@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>XBet Casino | Futuristic Gaming Experience</title>
+    <title>XBet Casino</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -12,9 +13,9 @@
         }
 
         body {
-            font-family: 'Orbitron', 'Share Tech Mono', 'Courier New', monospace;
-            background: #050510;
-            color: #fff;
+            font-family: 'Inter', 'Orbitron', sans-serif;
+            background: #0a0a0f;
+            color: #ffffff;
             overflow-x: hidden;
             position: relative;
         }
@@ -27,10 +28,9 @@
             width: 100%;
             height: 100%;
             z-index: -2;
-            background: radial-gradient(circle at 30% 50%, #0a0a2a 0%, #020210 100%);
+            background: radial-gradient(circle at 30% 40%, #0f0f1a 0%, #050510 100%);
         }
 
-        /* Particle System */
         #particleCanvas {
             position: fixed;
             top: 0;
@@ -46,12 +46,12 @@
             position: fixed;
             top: 0;
             width: 100%;
-            background: rgba(5, 5, 20, 0.9);
+            background: rgba(5, 5, 15, 0.92);
             backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(0, 255, 255, 0.4);
+            border-bottom: 1px solid rgba(0, 255, 255, 0.3);
             z-index: 1000;
             padding: 1rem 2rem;
-            box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.1);
         }
 
         .nav-container {
@@ -65,44 +65,57 @@
         .logo {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 12px;
             cursor: pointer;
         }
 
         .logo-icon {
-            width: 50px;
-            height: 50px;
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #00ffff, #ff00ff);
+            border-radius: 12px;
             position: relative;
+            animation: logoPulse 2s ease-in-out infinite;
         }
 
-        .logo-icon img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            filter: drop-shadow(0 0 15px rgba(0, 255, 255, 0.8));
-            animation: logoGlow 2s ease-in-out infinite;
-        }
-
-        @keyframes logoGlow {
-            0%, 100% { filter: drop-shadow(0 0 10px rgba(0, 255, 255, 0.5)); }
-            50% { filter: drop-shadow(0 0 25px rgba(0, 255, 255, 0.9)); }
+        .logo-icon::before {
+            content: 'X';
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            font-weight: bold;
+            font-family: 'Orbitron', monospace;
+            background: linear-gradient(135deg, #00ffff, #ff00ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
         }
 
         .logo-text {
-            font-size: 2rem;
-            font-weight: bold;
+            font-size: 1.8rem;
+            font-weight: 800;
+            font-family: 'Orbitron', monospace;
             background: linear-gradient(135deg, #00ffff, #ff00ff, #00ffff);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            letter-spacing: 3px;
-            animation: textShimmer 3s linear infinite;
+            letter-spacing: 2px;
+            animation: textFlow 3s linear infinite;
             background-size: 200% auto;
         }
 
-        @keyframes textShimmer {
+        @keyframes textFlow {
             0% { background-position: 0% 50%; }
             100% { background-position: 200% 50%; }
+        }
+
+        @keyframes logoPulse {
+            0%, 100% { box-shadow: 0 0 10px rgba(0, 255, 255, 0.5); }
+            50% { box-shadow: 0 0 25px rgba(0, 255, 255, 0.9); }
         }
 
         .nav-links {
@@ -115,6 +128,7 @@
             color: #aaa;
             text-decoration: none;
             font-size: 0.9rem;
+            font-weight: 500;
             letter-spacing: 1px;
             transition: all 0.3s;
             cursor: pointer;
@@ -126,36 +140,31 @@
             text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
         }
 
-        /* XCoin Balance Display */
+        /* XCoin Balance */
         .xcoin-balance {
             display: flex;
             align-items: center;
             gap: 10px;
-            background: linear-gradient(135deg, rgba(0, 255, 255, 0.15), rgba(255, 0, 255, 0.15));
+            background: linear-gradient(135deg, rgba(0, 255, 255, 0.12), rgba(255, 0, 255, 0.12));
             padding: 0.5rem 1.2rem;
-            border-radius: 50px;
+            border-radius: 40px;
             border: 1px solid rgba(0, 255, 255, 0.3);
             backdrop-filter: blur(5px);
         }
 
         .xcoin-icon {
-            width: 28px;
-            height: 28px;
-            position: relative;
-        }
-
-        .xcoin-icon img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.8));
+            width: 26px;
+            height: 26px;
+            background: radial-gradient(circle at 30% 30%, #ffd966, #ffaa00);
+            border-radius: 50%;
+            box-shadow: 0 0 12px rgba(255, 215, 0, 0.6);
         }
 
         .xcoin-amount {
             font-size: 1.2rem;
             font-weight: bold;
             color: #ffd966;
-            text-shadow: 0 0 10px rgba(255, 217, 0, 0.5);
+            text-shadow: 0 0 8px rgba(255, 217, 0, 0.5);
         }
 
         .xcoin-label {
@@ -166,7 +175,7 @@
 
         .btn {
             padding: 0.6rem 1.5rem;
-            border-radius: 30px;
+            border-radius: 40px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
@@ -180,7 +189,6 @@
         .btn-primary {
             background: linear-gradient(135deg, #00ffff, #ff00ff);
             color: #fff;
-            text-shadow: 0 0 5px rgba(0,0,0,0.5);
         }
 
         .btn-primary:hover {
@@ -189,9 +197,9 @@
         }
 
         .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.08);
             color: #fff;
-            border: 1px solid rgba(0, 255, 255, 0.5);
+            border: 1px solid rgba(0, 255, 255, 0.4);
         }
 
         .btn-secondary:hover {
@@ -219,9 +227,9 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 80%;
-            height: 80%;
-            background: radial-gradient(circle, rgba(0, 255, 255, 0.1), transparent);
+            width: 70%;
+            height: 70%;
+            background: radial-gradient(circle, rgba(0, 255, 255, 0.08), transparent);
             filter: blur(50px);
             pointer-events: none;
         }
@@ -229,12 +237,13 @@
         .hero h1 {
             font-size: 4rem;
             margin-bottom: 1rem;
+            font-family: 'Orbitron', monospace;
             background: linear-gradient(135deg, #00ffff, #ff00ff, #00ffff);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
             background-size: 200% auto;
-            animation: textShimmer 4s linear infinite;
+            animation: textFlow 4s linear infinite;
         }
 
         .hero p {
@@ -252,12 +261,12 @@
         }
 
         .game-card {
-            background: linear-gradient(135deg, rgba(20, 20, 40, 0.8), rgba(10, 10, 30, 0.9));
-            border-radius: 24px;
+            background: linear-gradient(135deg, rgba(20, 20, 45, 0.9), rgba(10, 10, 30, 0.95));
+            border-radius: 28px;
             padding: 2rem;
             text-align: center;
             cursor: pointer;
-            transition: all 0.4s;
+            transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
             border: 1px solid rgba(0, 255, 255, 0.2);
             backdrop-filter: blur(10px);
             position: relative;
@@ -277,9 +286,9 @@
         }
 
         .game-card:hover {
-            transform: translateY(-10px);
-            border-color: rgba(0, 255, 255, 0.6);
-            box-shadow: 0 10px 40px rgba(0, 255, 255, 0.2);
+            transform: translateY(-12px);
+            border-color: rgba(0, 255, 255, 0.7);
+            box-shadow: 0 15px 45px rgba(0, 255, 255, 0.25);
         }
 
         .game-card:hover::before {
@@ -290,19 +299,18 @@
             width: 100px;
             height: 100px;
             margin: 0 auto 1.5rem;
-            position: relative;
-        }
-
-        .game-icon img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            filter: drop-shadow(0 0 15px rgba(0, 255, 255, 0.5));
+            background: linear-gradient(135deg, #00ffff20, #ff00ff20);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
         }
 
         .game-title {
             font-size: 1.8rem;
             margin-bottom: 0.5rem;
+            font-family: 'Orbitron', monospace;
             background: linear-gradient(135deg, #fff, #88aaff);
             -webkit-background-clip: text;
             background-clip: text;
@@ -322,11 +330,11 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.95);
+            background: rgba(0, 0, 0, 0.96);
             z-index: 2000;
             align-items: center;
             justify-content: center;
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(15px);
         }
 
         .modal.active {
@@ -335,15 +343,15 @@
 
         .modal-content {
             background: linear-gradient(135deg, #1a1a2e, #0a0a1a);
-            border-radius: 32px;
-            max-width: 900px;
+            border-radius: 36px;
+            max-width: 950px;
             width: 90%;
             max-height: 85vh;
             overflow-y: auto;
             padding: 2rem;
             position: relative;
-            border: 1px solid rgba(0, 255, 255, 0.3);
-            box-shadow: 0 0 50px rgba(0, 255, 255, 0.2);
+            border: 1px solid rgba(0, 255, 255, 0.4);
+            box-shadow: 0 0 60px rgba(0, 255, 255, 0.2);
         }
 
         .modal-close {
@@ -369,17 +377,17 @@
         .slots-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
+            gap: 18px;
             margin: 2rem 0;
             background: linear-gradient(135deg, #000000, #0a0a1a);
-            padding: 25px;
-            border-radius: 24px;
+            padding: 28px;
+            border-radius: 28px;
             border: 1px solid rgba(0, 255, 255, 0.3);
         }
 
         .slot-reel {
             background: linear-gradient(135deg, #1a1a2a, #0a0a1a);
-            border-radius: 16px;
+            border-radius: 20px;
             aspect-ratio: 1;
             display: flex;
             align-items: center;
@@ -388,27 +396,21 @@
             border: 2px solid rgba(0, 255, 255, 0.3);
             position: relative;
             overflow: hidden;
-        }
-
-        .slot-reel img {
-            width: 80%;
-            height: 80%;
-            object-fit: contain;
-            filter: drop-shadow(0 0 8px rgba(0, 255, 255, 0.5));
+            font-size: 3.5rem;
         }
 
         .slot-reel.winning {
             border-color: #00ffff;
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.8);
-            animation: pulseGlow 0.5s ease-in-out;
+            box-shadow: 0 0 25px rgba(0, 255, 255, 0.8);
+            animation: reelGlow 0.5s ease-in-out;
         }
 
-        @keyframes pulseGlow {
+        @keyframes reelGlow {
             0%, 100% { box-shadow: 0 0 20px rgba(0, 255, 255, 0.8); }
-            50% { box-shadow: 0 0 40px rgba(0, 255, 255, 1); }
+            50% { box-shadow: 0 0 45px rgba(0, 255, 255, 1); }
         }
 
-        /* Dice Game */
+        /* 3D Dice */
         .dice-container {
             text-align: center;
         }
@@ -427,18 +429,14 @@
             width: 100%;
             height: 100%;
             background: linear-gradient(135deg, #ff3366, #ff66cc);
-            border-radius: 24px;
+            border-radius: 28px;
             display: flex;
             align-items: center;
             justify-content: center;
+            font-size: 4rem;
+            font-weight: bold;
             border: 2px solid rgba(255, 255, 255, 0.5);
-            box-shadow: 0 0 20px rgba(255, 51, 102, 0.5);
-        }
-
-        .dice-face img {
-            width: 70%;
-            height: 70%;
-            object-fit: contain;
+            box-shadow: 0 0 25px rgba(255, 51, 102, 0.5);
         }
 
         /* Crash Graph */
@@ -448,8 +446,8 @@
 
         .crash-graph {
             background: linear-gradient(135deg, #000000, #0a0a1a);
-            border-radius: 16px;
-            height: 300px;
+            border-radius: 20px;
+            height: 320px;
             margin: 2rem 0;
             position: relative;
             border: 1px solid rgba(0, 255, 255, 0.3);
@@ -458,19 +456,19 @@
         .crash-canvas {
             width: 100%;
             height: 100%;
-            border-radius: 16px;
+            border-radius: 20px;
         }
 
         .multiplier-display {
             text-align: center;
             font-size: 4rem;
             font-weight: bold;
+            font-family: 'Orbitron', monospace;
             background: linear-gradient(135deg, #00ffff, #ff00ff);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
             margin: 1rem 0;
-            font-family: monospace;
             text-shadow: 0 0 30px rgba(0, 255, 255, 0.5);
         }
 
@@ -484,14 +482,15 @@
             margin-bottom: 0.5rem;
             color: #88aaff;
             letter-spacing: 1px;
+            font-size: 0.85rem;
         }
 
         .form-group input, .form-group select {
             width: 100%;
-            padding: 0.8rem;
-            background: rgba(10, 10, 30, 0.8);
+            padding: 0.9rem;
+            background: rgba(10, 10, 30, 0.9);
             border: 1px solid rgba(0, 255, 255, 0.3);
-            border-radius: 12px;
+            border-radius: 16px;
             color: #fff;
             font-size: 1rem;
             transition: all 0.3s;
@@ -500,7 +499,7 @@
         .form-group input:focus, .form-group select:focus {
             outline: none;
             border-color: #00ffff;
-            box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+            box-shadow: 0 0 18px rgba(0, 255, 255, 0.3);
         }
 
         /* Bet Controls */
@@ -514,13 +513,14 @@
         .bet-btn {
             background: rgba(0, 255, 255, 0.1);
             border: 1px solid rgba(0, 255, 255, 0.3);
-            padding: 0.5rem 1.2rem;
-            border-radius: 30px;
+            padding: 0.6rem 1.5rem;
+            border-radius: 40px;
             cursor: pointer;
             transition: all 0.3s;
+            font-weight: 600;
         }
 
-        .bet-btn:hover {
+        .bet-btn:hover, .bet-btn.active {
             background: rgba(0, 255, 255, 0.3);
             border-color: #00ffff;
         }
@@ -530,28 +530,29 @@
             position: fixed;
             bottom: 20px;
             right: 20px;
-            width: 320px;
-            background: linear-gradient(135deg, rgba(10, 10, 30, 0.95), rgba(5, 5, 20, 0.95));
-            border-radius: 20px;
+            width: 340px;
+            background: linear-gradient(135deg, rgba(10, 10, 30, 0.96), rgba(5, 5, 20, 0.96));
+            border-radius: 24px;
             overflow: hidden;
             border: 1px solid rgba(0, 255, 255, 0.3);
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(12px);
             z-index: 1000;
-            box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);
+            box-shadow: 0 0 35px rgba(0, 255, 255, 0.2);
         }
 
         .chat-header {
             background: linear-gradient(135deg, #00ffff20, #ff00ff20);
-            padding: 1rem;
+            padding: 1rem 1.2rem;
             font-weight: bold;
             cursor: pointer;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            font-family: 'Orbitron', monospace;
         }
 
         .chat-messages {
-            height: 300px;
+            height: 320px;
             overflow-y: auto;
             padding: 1rem;
         }
@@ -560,10 +561,11 @@
             margin-bottom: 0.8rem;
             font-size: 0.85rem;
             animation: fadeIn 0.3s ease;
+            word-break: break-word;
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateX(20px); }
+            from { opacity: 0; transform: translateX(15px); }
             to { opacity: 1; transform: translateX(0); }
         }
 
@@ -580,17 +582,17 @@
 
         .chat-input input {
             flex: 1;
-            padding: 0.6rem;
+            padding: 0.7rem;
             background: rgba(0, 0, 0, 0.5);
             border: 1px solid rgba(0, 255, 255, 0.3);
-            border-radius: 20px;
+            border-radius: 30px;
             color: #fff;
         }
 
         .chat-input button {
             margin-left: 0.8rem;
             padding: 0.6rem 1.2rem;
-            border-radius: 20px;
+            border-radius: 30px;
         }
 
         /* Toast */
@@ -607,6 +609,7 @@
             z-index: 3000;
             animation: slideUp 0.3s ease-out;
             font-family: monospace;
+            font-weight: 500;
         }
 
         @keyframes slideUp {
@@ -624,9 +627,37 @@
             display: none;
         }
 
+        /* Admin Panel */
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .admin-table th, .admin-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+        }
+
+        .admin-table th {
+            color: #00ffff;
+            font-weight: 600;
+        }
+
+        .status-badge {
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            display: inline-block;
+        }
+
+        .status-active { background: rgba(0, 255, 0, 0.2); color: #0f0; }
+        .status-banned { background: rgba(255, 0, 0, 0.2); color: #f00; }
+
         /* Scrollbar */
         ::-webkit-scrollbar {
-            width: 8px;
+            width: 6px;
         }
 
         ::-webkit-scrollbar-track {
@@ -635,14 +666,15 @@
 
         ::-webkit-scrollbar-thumb {
             background: linear-gradient(135deg, #00ffff, #ff00ff);
-            border-radius: 4px;
+            border-radius: 3px;
         }
 
         @media (max-width: 768px) {
-            .nav-links span { display: none; }
+            .nav-links .nav-text { display: none; }
             .hero h1 { font-size: 2rem; }
             .games-grid { grid-template-columns: 1fr; }
-            .chat-container { width: 280px; right: 10px; bottom: 10px; }
+            .chat-container { width: 300px; right: 10px; bottom: 10px; }
+            .modal-content { padding: 1.5rem; }
         }
     </style>
 </head>
@@ -652,10 +684,8 @@
 
     <nav class="navbar">
         <div class="nav-container">
-            <div class="logo">
-                <div class="logo-icon">
-                    <img src="/assets/ui/xbet-logo.png" alt="XBet" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ccircle cx=%2250%22 cy=%2250%22 r=%2245%22 fill=%22url(%23grad)%22/%3E%3Ctext x=%2250%22 y=%2270%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2240%22 font-weight=%22bold%22%3EX%3C/text%3E%3Cdefs%3E%3ClinearGradient id=%22grad%22%3E%3Cstop offset=%220%25%22 stop-color=%22%2300ffff%22/%3E%3Cstop offset=%22100%25%22 stop-color=%22%23ff00ff%22/%3E%3C/linearGradient%3E%3C/defs%3E%3C/svg%3E'">
-                </div>
+            <div class="logo" onclick="closeAllModals()">
+                <div class="logo-icon"></div>
                 <span class="logo-text">XBET</span>
             </div>
             <div class="nav-links">
@@ -665,12 +695,11 @@
                 </div>
                 <div id="userInfo" class="hidden">
                     <div class="xcoin-balance">
-                        <div class="xcoin-icon">
-                            <img src="/assets/coins/xcoin-gold.png" alt="XCoin" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ccircle cx=%2250%22 cy=%2250%22 r=%2245%22 fill=%22%23FFD700%22/%3E%3Ctext x=%2250%22 y=%2270%22 text-anchor=%22middle%22 fill=%22black%22 font-size=%2230%22 font-weight=%22bold%22%3EX%3C/text%3E%3C/svg%3E'">
-                        </div>
+                        <div class="xcoin-icon"></div>
                         <span class="xcoin-amount" id="balance">0.00</span>
                         <span class="xcoin-label">XCOIN</span>
                     </div>
+                    <a id="adminLink" class="hidden" onclick="showAdminPanel()" style="color: #ff00ff;">ADMIN</a>
                     <a onclick="logout()">LOGOUT</a>
                 </div>
             </div>
@@ -680,31 +709,44 @@
     <div class="container">
         <div class="hero">
             <div class="hero-glow"></div>
-            <h1>XBET ONLINE CASINO</h1>
-            <p>Experience the next generation of gamleing with XCoin currency</p>
+            <h1>XBET CASINO</h1>
+            <p>Experience next-generation gaming with XCoin • Provably Fair • Instant Transactions</p>
         </div>
 
         <div class="games-grid">
             <div class="game-card" onclick="openGame('slots')">
-                <div class="game-icon">
-                    <img src="/assets/games/slots-icon.png" alt="Slots" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Crect x=%2210%22 y=%2210%22 width=%2280%22 height=%2280%22 fill=%22%2300ffff%22 rx=%2215%22/%3E%3Ctext x=%2250%22 y=%2265%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2230%22 font-weight=%22bold%22%3E🎰%3C/text%3E%3C/svg%3E'">
-                </div>
-                <h3 class="game-title">SLOTS</h3>
-                <p class="game-description">3x3 grid with XBet multiplier up to 200x</p>
+                <div class="game-icon">🎰</div>
+                <h3 class="game-title">CSLOTS</h3>
+                <p class="game-description">3x3 grid • XBet symbol up to 200x multiplier</p>
             </div>
             <div class="game-card" onclick="openGame('dice')">
-                <div class="game-icon">
-                    <img src="/assets/games/dice-icon.png" alt="Dice" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Crect x=%2210%22 y=%2210%22 width=%2280%22 height=%2280%22 fill=%22%23ff00ff%22 rx=%2215%22/%3E%3Ctext x=%2250%22 y=%2265%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2230%22 font-weight=%22bold%22%3E🎲%3C/text%3E%3C/svg%3E'">
-                </div>
+                <div class="game-icon">🎲</div>
                 <h3 class="game-title">DICE</h3>
-                <p class="game-description">Roll under or over with up to 99x multiplier</p>
+                <p class="game-description">Roll under/over • Multipliers up to 99x</p>
             </div>
             <div class="game-card" onclick="openGame('crash')">
-                <div class="game-icon">
-                    <img src="/assets/games/crash-icon.png" alt="Crash" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Cpolygon points=%2250,20 80,80 20,80%22 fill=%22%23ff3366%22/%3E%3Ctext x=%2250%22 y=%2270%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2220%22%3E🚀%3C/text%3E%3C/svg%3E'">
-                </div>
+                <div class="game-icon">🚀</div>
                 <h3 class="game-title">CRASH</h3>
-                <p class="game-description">Multiplier rises - cash out before it crashes</p>
+                <p class="game-description">Multiplier rises • Cash out before crash</p>
+            </div>
+        </div>
+
+        <!-- Leaderboard Section -->
+        <div style="background: linear-gradient(135deg, rgba(0, 255, 255, 0.05), rgba(255, 0, 255, 0.05)); border-radius: 28px; padding: 1.5rem; margin-top: 2rem;">
+            <h3 style="color: #00ffff; margin-bottom: 1rem;">GLOBAL LEADERBOARD</h3>
+            <div id="leaderboardContainer" style="display: flex; gap: 1rem; overflow-x: auto; padding: 0.5rem 0;">
+                <div style="min-width: 200px; background: rgba(0,0,0,0.3); border-radius: 16px; padding: 1rem;">
+                    <div style="color: #ffaa00;">BIGGEST WIN</div>
+                    <div id="biggestWinLeader" style="font-size: 1.2rem;">Loading...</div>
+                </div>
+                <div style="min-width: 200px; background: rgba(0,0,0,0.3); border-radius: 16px; padding: 1rem;">
+                    <div style="color: #ffaa00;">MOST GAMES</div>
+                    <div id="mostGamesLeader" style="font-size: 1.2rem;">Loading...</div>
+                </div>
+                <div style="min-width: 200px; background: rgba(0,0,0,0.3); border-radius: 16px; padding: 1rem;">
+                    <div style="color: #ffaa00;">TOTAL WAGERED</div>
+                    <div id="totalWageredLeader" style="font-size: 1.2rem;">Loading...</div>
+                </div>
             </div>
         </div>
     </div>
@@ -713,7 +755,7 @@
     <div id="authModal" class="modal">
         <div class="modal-content">
             <span class="modal-close" onclick="closeAuthModal()">✕</span>
-            <h2 id="authTitle" style="margin-bottom: 1.5rem;">AUTHENTICATION</h2>
+            <h2 id="authTitle" style="margin-bottom: 1.5rem; font-family: 'Orbitron';">AUTHENTICATION</h2>
             <form id="authForm" onsubmit="return false;">
                 <div class="form-group">
                     <label>EMAIL ADDRESS</label>
@@ -722,6 +764,10 @@
                 <div class="form-group">
                     <label>PASSWORD</label>
                     <input type="password" id="password" required>
+                </div>
+                <div class="form-group" id="usernameGroup" style="display: none;">
+                    <label>USERNAME</label>
+                    <input type="text" id="username">
                 </div>
                 <button type="submit" class="btn btn-primary" style="width: 100%;" onclick="handleAuth()">CONTINUE</button>
             </form>
@@ -736,43 +782,52 @@
         </div>
     </div>
 
+    <!-- Admin Modal -->
+    <div id="adminModal" class="modal">
+        <div class="modal-content" style="max-width: 1200px;">
+            <span class="modal-close" onclick="closeAdminModal()">✕</span>
+            <h2 style="margin-bottom: 1.5rem; font-family: 'Orbitron';">ADMIN DASHBOARD</h2>
+            <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap;">
+                <button class="btn btn-secondary" onclick="loadAdminUsers()">USERS</button>
+                <button class="btn btn-secondary" onclick="loadAdminAnalytics()">ANALYTICS</button>
+                <button class="btn btn-secondary" onclick="loadAdminSettings()">GAME SETTINGS</button>
+            </div>
+            <div id="adminContent"></div>
+        </div>
+    </div>
+
     <!-- Chat -->
     <div class="chat-container" id="chatContainer" style="display: none;">
         <div class="chat-header" onclick="toggleChat()">
-            <span>💬 QUANTUM CHAT</span>
+            <span>⚡ QUANTUM CHAT</span>
             <span>▼</span>
         </div>
         <div id="chatMessages" class="chat-messages"></div>
         <div class="chat-input">
-            <input type="text" id="chatInput" placeholder="Message..." onkeypress="if(event.key==='Enter') sendChatMessage()">
+            <input type="text" id="chatInput" placeholder="Type message..." onkeypress="if(event.key==='Enter') sendChatMessage()">
             <button class="btn btn-primary" onclick="sendChatMessage()">SEND</button>
         </div>
     </div>
 
     <script>
         // ==================== CONFIGURATION ====================
-        const API_URL = window.location.hostname === 'localhost' ? 'http://localhost:5000' : 'https://xbetb.onrender.com';
+        const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+            ? 'http://localhost:5000' 
+            : 'srv-d732oc24d50c73fg81n0';
         let token = localStorage.getItem('token');
         let currentUser = null;
         let ws = null;
         let currentGame = null;
+        let currentAuthType = 'login';
         
         // Game state
-        let slotsReels = ['cherry', 'lemon', 'orange', 'cherry', 'lemon', 'orange', 'cherry', 'lemon', 'orange'];
         let crashMultiplier = 1;
-        let crashActive = false;
         let crashCanvas = null;
         let crashCtx = null;
         
-        // Symbol images mapping
-        const SYMBOL_IMAGES = {
-            'cherry': '/assets/games/slots/cherry.png',
-            'lemon': '/assets/games/slots/lemon.png',
-            'orange': '/assets/games/slots/orange.png',
-            'plum': '/assets/games/slots/plum.png',
-            'bell': '/assets/games/slots/bell.png',
-            'xbet': '/assets/games/slots/xbet.png'
-        };
+        // Symbol mapping
+        const SYMBOLS = ['🍒', '🍋', '🍊', '🍑', '🔔', '⭐'];
+        const SYMBOL_NAMES = ['cherry', 'lemon', 'orange', 'plum', 'bell', 'xbet'];
         
         // ==================== BACKGROUND ANIMATION ====================
         const bgCanvas = document.getElementById('bgCanvas');
@@ -781,7 +836,6 @@
         const particleCtx = particleCanvas.getContext('2d');
         
         let particles = [];
-        let stars = [];
         
         function resizeCanvases() {
             bgCanvas.width = window.innerWidth;
@@ -795,7 +849,6 @@
             const w = bgCanvas.width;
             const h = bgCanvas.height;
             
-            // Gradient background
             const grad = bgCtx.createLinearGradient(0, 0, w, h);
             grad.addColorStop(0, '#050510');
             grad.addColorStop(0.5, '#0a0a2a');
@@ -803,43 +856,34 @@
             bgCtx.fillStyle = grad;
             bgCtx.fillRect(0, 0, w, h);
             
-            // Draw grid lines
-            bgCtx.strokeStyle = 'rgba(0, 255, 255, 0.1)';
+            // Animated grid lines
+            bgCtx.strokeStyle = 'rgba(0, 255, 255, 0.08)';
             bgCtx.lineWidth = 1;
-            for (let i = 0; i < w; i += 50) {
+            const time = Date.now() / 1000;
+            for (let i = 0; i < w; i += 60) {
+                const offset = Math.sin(time + i * 0.01) * 10;
                 bgCtx.beginPath();
-                bgCtx.moveTo(i, 0);
-                bgCtx.lineTo(i, h);
+                bgCtx.moveTo(i + offset, 0);
+                bgCtx.lineTo(i + offset, h);
                 bgCtx.stroke();
                 bgCtx.beginPath();
-                bgCtx.moveTo(0, i);
-                bgCtx.lineTo(w, i);
+                bgCtx.moveTo(0, i + offset);
+                bgCtx.lineTo(w, i + offset);
                 bgCtx.stroke();
             }
             
-            // Draw glowing orbs
-            for (let i = 0; i < 3; i++) {
-                const x = w * (0.2 + i * 0.3);
-                const y = h * 0.5;
-                const rad = 150;
-                const gradOrb = bgCtx.createRadialGradient(x, y, 0, x, y, rad);
-                gradOrb.addColorStop(0, 'rgba(0, 255, 255, 0.05)');
-                gradOrb.addColorStop(1, 'transparent');
-                bgCtx.fillStyle = gradOrb;
-                bgCtx.fillRect(0, 0, w, h);
-            }
+            requestAnimationFrame(drawBackground);
         }
         
         function initParticles() {
-            const particleCount = 100;
-            for (let i = 0; i < particleCount; i++) {
+            for (let i = 0; i < 150; i++) {
                 particles.push({
                     x: Math.random() * window.innerWidth,
                     y: Math.random() * window.innerHeight,
                     radius: Math.random() * 2 + 1,
-                    alpha: Math.random() * 0.5,
-                    speedX: (Math.random() - 0.5) * 0.5,
-                    speedY: (Math.random() - 0.5) * 0.5
+                    alpha: Math.random() * 0.4,
+                    speedX: (Math.random() - 0.5) * 0.3,
+                    speedY: (Math.random() - 0.5) * 0.3
                 });
             }
         }
@@ -868,7 +912,6 @@
         
         window.addEventListener('resize', () => {
             resizeCanvases();
-            drawBackground();
         });
         
         resizeCanvases();
@@ -885,9 +928,14 @@
                 });
                 if (response.ok) {
                     const data = await response.json();
-                    currentUser = { xcoin_balance: data.xcoin_balance };
+                    currentUser = { 
+                        xcoin_balance: data.xcoin_balance,
+                        role: data.role || 'user',
+                        username: data.username || 'User'
+                    };
                     updateUI(true);
                     initWebSocket();
+                    loadLeaderboards();
                 } else {
                     logout();
                 }
@@ -921,10 +969,10 @@
                     crashCrashed(data.multiplier);
                     break;
                 case 'crash_bet_placed':
-                    toast(`${data.username} placed ${data.bet} XCoin`);
+                    toast(`${data.username} placed ${data.bet} XCOIN`);
                     break;
                 case 'crash_cashout':
-                    toast(`${data.username} cashed out ${data.win} XCoin`);
+                    toast(`${data.username} cashed out ${data.win} XCOIN`);
                     break;
             }
         }
@@ -933,12 +981,16 @@
             const authButtons = document.getElementById('authButtons');
             const userInfo = document.getElementById('userInfo');
             const chatContainer = document.getElementById('chatContainer');
+            const adminLink = document.getElementById('adminLink');
             
             if (loggedIn && currentUser) {
                 authButtons.classList.add('hidden');
                 userInfo.classList.remove('hidden');
                 document.getElementById('balance').textContent = currentUser.xcoin_balance.toFixed(2);
                 chatContainer.style.display = 'flex';
+                if (currentUser.role === 'admin') {
+                    adminLink.classList.remove('hidden');
+                }
             } else {
                 authButtons.classList.remove('hidden');
                 userInfo.classList.add('hidden');
@@ -949,6 +1001,7 @@
         function showAuthModal(type) {
             currentAuthType = type;
             document.getElementById('authTitle').textContent = type === 'login' ? 'LOGIN TO XBET' : 'CREATE XBET ACCOUNT';
+            document.getElementById('usernameGroup').style.display = type === 'register' ? 'block' : 'none';
             document.getElementById('authModal').classList.add('active');
         }
         
@@ -959,13 +1012,15 @@
         async function handleAuth() {
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
+            const username = document.getElementById('username').value;
             const endpoint = currentAuthType === 'login' ? '/api/auth/login' : '/api/auth/register';
+            const body = currentAuthType === 'login' ? { email, password } : { email, password, username };
             
             try {
                 const response = await fetch(`${API_URL}${endpoint}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email, password })
+                    body: JSON.stringify(body)
                 });
                 
                 const data = await response.json();
@@ -976,6 +1031,7 @@
                     updateUI(true);
                     closeAuthModal();
                     initWebSocket();
+                    loadLeaderboards();
                     toast('AUTHENTICATION SUCCESSFUL');
                 } else {
                     toast(data.error || 'AUTHENTICATION FAILED');
@@ -1032,22 +1088,22 @@
         function getSlotsHTML() {
             return `
                 <div class="slots-container">
-                    <h2>CRYPTO SLOTS</h2>
+                    <h2 style="font-family: 'Orbitron';">CRYPTO SLOTS</h2>
                     <div class="slots-grid" id="slotsGrid">
-                        ${slotsReels.map(s => `
-                            <div class="slot-reel">
-                                <img src="${SYMBOL_IMAGES[s] || SYMBOL_IMAGES.cherry}" alt="${s}">
-                            </div>
-                        `).join('')}
+                        ${Array(9).fill().map(() => `<div class="slot-reel">🍒</div>`).join('')}
                     </div>
                     <div class="bet-controls">
                         <div class="form-group" style="flex: 1;">
                             <label>BET (XCOIN)</label>
                             <input type="number" id="betAmount" value="10" min="1" max="1000">
                         </div>
+                        <div class="form-group" style="flex: 1;">
+                            <label>LINES</label>
+                            <select id="lines"><option>5</option></select>
+                        </div>
                     </div>
                     <button class="btn btn-primary" style="width: 100%;" onclick="spinSlots()">SPIN</button>
-                    <div id="slotResult" style="margin-top: 1.5rem; text-align: center;"></div>
+                    <div id="slotResult" style="margin-top: 1.5rem;"></div>
                 </div>
             `;
         }
@@ -1061,7 +1117,11 @@
             }
             
             const reels = document.querySelectorAll('.slot-reel');
-            reels.forEach(reel => reel.style.animation = 'pulseGlow 0.2s infinite');
+            reels.forEach((reel, i) => {
+                reel.style.animation = 'none';
+                reel.offsetHeight;
+                reel.style.animation = 'spin 0.1s linear infinite';
+            });
             
             try {
                 const response = await fetch(`${API_URL}/api/games/slots/play`, {
@@ -1075,29 +1135,29 @@
                 
                 const data = await response.json();
                 
-                reels.forEach(reel => reel.style.animation = '');
-                
-                const newReels = data.result.reels_data;
-                const slotDivs = document.querySelectorAll('.slot-reel');
-                slotDivs.forEach((div, i) => {
-                    const img = div.querySelector('img');
-                    img.src = SYMBOL_IMAGES[newReels[i]] || SYMBOL_IMAGES.cherry;
-                    if (data.result.winning_lines.flat().includes(i)) {
-                        div.classList.add('winning');
-                        setTimeout(() => div.classList.remove('winning'), 1000);
+                setTimeout(() => {
+                    reels.forEach((reel, i) => {
+                        reel.style.animation = '';
+                        reel.textContent = SYMBOLS[data.result.reels_data[i] === 'xbet' ? 5 : 
+                            SYMBOL_NAMES.indexOf(data.result.reels_data[i])];
+                        if (data.result.winning_lines.flat().includes(i)) {
+                            reel.classList.add('winning');
+                            setTimeout(() => reel.classList.remove('winning'), 1000);
+                        }
+                    });
+                    
+                    currentUser.xcoin_balance = data.new_balance;
+                    document.getElementById('balance').textContent = currentUser.xcoin_balance.toFixed(2);
+                    
+                    const resultDiv = document.getElementById('slotResult');
+                    if (data.outcome === 'win') {
+                        resultDiv.innerHTML = `<div style="color: #00ffff;">WIN: ${data.win_amount.toFixed(2)} XCOIN</div>`;
+                        toast(`WIN ${data.win_amount.toFixed(2)} XCOIN`);
+                    } else {
+                        resultDiv.innerHTML = `<div style="color: #ff3366;">LOSS: ${betAmount} XCOIN</div>`;
                     }
-                });
-                
-                currentUser.xcoin_balance = data.new_balance;
-                document.getElementById('balance').textContent = currentUser.xcoin_balance.toFixed(2);
-                
-                const resultDiv = document.getElementById('slotResult');
-                if (data.outcome === 'win') {
-                    resultDiv.innerHTML = `<div style="color: #00ffff;">WIN: ${data.win_amount.toFixed(2)} XCOIN</div>`;
-                    toast(`WIN ${data.win_amount.toFixed(2)} XCOIN`);
-                } else {
-                    resultDiv.innerHTML = `<div style="color: #ff3366;">LOSS: ${betAmount} XCOIN</div>`;
-                }
+                    loadLeaderboards();
+                }, 800);
             } catch (error) {
                 reels.forEach(reel => reel.style.animation = '');
                 toast('GAME ERROR');
@@ -1107,11 +1167,9 @@
         function getDiceHTML() {
             return `
                 <div class="dice-container">
-                    <h2>QUANTUM DICE</h2>
+                    <h2 style="font-family: 'Orbitron';">QUANTUM DICE</h2>
                     <div class="dice-3d" id="dice3d">
-                        <div class="dice-face">
-                            <img src="/assets/games/dice/dice-default.png" id="diceImage" alt="Dice">
-                        </div>
+                        <div class="dice-face">🎲</div>
                     </div>
                     <div class="form-group">
                         <label>BET (XCOIN)</label>
@@ -1120,14 +1178,14 @@
                     <div class="form-group">
                         <label>TARGET (1-99)</label>
                         <input type="range" id="target" min="1" max="99" value="50">
-                        <div id="targetValue" style="text-align: center; margin-top: 5px;">50</div>
+                        <div id="targetValue" style="text-align: center; margin-top: 8px;">50</div>
                     </div>
                     <div class="bet-controls">
                         <button class="bet-btn" onclick="setDiceCondition('under')" id="underBtn">UNDER</button>
                         <button class="bet-btn" onclick="setDiceCondition('over')" id="overBtn">OVER</button>
                     </div>
                     <button class="btn btn-primary" style="width: 100%;" onclick="rollDice()">ROLL</button>
-                    <div id="diceResult" style="margin-top: 1.5rem; text-align: center;"></div>
+                    <div id="diceResult" style="margin-top: 1.5rem;"></div>
                 </div>
             `;
         }
@@ -1150,7 +1208,7 @@
             }
             
             const dice = document.getElementById('dice3d');
-            dice.style.animation = 'spin 0.5s ease-out';
+            dice.style.animation = 'spin 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
             
             try {
                 const response = await fetch(`${API_URL}/api/games/dice/play`, {
@@ -1171,8 +1229,9 @@
                 setTimeout(() => {
                     dice.style.animation = '';
                     const roll = data.result.roll;
-                    const diceImg = document.getElementById('diceImage');
-                    diceImg.src = `/assets/games/dice/dice-${Math.floor(roll / 16.67) + 1}.png`;
+                    const diceFace = dice.querySelector('.dice-face');
+                    const rollEmoji = roll < 20 ? '💀' : roll < 40 ? '😐' : roll < 60 ? '🙂' : roll < 80 ? '😊' : '🚀';
+                    diceFace.textContent = rollEmoji;
                     
                     currentUser.xcoin_balance = data.new_balance;
                     document.getElementById('balance').textContent = currentUser.xcoin_balance.toFixed(2);
@@ -1184,6 +1243,7 @@
                     } else {
                         resultDiv.innerHTML = `<div style="color: #ff3366;">ROLL: ${roll.toFixed(2)} | LOSS: ${betAmount} XCOIN</div>`;
                     }
+                    loadLeaderboards();
                 }, 500);
             } catch (error) {
                 dice.style.animation = '';
@@ -1194,7 +1254,7 @@
         function getCrashHTML() {
             return `
                 <div class="crash-container">
-                    <h2>SPACE CRASH</h2>
+                    <h2 style="font-family: 'Orbitron';">SPACE CRASH</h2>
                     <div class="multiplier-display" id="multiplierDisplay">1.00x</div>
                     <div class="crash-graph">
                         <canvas id="crashCanvas" width="700" height="250" style="width:100%; height:100%;"></canvas>
@@ -1204,22 +1264,24 @@
                         <input type="number" id="crashBet" value="10" min="1">
                     </div>
                     <div class="form-group">
-                        <label>AUTO CASHPUT (MULTIPLIER)</label>
+                        <label>AUTO CASHOUT (MULTIPLIER)</label>
                         <input type="number" id="autoCashout" step="0.1" placeholder="OPTIONAL">
                     </div>
                     <div style="display: flex; gap: 1rem;">
                         <button class="btn btn-primary" style="flex: 1;" onclick="placeCrashBet()" id="placeBetBtn">PLACE BET</button>
                         <button class="btn btn-secondary" style="flex: 1;" onclick="cashoutCrash()" id="cashoutBtn" disabled>CASH OUT</button>
                     </div>
-                    <div id="crashResult" style="margin-top: 1.5rem; text-align: center;"></div>
+                    <div id="crashResult" style="margin-top: 1.5rem;"></div>
                 </div>
             `;
         }
         
         function initCrashGame() {
             crashCanvas = document.getElementById('crashCanvas');
-            crashCtx = crashCanvas.getContext('2d');
-            drawCrashGraph(1);
+            if (crashCanvas) {
+                crashCtx = crashCanvas.getContext('2d');
+                drawCrashGraph(1);
+            }
             
             fetch(`${API_URL}/api/games/crash/start`, {
                 method: 'POST',
@@ -1241,7 +1303,7 @@
             
             crashCtx.clearRect(0, 0, w, h);
             
-            // Draw grid
+            // Grid
             crashCtx.strokeStyle = 'rgba(0, 255, 255, 0.2)';
             crashCtx.lineWidth = 1;
             for (let i = 0; i <= 10; i++) {
@@ -1257,7 +1319,7 @@
                 crashCtx.stroke();
             }
             
-            // Draw curve
+            // Curve
             crashCtx.beginPath();
             crashCtx.strokeStyle = '#00ffff';
             crashCtx.lineWidth = 3;
@@ -1270,7 +1332,7 @@
             }
             crashCtx.stroke();
             
-            // Draw current point
+            // Current point
             const currentX = w * (Math.log(currentMultiplier) / Math.log(1.03)) / 30;
             const currentY = h - (currentMultiplier / 15) * h;
             crashCtx.fillStyle = '#ff00ff';
@@ -1323,6 +1385,131 @@
             if (ws && ws.readyState === WebSocket.OPEN) {
                 ws.send(JSON.stringify({ type: 'crash_cashout' }));
                 document.getElementById('cashoutBtn').disabled = true;
+            }
+        }
+        
+        // ==================== ADMIN FUNCTIONS ====================
+        function showAdminPanel() {
+            document.getElementById('adminModal').classList.add('active');
+            loadAdminUsers();
+        }
+        
+        function closeAdminModal() {
+            document.getElementById('adminModal').classList.remove('active');
+        }
+        
+        async function loadAdminUsers() {
+            try {
+                const response = await fetch(`${API_URL}/api/admin/users`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const data = await response.json();
+                
+                document.getElementById('adminContent').innerHTML = `
+                    <h3>USER MANAGEMENT</h3>
+                    <table class="admin-table">
+                        <thead><tr><th>USERNAME</th><th>EMAIL</th><th>BALANCE</th><th>STATUS</th><th>ACTION</th></tr></thead>
+                        <tbody>
+                            ${data.users.map(u => `
+                                <tr>
+                                    <td>${u.username}</td>
+                                    <td>${u.email}</td>
+                                    <td>${u.xcoin_balance.toFixed(2)} XCOIN</td>
+                                    <td><span class="status-badge ${u.banned ? 'status-banned' : 'status-active'}">${u.banned ? 'BANNED' : 'ACTIVE'}</span></td>
+                                    <td><button class="btn btn-secondary" onclick="banUser('${u.id}', ${!u.banned})">${u.banned ? 'UNBAN' : 'BAN'}</button></td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                `;
+            } catch (error) {
+                toast('Failed to load users');
+            }
+        }
+        
+        async function banUser(userId, ban) {
+            try {
+                await fetch(`${API_URL}/api/admin/users/${userId}/ban`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ banned: ban })
+                });
+                toast(ban ? 'USER BANNED' : 'USER UNBANNED');
+                loadAdminUsers();
+            } catch (error) {
+                toast('Action failed');
+            }
+        }
+        
+        async function loadAdminAnalytics() {
+            try {
+                const response = await fetch(`${API_URL}/api/admin/analytics`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const data = await response.json();
+                
+                document.getElementById('adminContent').innerHTML = `
+                    <h3>ANALYTICS DASHBOARD</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                        <div style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 16px;">
+                            <div style="color: #88aaff;">TOTAL USERS</div>
+                            <div style="font-size: 2rem; font-weight: bold;">${data.total_users}</div>
+                        </div>
+                        <div style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 16px;">
+                            <div style="color: #88aaff;">TOTAL BETS</div>
+                            <div style="font-size: 2rem; font-weight: bold;">${data.total_bets}</div>
+                        </div>
+                        <div style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 16px;">
+                            <div style="color: #88aaff;">TOTAL VOLUME</div>
+                            <div style="font-size: 2rem; font-weight: bold;">${data.total_volume.toFixed(0)} XCOIN</div>
+                        </div>
+                        <div style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 16px;">
+                            <div style="color: #88aaff;">HOUSE EDGE</div>
+                            <div style="font-size: 2rem; font-weight: bold;">${data.house_edge.toFixed(2)}%</div>
+                        </div>
+                    </div>
+                `;
+            } catch (error) {
+                toast('Failed to load analytics');
+            }
+        }
+        
+        function loadAdminSettings() {
+            document.getElementById('adminContent').innerHTML = `
+                <h3>GAME SETTINGS</h3>
+                <div class="form-group">
+                    <label>SLOTS RTP (%)</label>
+                    <input type="number" id="slotsRTP" value="96.5" step="0.1">
+                </div>
+                <div class="form-group">
+                    <label>DICE HOUSE EDGE (%)</label>
+                    <input type="number" id="diceHouseEdge" value="1" step="0.1">
+                </div>
+                <div class="form-group">
+                    <label>CRASH MAX MULTIPLIER</label>
+                    <input type="number" id="crashMaxMultiplier" value="10000">
+                </div>
+                <button class="btn btn-primary" onclick="saveGameSettings()">SAVE SETTINGS</button>
+            `;
+        }
+        
+        async function saveGameSettings() {
+            toast('SETTINGS SAVED (backend integration required)');
+        }
+        
+        // ==================== LEADERBOARD ====================
+        async function loadLeaderboards() {
+            try {
+                const response = await fetch(`${API_URL}/api/leaderboard`);
+                const data = await response.json();
+                if (data.biggest_win) document.getElementById('biggestWinLeader').innerHTML = `${data.biggest_win.username}: ${data.biggest_win.value.toFixed(2)} XCOIN`;
+                if (data.most_games) document.getElementById('mostGamesLeader').innerHTML = `${data.most_games.username}: ${data.most_games.value} games`;
+                if (data.total_wagered) document.getElementById('totalWageredLeader').innerHTML = `${data.total_wagered.username}: ${data.total_wagered.value.toFixed(0)} XCOIN`;
+            } catch (error) {
+                console.log('Leaderboard error');
             }
         }
         
@@ -1384,6 +1571,12 @@
             currentGame = null;
         }
         
+        function closeAllModals() {
+            document.getElementById('authModal')?.classList.remove('active');
+            document.getElementById('gameModal')?.classList.remove('active');
+            document.getElementById('adminModal')?.classList.remove('active');
+        }
+        
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
             verifyToken();
@@ -1394,6 +1587,11 @@
                 });
             }
             setDiceCondition('under');
+            
+            // Add spinning animation CSS
+            const style = document.createElement('style');
+            style.textContent = `@keyframes spin { 0% { transform: translateY(0); } 100% { transform: translateY(-100%); } }`;
+            document.head.appendChild(style);
         });
     </script>
 </body>
