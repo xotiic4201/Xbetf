@@ -116,6 +116,8 @@
         .btn-ghost:hover { border-color: var(--border-bright); color: var(--text-primary); }
         .btn-danger { background: linear-gradient(135deg, #e74c3c, #922b21); color: #fff; }
         .hidden { display: none !important; }
+        .payment-buttons { display: flex; gap: 8px; margin-left: 8px; }
+        .payment-buttons .btn { padding: 0.3rem 1rem; font-size: 0.75rem; }
         #adminLink {
             font-size: 0.75rem; font-weight: 700; color: var(--crimson);
             cursor: pointer; padding: 4px 10px;
@@ -301,6 +303,7 @@
                     <div class="balance-coin"><img src="/assets/coins/xcoin-gold.png" onerror="this.style.display='none'"></div>
                     <div><div class="balance-value" id="balance">0.00</div><div class="balance-label">XCOIN</div></div>
                 </div>
+                <div class="payment-buttons" id="paymentButtons"></div>
                 <span id="adminLink" class="hidden" onclick="showAdminPanel()">ADMIN</span>
                 <span id="logoutBtn" onclick="logout()">Logout</span>
             </div>
@@ -313,7 +316,7 @@
     <div id="casinoSection" class="page-section active">
         <section class="hero">
             <div class="hero-left">
-                <div class="hero-eyebrow">Provably Fair · Est. 2026</div>
+                <div class="hero-eyebrow">Provably Fair · Est. 2024</div>
                 <h1 class="hero-title"><span class="line-gold">PLAY</span><span class="line-white">WIN</span></h1>
                 <p class="hero-desc">Next-generation crypto casino with instant payouts, provably fair games, and XCoin currency.</p>
                 <div style="display:flex; gap:12px;"><button class="btn btn-gold" onclick="showAuth('register')">Start Playing</button><button class="btn btn-ghost" onclick="scrollToGames()">Browse Games</button></div>
@@ -343,7 +346,7 @@
             <div class="game-card" onclick="joinPokerTable('cash')"><div class="game-card-visual" style="background:linear-gradient(160deg,#0a2a2a,#041010);"><span style="font-size:4rem;">💰</span></div><div class="game-card-body"><div class="game-name">Cash Games</div><div class="game-desc">Play at your own pace. Buy in from 100-5000 XCoin.</div><div class="game-footer"><span>Min 100 XCoin</span><span>Max 5000 XCoin</span></div></div></div>
             <div class="game-card" onclick="joinPokerTable('tournament')"><div class="game-card-visual" style="background:linear-gradient(160deg,#2a0a2a,#100410);"><span style="font-size:4rem;">🏆</span></div><div class="game-card-body"><div class="game-name">Tournaments</div><div class="game-desc">Daily tournaments with guaranteed prize pools.</div><div class="game-footer"><span>Next: 20:00 UTC</span><span>Prize: 10,000 XCoin</span></div></div></div>
         </div>
-        <div class="panel" style="margin-top:2rem;"><div class="panel-header"><div class="panel-title">Active Tables</div><div class="section-meta">Live</div></div><div class="panel-body" id="pokerTables"><div style="color:var(--text-muted);text-align:center;padding:1rem;">No active tables. Start a new game!</div></div></div>
+        <div class="panel" style="margin-top:2rem;"><div class="panel-header"><div class="panel-title">Active Tables</div><div class="section-meta">Live</div></div><div class="panel-body" id="pokerTables"><div style="color:var(--text-muted);text-align:center;padding:1rem;">Coming soon - multiplayer poker tables</div></div></div>
     </div>
 
     <!-- Promotions Section -->
@@ -371,169 +374,25 @@
 <div class="modal-overlay" id="adminModal"><div class="modal-box" style="max-width:860px;"><div class="modal-header"><div class="modal-title">Admin Dashboard</div><div class="modal-close" onclick="closeModal('adminModal')">✕</div></div><div class="modal-body"><div class="admin-tabs"><div class="admin-tab active" onclick="adminTab('users',this)">Users</div><div class="admin-tab" onclick="adminTab('analytics',this)">Analytics</div><div class="admin-tab" onclick="adminTab('settings',this)">Settings</div></div><div id="adminContent"></div></div></div></div>
 
 <script>
-const stripe = Stripe('pk_test_your_stripe_public_key'); // Replace with your actual public key
-
-async function depositXCoin() {
-    if (!currentUser) {
-        showAuth('login');
-        return;
-    }
-    
-    const amount = parseFloat(prompt('Enter amount to deposit (XCoin):', '100'));
-    if (!amount || amount < 100) {
-        toast('Minimum deposit is 100 XCoin', 'info');
-        return;
-    }
-    
-    try {
-        const response = await fetch(`${API_URL}/api/payments/create-deposit`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify({ xcoin_amount: amount })
-        });
-        
-        const data = await response.json();
-        
-        if (response.ok && data.url) {
-            // Redirect to Stripe Checkout
-            window.location.href = data.url;
-        } else {
-            toast(data.error || 'Payment creation failed', 'lose');
-        }
-    } catch (error) {
-        toast('Payment error', 'lose');
-    }
-}
-
-async function withdrawXCoin() {
-    if (!currentUser) {
-        showAuth('login');
-        return;
-    }
-    
-    const amount = parseFloat(prompt('Enter amount to withdraw (XCoin):', '5000'));
-    if (!amount || amount < 5000) {
-        toast('Minimum withdrawal is 5000 XCoin', 'info');
-        return;
-    }
-    
-    const address = prompt('Enter your withdrawal address:', '');
-    if (!address) return;
-    
-    try {
-        const response = await fetch(`${API_URL}/api/user/withdraw`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify({ xcoin_amount: amount, address: address })
-        });
-        
-        const data = await response.json();
-        
-        if (response.ok) {
-            currentUser.xcoin_balance = data.new_balance;
-            document.getElementById('balance').textContent = currentUser.xcoin_balance.toFixed(2);
-            toast(`Withdrawal request for ${amount} XCoin submitted`, 'win');
-        } else {
-            toast(data.error || 'Withdrawal failed', 'lose');
-        }
-    } catch (error) {
-        toast('Withdrawal error', 'lose');
-    }
-}
-
-async function getXCoinRate() {
-    try {
-        const response = await fetch(`${API_URL}/api/payments/rate`);
-        const data = await response.json();
-        return data;
-    } catch (error) {
-        return { xcoin_to_usd: 0.01, min_deposit_xcoin: 100 };
-    }
-}
-
-// Add deposit/withdrawal buttons to user menu
-function addPaymentButtons() {
-    const userInfo = document.getElementById('userInfo');
-    if (!userInfo) return;
-    
-    const buttonsHtml = `
-        <button class="btn btn-gold" onclick="depositXCoin()" style="padding: 0.3rem 1rem; font-size: 0.75rem;">Deposit</button>
-        <button class="btn btn-ghost" onclick="withdrawXCoin()" style="padding: 0.3rem 1rem; font-size: 0.75rem;">Withdraw</button>
-    `;
-    
-    const balanceChip = document.querySelector('.balance-chip');
-    if (balanceChip) {
-        balanceChip.insertAdjacentHTML('afterend', buttonsHtml);
-    }
-}
-
-// Call this after user login
-function updateUIWithPayments(in_) {
-    // Call the existing updateUI first
-    const originalUpdateUI = window.updateUI;
-    if (originalUpdateUI) originalUpdateUI(in_);
-    
-    if (in_ && currentUser) {
-        addPaymentButtons();
-    }
-}
-
-// Override updateUI to include payment buttons
-window.updateUI = updateUIWithPayments;
-
-// Check deposit success on page load
-async function checkDepositSuccess() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const sessionId = urlParams.get('session_id');
-    
-    if (sessionId) {
-        // Clear the URL parameter
-        window.history.replaceState({}, document.title, window.location.pathname);
-        
-        // Verify deposit with backend
-        try {
-            const response = await fetch(`${API_URL}/api/user/balance`, {
-                headers: { 'Authorization': `Bearer ${token}` }
-            });
-            const data = await response.json();
-            if (response.ok && currentUser) {
-                currentUser.xcoin_balance = data.xcoin_balance;
-                document.getElementById('balance').textContent = currentUser.xcoin_balance.toFixed(2);
-                toast('Deposit successful!', 'win');
-            }
-        } catch (error) {
-            toast('Deposit verification failed', 'info');
-        }
-    }
-}
-
-// Add to page load
-document.addEventListener('DOMContentLoaded', () => {
-    // ... existing code ...
-    checkDepositSuccess();
-    getXCoinRate().then(rate => {
-        console.log(`XCoin rate: 1 XCoin = $${rate.xcoin_to_usd}`);
-    });
-});    
 // ==================== CONFIG ====================
-const API_URL = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'http://localhost:5000' : 'https://xbetb.onrender.com';
+const API_URL = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'http://localhost:5000' : 'https://xbet-backend.onrender.com';
 let token = localStorage.getItem('token');
 let currentUser = null;
 let ws = null;
 let currentAuthMode = 'login';
-let crashCanvas, crashCtx, crashGameMult = 1, crashBetActive = false, crashPoints = [];
+let stripePublicKey = 'pk_test_your_stripe_public_key'; // Replace with your actual Stripe public key
+let stripe = null;
 
 // Asset paths
 const ASSETS = {
     slots: { icon: '/assets/games/slots-icon.png', symbols: { cherry: '/assets/games/slots/cherry.png', lemon: '/assets/games/slots/lemon.png', orange: '/assets/games/slots/orange.png', plum: '/assets/games/slots/plum.png', bell: '/assets/games/slots/bell.png', xbet: '/assets/games/slots/xbet.png' } },
     dice: { default: '/assets/games/dice/dice-default.png', faces: { 1: '/assets/games/dice/dice-1.png', 2: '/assets/games/dice/dice-2.png', 3: '/assets/games/dice/dice-3.png', 4: '/assets/games/dice/dice-4.png', 5: '/assets/games/dice/dice-5.png', 6: '/assets/games/dice/dice-6.png' } }
 };
+
+// Initialize Stripe
+if (stripePublicKey && stripePublicKey !== 'pk_test_your_stripe_public_key') {
+    stripe = Stripe(stripePublicKey);
+}
 
 // ==================== BACKGROUND ====================
 const bgCanvas = document.getElementById('bgCanvas'), bgCtx = bgCanvas.getContext('2d');
@@ -548,10 +407,11 @@ window.addEventListener('resize', resizeAll); resizeAll(); drawBg(); initParticl
 // ==================== AUTH ====================
 function showAuth(mode){setAuthMode(mode);openModal('authModal');}
 function setAuthMode(m){currentAuthMode=m;document.getElementById('usernameField').style.display=m==='register'?'block':'none';document.getElementById('authSubmitBtn').textContent=m==='login'?'Sign In':'Create Account';}
-async function handleAuth(){const email=document.getElementById('authEmail').value.trim(),pass=document.getElementById('authPassword').value,username=document.getElementById('authUsername').value.trim();if(!email||!pass){toast('Please fill all fields','info');return;}const endpoint=currentAuthMode==='login'?'/api/auth/login':'/api/auth/register';const body=currentAuthMode==='login'?{email,password:pass}:{email,password:pass,username};try{const res=await fetch(`${API_URL}${endpoint}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});const data=await res.json();if(res.ok){token=data.token;localStorage.setItem('token',token);currentUser=data.user;updateUI(true);closeModal('authModal');initWS();loadLeaderboard();loadReferralCode();toast(`Welcome ${currentUser.username}!`,'win');}else toast(data.error||'Auth failed','lose');}catch{toast('Server error','lose');}}
-async function verifyToken(){if(!token)return;try{const res=await fetch(`${API_URL}/api/user/balance`,{headers:{Authorization:`Bearer ${token}`}});if(res.ok){const data=await res.json();currentUser={xcoin_balance:data.xcoin_balance,role:data.role||'user',username:data.username||'Player'};updateUI(true);initWS();loadLeaderboard();loadReferralCode();}else logout();}catch{logout();}}
+async function handleAuth(){const email=document.getElementById('authEmail').value.trim(),pass=document.getElementById('authPassword').value,username=document.getElementById('authUsername').value.trim();if(!email||!pass){toast('Please fill all fields','info');return;}const endpoint=currentAuthMode==='login'?'/api/auth/login':'/api/auth/register';const body=currentAuthMode==='login'?{email,password:pass}:{email,password:pass,username};try{const res=await fetch(`${API_URL}${endpoint}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});const data=await res.json();if(res.ok){token=data.token;localStorage.setItem('token',token);currentUser=data.user;updateUI(true);closeModal('authModal');initWS();loadLeaderboard();loadReferralCode();updateOnlinePlayers();toast(`Welcome ${currentUser.username}!`,'win');}else toast(data.error||'Auth failed','lose');}catch{toast('Server error','lose');}}
+async function verifyToken(){if(!token)return;try{const res=await fetch(`${API_URL}/api/user/balance`,{headers:{Authorization:`Bearer ${token}`}});if(res.ok){const data=await res.json();currentUser={xcoin_balance:data.xcoin_balance,role:data.role||'user',username:data.username||'Player',referral_code:data.referral_code||''};updateUI(true);initWS();loadLeaderboard();loadReferralCode();updateOnlinePlayers();}else logout();}catch{logout();}}
 async function logout(){token=null;currentUser=null;localStorage.removeItem('token');if(ws)ws.close();updateUI(false);toast('Signed out','info');}
-function updateUI(in_){document.getElementById('authButtons').classList.toggle('hidden',in_);document.getElementById('userInfo').classList.toggle('hidden',!in_);const chatBtn=document.getElementById('chatToggleBtn');if(chatBtn)chatBtn.style.display=in_?'flex':'none';if(in_&&currentUser){document.getElementById('balance').textContent=currentUser.xcoin_balance.toFixed(2);document.getElementById('adminLink').classList.toggle('hidden',currentUser.role!=='admin');}}
+function updateUI(in_){document.getElementById('authButtons').classList.toggle('hidden',in_);document.getElementById('userInfo').classList.toggle('hidden',!in_);const chatBtn=document.getElementById('chatToggleBtn');if(chatBtn)chatBtn.style.display=in_?'flex':'none';if(in_&&currentUser){document.getElementById('balance').textContent=currentUser.xcoin_balance.toFixed(2);document.getElementById('adminLink').classList.toggle('hidden',currentUser.role!=='admin');addPaymentButtons();}}
+function addPaymentButtons(){const container=document.getElementById('paymentButtons');if(!container)return;container.innerHTML=`<button class="btn btn-gold" onclick="depositXCoin()">Deposit</button><button class="btn btn-ghost" onclick="withdrawXCoin()">Withdraw</button>`;}
 function initWS(){if(!token)return;const url=API_URL.replace('http','ws')+`/ws/${token}`;ws=new WebSocket(url);ws.onmessage=e=>{const d=JSON.parse(e.data);if(d.type==='chat')addChatMsg(d.username,d.message);if(d.type==='crash_multiplier')updateCrashMult(d.multiplier);if(d.type==='crash_crashed')onCrashCrashed(d.multiplier);};ws.onclose=()=>setTimeout(initWS,5000);}
 
 // ==================== MODALS ====================
@@ -561,6 +421,16 @@ function closeAllModals(){['authModal','gameModal','adminModal'].forEach(id=>clo
 
 // ==================== TAB NAVIGATION ====================
 document.querySelectorAll('.nav-tab').forEach(tab=>{tab.addEventListener('click',()=>{const section=tab.dataset.section;document.querySelectorAll('.page-section').forEach(s=>s.classList.remove('active'));document.getElementById(`${section}Section`).classList.add('active');document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));tab.classList.add('active');});});
+
+// ==================== STRIPE PAYMENTS ====================
+async function depositXCoin(){if(!currentUser){showAuth('login');return;}const amount=parseFloat(prompt('Enter amount to deposit (XCoin):','100'));if(!amount||amount<100){toast('Minimum deposit is 100 XCoin','info');return;}try{const res=await fetch(`${API_URL}/api/payments/create-deposit`,{method:'POST',headers:{'Content-Type':'application/json',Authorization:`Bearer ${token}`},body:JSON.stringify({xcoin_amount:amount})});const data=await res.json();if(res.ok&&data.url){window.location.href=data.url;}else{toast(data.error||'Payment creation failed','lose');}}catch{toast('Payment error','lose');}}
+async function withdrawXCoin(){if(!currentUser){showAuth('login');return;}const amount=parseFloat(prompt('Enter amount to withdraw (XCoin):','5000'));if(!amount||amount<5000){toast('Minimum withdrawal is 5000 XCoin','info');return;}const address=prompt('Enter your withdrawal address:');if(!address)return;try{const res=await fetch(`${API_URL}/api/user/withdraw`,{method:'POST',headers:{'Content-Type':'application/json',Authorization:`Bearer ${token}`},body:JSON.stringify({xcoin_amount:amount,address:address})});const data=await res.json();if(res.ok){currentUser.xcoin_balance=data.new_balance;document.getElementById('balance').textContent=currentUser.xcoin_balance.toFixed(2);toast(`Withdrawal request for ${amount} XCoin submitted`,'win');}else{toast(data.error||'Withdrawal failed','lose');}}catch{toast('Withdrawal error','lose');}}
+async function checkDepositSuccess(){const urlParams=new URLSearchParams(window.location.search);const sessionId=urlParams.get('session_id');if(sessionId){window.history.replaceState({},document.title,window.location.pathname);try{const res=await fetch(`${API_URL}/api/user/balance`,{headers:{Authorization:`Bearer ${token}`}});const data=await res.json();if(res.ok&&currentUser){currentUser.xcoin_balance=data.xcoin_balance;document.getElementById('balance').textContent=currentUser.xcoin_balance.toFixed(2);toast('Deposit successful!','win');}}catch{toast('Deposit verification failed','info');}}}
+
+// ==================== ONLINE PLAYERS ====================
+async function updateOnlinePlayers(){try{const res=await fetch(`${API_URL}/api/online-players`);if(res.ok){const data=await res.json();document.getElementById('statPlayers').textContent=data.count;document.getElementById('chatOnlineCount').textContent=data.count;}else{document.getElementById('statPlayers').textContent='--';}}catch{document.getElementById('statPlayers').textContent='--';}}
+setInterval(updateOnlinePlayers,15000);
+updateOnlinePlayers();
 
 // ==================== GAMES ====================
 function openGame(g){if(!currentUser){showAuth('login');return;}const body=document.getElementById('gameModalBody');const titles={slots:'Crypto Slots',dice:'Quantum Dice',crash:'Space Crash',poker:'Texas Hold\'em'};document.getElementById('gameModalTitle').textContent=titles[g];if(g==='slots')body.innerHTML=slotsHTML();else if(g==='dice')body.innerHTML=diceHTML();else if(g==='crash')body.innerHTML=crashHTML();else body.innerHTML=pokerGameHTML();openModal('gameModal');if(g==='crash')initCrash();if(g==='dice')initDiceSlider();}
@@ -578,16 +448,16 @@ function applyDiceResult(data,bet,dice){dice.classList.remove('rolling');const r
 
 function crashHTML(){return `<div class="crash-graph-wrap"><div class="crash-multiplier-big" id="crashMultDisplay">1.00x</div><canvas id="crashCanvas" width="600" height="200"></canvas></div><div class="bet-panel"><div class="bet-row-inline"><div class="form-field"><label class="form-label">Bet (XCOIN)</label><input class="form-input" type="number" id="crashBet" value="10"></div><div class="form-field"><label class="form-label">Auto Cashout</label><input class="form-input" type="number" id="autoCashout" step="0.1" placeholder="e.g. 2.0"></div></div><div style="display:flex; gap:10px;"><button class="btn btn-gold" style="flex:1;" onclick="placeCrashBet()" id="crashBetBtn">Place Bet</button><button class="btn btn-danger" style="flex:1;" onclick="cashOutCrash()" id="crashCashBtn" disabled>Cash Out</button></div></div>`;}
 function initCrash(){crashCanvas=document.getElementById('crashCanvas');if(crashCanvas){crashCtx=crashCanvas.getContext('2d');startCrashSim();}}
-let crashSimActive=false,crashStartTime,crashPoint=0;
+let crashSimActive=false,crashStartTime,crashPoint=0,crashCanvas,crashCtx,crashGameMult=1,crashBetActive=false;
 function startCrashSim(){if(crashSimActive)return;crashSimActive=true;crashGameMult=1;crashStartTime=Date.now();crashPoint=Math.random()>0.3?(1+Math.random()*8):(1+Math.random()*1.5);function tick(){const elapsed=(Date.now()-crashStartTime)/1000;crashGameMult=Math.pow(1.06,elapsed*5);if(crashCanvas){crashCanvas.width=crashCanvas.clientWidth;crashCanvas.height=200;drawCrashCanvas(crashGameMult,false);}document.getElementById('crashMultDisplay').textContent=crashGameMult.toFixed(2)+'x';if(crashBetActive){const auto=parseFloat(document.getElementById('autoCashout')?.value);if(auto&&crashGameMult>=auto)cashOutCrash();}if(crashGameMult>=crashPoint){drawCrashCanvas(crashGameMult,true);if(crashBetActive){toast(`Crashed at ${crashGameMult.toFixed(2)}x - you lost!`,'lose');crashBetActive=false;document.getElementById('crashBetBtn').disabled=false;document.getElementById('crashCashBtn').disabled=true;}crashSimActive=false;setTimeout(startCrashSim,3000);return;}requestAnimationFrame(tick);}tick();}
 function drawCrashCanvas(mult,crashed){if(!crashCtx)return;const w=crashCanvas.width,h=crashCanvas.height;crashCtx.clearRect(0,0,w,h);crashCtx.strokeStyle='rgba(26,255,140,0.07)';for(let i=1;i<5;i++){crashCtx.beginPath();crashCtx.moveTo(0,(i/5)*h);crashCtx.lineTo(w,(i/5)*h);crashCtx.stroke();crashCtx.beginPath();crashCtx.moveTo((i/5)*w,0);crashCtx.lineTo((i/5)*w,h);crashCtx.stroke();}crashCtx.beginPath();for(let x=0;x<=w;x++){const t=x/w;const m=Math.pow(1.03,t*30);const y=h-(m/15)*h;x===0?crashCtx.moveTo(x,Math.min(h,Math.max(0,y))):crashCtx.lineTo(x,Math.min(h,Math.max(0,y)));}crashCtx.strokeStyle=crashed?'#ff4444':'#1aff8c';crashCtx.lineWidth=2.5;crashCtx.stroke();const currentX=w*(Math.log(mult)/Math.log(1.03))/30;const currentY=h-(mult/15)*h;crashCtx.fillStyle='#ff00ff';crashCtx.shadowBlur=15;crashCtx.beginPath();crashCtx.arc(Math.min(w,Math.max(0,currentX)),Math.min(h,Math.max(0,currentY)),8,0,Math.PI*2);crashCtx.fill();crashCtx.shadowBlur=0;}
 function updateCrashMult(m){crashGameMult=m;drawCrashCanvas(m,false);document.getElementById('crashMultDisplay').textContent=m.toFixed(2)+'x';}
 function onCrashCrashed(m){drawCrashCanvas(m,true);if(crashBetActive){toast(`Crashed at ${m.toFixed(2)}x`,'lose');crashBetActive=false;document.getElementById('crashBetBtn').disabled=false;document.getElementById('crashCashBtn').disabled=true;}}
 function placeCrashBet(){const bet=parseFloat(document.getElementById('crashBet').value);if(!bet||bet>currentUser.xcoin_balance){toast('Insufficient balance','lose');return;}crashBetActive=true;currentUser.xcoin_balance-=bet;document.getElementById('balance').textContent=currentUser.xcoin_balance.toFixed(2);document.getElementById('crashBetBtn').disabled=true;document.getElementById('crashCashBtn').disabled=false;toast(`Bet placed: ${bet} XCOIN`,'info');if(ws)ws.send(JSON.stringify({type:'crash_bet',amount:bet,auto_cashout:parseFloat(document.getElementById('autoCashout').value)||null}));}
 function cashOutCrash(){if(!crashBetActive)return;const win=crashGameMult*parseFloat(document.getElementById('crashBet').value);currentUser.xcoin_balance+=win;document.getElementById('balance').textContent=currentUser.xcoin_balance.toFixed(2);toast(`Cashed out ${win.toFixed(2)} XCOIN at ${crashGameMult.toFixed(2)}x`,'win');crashBetActive=false;document.getElementById('crashBetBtn').disabled=false;document.getElementById('crashCashBtn').disabled=true;if(ws)ws.send(JSON.stringify({type:'crash_cashout'}));}
-
 function pokerGameHTML(){return `<div style="text-align:center; padding:2rem;"><div style="font-size:4rem; margin-bottom:1rem;">♠️♥️♣️♦️</div><h3>Texas Hold'em Poker</h3><p style="color:var(--text-secondary); margin:1rem 0;">Compete against players worldwide. Daily tournaments with XCoin prizes.</p><div class="bet-panel"><div class="form-field"><label class="form-label">Buy-in (XCOIN)</label><input class="form-input" type="number" id="pokerBuyin" value="100" min="10"></div><button class="btn btn-gold" style="width:100%;" onclick="joinPokerTable()">Join Table</button><div style="margin-top:1rem; font-size:0.75rem; color:var(--text-muted);">Real poker coming soon — multiplayer update in progress</div></div></div>`;}
 function joinPokerTable(type='cash'){if(!currentUser){showAuth('login');return;}const buyin=parseFloat(document.getElementById('pokerBuyin')?.value||100);if(buyin>currentUser.xcoin_balance){toast('Insufficient balance','lose');return;}toast('Poker tables coming soon! Stay tuned.','info');}
+function setBet(id,v){const el=document.getElementById(id);if(el)el.value=v;}
 
 // ==================== PROMOTIONS ====================
 async function claimDailyBonus(){if(!currentUser){showAuth('login');return;}try{const res=await fetch(`${API_URL}/api/rewards/daily`,{method:'POST',headers:{Authorization:`Bearer ${token}`}});const data=await res.json();if(res.ok){currentUser.xcoin_balance+=data.bonus;document.getElementById('balance').textContent=currentUser.xcoin_balance.toFixed(2);toast(`Claimed ${data.bonus} XCOIN daily bonus!`,'win');document.getElementById('dailyBonusStatus').textContent='Claimed';}else toast(data.error||'Already claimed today','info');}catch{toast('Daily bonus unavailable','info');}}
@@ -602,7 +472,7 @@ function switchLb(type,el){document.querySelectorAll('.lb-tab').forEach(t=>t.cla
 // ==================== ADMIN ====================
 function showAdminPanel(){openModal('adminModal');adminTab('users',document.querySelector('.admin-tab.active'));loadAdminUsers();}
 function adminTab(tab,el){document.querySelectorAll('.admin-tab').forEach(t=>t.classList.remove('active'));if(el)el.classList.add('active');if(tab==='users')loadAdminUsers();else if(tab==='analytics')loadAdminAnalytics();else loadAdminSettings();}
-async function loadAdminUsers(){try{const res=await fetch(`${API_URL}/api/admin/users`,{headers:{Authorization:`Bearer ${token}`}});const data=await res.json();document.getElementById('adminContent').innerHTML=`<table class="admin-table"><thead><tr><th>User</th><th>Email</th><th>Balance</th><th>Status</th><th>Action</th></tr></thead><tbody>${data.users.map(u=>`<tr><td>${u.username}</td><td>${u.email}</td><td>${Number(u.xcoin_balance).toFixed(0)}</td><td><span class="badge ${u.banned?'badge-banned':'badge-active'}">${u.banned?'Banned':'Active'}</span></td><td><button class="btn ${u.banned?'btn-gold':'btn-danger'}" style="padding:4px 12px;" onclick="banUser('${u.id}',${!u.banned})">${u.banned?'Unban':'Ban'}</button></td></tr>`).join('')}</tbody></table>`;}catch{document.getElementById('adminContent').innerHTML='<div style="padding:2rem;">Backend not connected</div>';}}
+async function loadAdminUsers(){try{const res=await fetch(`${API_URL}/api/admin/users`,{headers:{Authorization:`Bearer ${token}`}});const data=await res.json();document.getElementById('adminContent').innerHTML=`<table class="admin-table"><thead><tr><th>User</th><th>Email</th><th>Balance</th><th>Status</th><th>Action</th></thead><tbody>${data.users.map(u=>`<tr><td>${u.username}</td><td>${u.email}</td><td>${Number(u.xcoin_balance).toFixed(0)}</td><td><span class="badge ${u.banned?'badge-banned':'badge-active'}">${u.banned?'Banned':'Active'}</span></td><td><button class="btn ${u.banned?'btn-gold':'btn-danger'}" style="padding:4px 12px;" onclick="banUser('${u.id}',${!u.banned})">${u.banned?'Unban':'Ban'}</button></td></tr>`).join('')}</tbody></table>`;}catch{document.getElementById('adminContent').innerHTML='<div style="padding:2rem;">Backend not connected</div>';}}
 async function banUser(id,ban){try{await fetch(`${API_URL}/api/admin/users/${id}/ban`,{method:'PUT',headers:{'Content-Type':'application/json',Authorization:`Bearer ${token}`},body:JSON.stringify({banned:ban})});toast(ban?'User banned':'User unbanned','info');loadAdminUsers();}catch{toast('Action failed','lose');}}
 async function loadAdminAnalytics(){try{const res=await fetch(`${API_URL}/api/admin/analytics`,{headers:{Authorization:`Bearer ${token}`}});const d=await res.json();document.getElementById('adminContent').innerHTML=`<div class="stats-grid"><div class="stat-card"><div class="stat-card-label">Total Users</div><div class="stat-card-value">${d.total_users}</div></div><div class="stat-card"><div class="stat-card-label">Total Bets</div><div class="stat-card-value">${d.total_bets}</div></div><div class="stat-card"><div class="stat-card-label">Volume</div><div class="stat-card-value">${Number(d.total_volume).toFixed(0)}</div></div><div class="stat-card"><div class="stat-card-label">House Edge</div><div class="stat-card-value">${Number(d.house_edge).toFixed(2)}%</div></div></div>`;}catch{document.getElementById('adminContent').innerHTML='<div style="padding:2rem;">Backend not connected</div>';}}
 function loadAdminSettings(){document.getElementById('adminContent').innerHTML=`<div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;"><div class="form-field"><label class="form-label">Slots RTP (%)</label><input class="form-input" value="96.5"></div><div class="form-field"><label class="form-label">Dice House Edge (%)</label><input class="form-input" value="1.0"></div><div class="form-field"><label class="form-label">Crash Max Multiplier</label><input class="form-input" value="10000"></div></div><button class="btn btn-gold" onclick="toast('Settings saved','info')">Save Settings</button>`;}
@@ -615,13 +485,12 @@ function sendChatMessage(){const input=document.getElementById('chatInput');cons
 function addChatMsg(user,text){const c=document.getElementById('chatMsgs');if(!c)return;const div=document.createElement('div');div.className='chat-msg';div.innerHTML=`<span class="chat-msg-user">${escapeHtml(user)}:</span> <span class="chat-msg-text">${escapeHtml(text)}</span>`;c.appendChild(div);c.scrollTop=c.scrollHeight;while(c.children.length>80)c.removeChild(c.firstChild);}
 function escapeHtml(t){const d=document.createElement('div');d.textContent=t;return d.innerHTML;}
 function toast(msg,type='info'){const icons={win:'🏆',lose:'💀',info:'💰'};const wrap=document.getElementById('toastWrap');const el=document.createElement('div');el.className=`toast ${type}`;el.innerHTML=`<span class="toast-icon">${icons[type]}</span><span class="toast-text">${escapeHtml(msg)}</span>`;wrap.appendChild(el);setTimeout(()=>{el.style.opacity='0';el.style.transform='translateX(20px)';setTimeout(()=>el.remove(),300);},3200);}
-function setBet(id,v){const el=document.getElementById(id);if(el)el.value=v;}
 function scrollToGames(){document.getElementById('gamesSection')?.scrollIntoView({behavior:'smooth'});}
 
 // ==================== INIT ====================
 verifyToken();
-setInterval(async()=>{if(currentUser){try{const res=await fetch(`${API_URL}/api/user/balance`,{headers:{Authorization:`Bearer ${token}`}});const data=await res.json();currentUser.xcoin_balance=data.xcoin_balance;document.getElementById('balance').textContent=data.xcoin_balance.toFixed(2);}catch{}}},30000);
-setInterval(()=>{const el=document.getElementById('statPlayers');if(el)el.textContent=Math.floor(800+Math.random()*300);},10000);
+checkDepositSuccess();
+setInterval(()=>{if(currentUser){fetch(`${API_URL}/api/user/balance`,{headers:{Authorization:`Bearer ${token}`}}).then(r=>r.json()).then(data=>{currentUser.xcoin_balance=data.xcoin_balance;document.getElementById('balance').textContent=data.xcoin_balance.toFixed(2);}).catch(()=>{});}},30000);
 </script>
 </body>
 </html>
