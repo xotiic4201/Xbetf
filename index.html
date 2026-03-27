@@ -370,6 +370,156 @@
 <div class="modal-overlay" id="adminModal"><div class="modal-box" style="max-width:860px;"><div class="modal-header"><div class="modal-title">Admin Dashboard</div><div class="modal-close" onclick="closeModal('adminModal')">✕</div></div><div class="modal-body"><div class="admin-tabs"><div class="admin-tab active" onclick="adminTab('users',this)">Users</div><div class="admin-tab" onclick="adminTab('analytics',this)">Analytics</div><div class="admin-tab" onclick="adminTab('settings',this)">Settings</div></div><div id="adminContent"></div></div></div></div>
 
 <script>
+const stripe = Stripe('pk_test_your_stripe_public_key'); // Replace with your actual public key
+
+async function depositXCoin() {
+    if (!currentUser) {
+        showAuth('login');
+        return;
+    }
+    
+    const amount = parseFloat(prompt('Enter amount to deposit (XCoin):', '100'));
+    if (!amount || amount < 100) {
+        toast('Minimum deposit is 100 XCoin', 'info');
+        return;
+    }
+    
+    try {
+        const response = await fetch(`${API_URL}/api/payments/create-deposit`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ xcoin_amount: amount })
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok && data.url) {
+            // Redirect to Stripe Checkout
+            window.location.href = data.url;
+        } else {
+            toast(data.error || 'Payment creation failed', 'lose');
+        }
+    } catch (error) {
+        toast('Payment error', 'lose');
+    }
+}
+
+async function withdrawXCoin() {
+    if (!currentUser) {
+        showAuth('login');
+        return;
+    }
+    
+    const amount = parseFloat(prompt('Enter amount to withdraw (XCoin):', '5000'));
+    if (!amount || amount < 5000) {
+        toast('Minimum withdrawal is 5000 XCoin', 'info');
+        return;
+    }
+    
+    const address = prompt('Enter your withdrawal address:', '');
+    if (!address) return;
+    
+    try {
+        const response = await fetch(`${API_URL}/api/user/withdraw`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ xcoin_amount: amount, address: address })
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+            currentUser.xcoin_balance = data.new_balance;
+            document.getElementById('balance').textContent = currentUser.xcoin_balance.toFixed(2);
+            toast(`Withdrawal request for ${amount} XCoin submitted`, 'win');
+        } else {
+            toast(data.error || 'Withdrawal failed', 'lose');
+        }
+    } catch (error) {
+        toast('Withdrawal error', 'lose');
+    }
+}
+
+async function getXCoinRate() {
+    try {
+        const response = await fetch(`${API_URL}/api/payments/rate`);
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        return { xcoin_to_usd: 0.01, min_deposit_xcoin: 100 };
+    }
+}
+
+// Add deposit/withdrawal buttons to user menu
+function addPaymentButtons() {
+    const userInfo = document.getElementById('userInfo');
+    if (!userInfo) return;
+    
+    const buttonsHtml = `
+        <button class="btn btn-gold" onclick="depositXCoin()" style="padding: 0.3rem 1rem; font-size: 0.75rem;">Deposit</button>
+        <button class="btn btn-ghost" onclick="withdrawXCoin()" style="padding: 0.3rem 1rem; font-size: 0.75rem;">Withdraw</button>
+    `;
+    
+    const balanceChip = document.querySelector('.balance-chip');
+    if (balanceChip) {
+        balanceChip.insertAdjacentHTML('afterend', buttonsHtml);
+    }
+}
+
+// Call this after user login
+function updateUIWithPayments(in_) {
+    // Call the existing updateUI first
+    const originalUpdateUI = window.updateUI;
+    if (originalUpdateUI) originalUpdateUI(in_);
+    
+    if (in_ && currentUser) {
+        addPaymentButtons();
+    }
+}
+
+// Override updateUI to include payment buttons
+window.updateUI = updateUIWithPayments;
+
+// Check deposit success on page load
+async function checkDepositSuccess() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const sessionId = urlParams.get('session_id');
+    
+    if (sessionId) {
+        // Clear the URL parameter
+        window.history.replaceState({}, document.title, window.location.pathname);
+        
+        // Verify deposit with backend
+        try {
+            const response = await fetch(`${API_URL}/api/user/balance`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            const data = await response.json();
+            if (response.ok && currentUser) {
+                currentUser.xcoin_balance = data.xcoin_balance;
+                document.getElementById('balance').textContent = currentUser.xcoin_balance.toFixed(2);
+                toast('Deposit successful!', 'win');
+            }
+        } catch (error) {
+            toast('Deposit verification failed', 'info');
+        }
+    }
+}
+
+// Add to page load
+document.addEventListener('DOMContentLoaded', () => {
+    // ... existing code ...
+    checkDepositSuccess();
+    getXCoinRate().then(rate => {
+        console.log(`XCoin rate: 1 XCoin = $${rate.xcoin_to_usd}`);
+    });
+});    
 // ==================== CONFIG ====================
 const API_URL = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'http://localhost:5000' : 'https://xbetb.onrender.com';
 let token = localStorage.getItem('token');
