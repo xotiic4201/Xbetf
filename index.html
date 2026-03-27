@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>XBET — Next-Gen Casino</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <title>XBET</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://js.stripe.com/v3/"></script>
     <style>
         * {
             margin: 0;
@@ -14,23 +15,25 @@
         }
 
         :root {
-            --gold: #ffd966;
-            --gold-dark: #d4af37;
-            --gold-glow: rgba(255, 217, 102, 0.4);
-            --crimson: #e74c3c;
-            --green: #2ecc71;
-            --green-dark: #27ae60;
-            --bg-primary: #0a0a0f;
+            --gold: #FFD966;
+            --gold-dark: #D4AF37;
+            --gold-glow: rgba(255, 217, 102, 0.5);
+            --crimson: #E74C3C;
+            --green: #2ECC71;
+            --green-dark: #27AE60;
+            --blue: #3498DB;
+            --purple: #9B59B6;
+            --bg-primary: #0A0A0F;
             --bg-secondary: #111118;
-            --bg-card: #1a1a24;
-            --bg-elevated: #22222e;
-            --border: rgba(255, 217, 102, 0.15);
-            --border-light: rgba(255, 217, 102, 0.3);
-            --text-primary: #ffffff;
-            --text-secondary: #a0a0b0;
-            --text-muted: #6a6a7a;
+            --bg-card: #1A1A24;
+            --bg-elevated: #22222E;
+            --border: rgba(255, 217, 102, 0.2);
+            --border-light: rgba(255, 217, 102, 0.4);
+            --text-primary: #FFFFFF;
+            --text-secondary: #A0A0B0;
+            --text-muted: #6A6A7A;
             --shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-            --shadow-glow: 0 0 20px rgba(255, 217, 102, 0.3);
+            --shadow-glow: 0 0 40px rgba(255, 217, 102, 0.3);
         }
 
         body {
@@ -41,6 +44,94 @@
             min-height: 100vh;
         }
 
+        /* Spectacular Entrance Animation */
+        .entrance-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #0A0A0F 0%, #1A1A2E 50%, #0A0A0F 100%);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: fadeOut 1.5s ease-in-out 2.5s forwards;
+            pointer-events: none;
+        }
+
+        @keyframes fadeOut {
+            to {
+                opacity: 0;
+                visibility: hidden;
+            }
+        }
+
+        .entrance-content {
+            text-align: center;
+            animation: scaleIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes scaleIn {
+            from {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .entrance-logo {
+            width: 200px;
+            height: 200px;
+            margin-bottom: 30px;
+            animation: floatLogo 2s ease-in-out infinite;
+        }
+
+        @keyframes floatLogo {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .entrance-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 4rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark), #FFE55C);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 20px;
+            animation: glowPulse 1s ease-in-out infinite;
+        }
+
+        @keyframes glowPulse {
+            0%, 100% { text-shadow: 0 0 20px rgba(255, 217, 102, 0.3); }
+            50% { text-shadow: 0 0 40px rgba(255, 217, 102, 0.8); }
+        }
+
+        .entrance-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            letter-spacing: 2px;
+        }
+
+        .entrance-spinner {
+            width: 60px;
+            height: 60px;
+            border: 3px solid var(--border);
+            border-top-color: var(--gold);
+            border-radius: 50%;
+            margin: 30px auto 0;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
         .bg-animation {
             position: fixed;
             top: 0;
@@ -48,7 +139,8 @@
             width: 100%;
             height: 100%;
             z-index: -2;
-            background: radial-gradient(circle at 20% 30%, #1a1a2e 0%, #0a0a0f 100%);
+            background: radial-gradient(circle at 20% 30%, #1A1A2E 0%, #0A0A0F 100%);
+            overflow: hidden;
         }
 
         .bg-animation::before {
@@ -60,7 +152,7 @@
             left: -50%;
             background: radial-gradient(circle, rgba(255,217,102,0.05) 1px, transparent 1px);
             background-size: 50px 50px;
-            animation: moveGrid 20s linear infinite;
+            animation: moveGrid 30s linear infinite;
         }
 
         @keyframes moveGrid {
@@ -83,7 +175,7 @@
             background: radial-gradient(circle, var(--gold), transparent);
             border-radius: 50%;
             opacity: 0;
-            animation: floatParticle 8s ease-in-out infinite;
+            animation: floatParticle 10s ease-in-out infinite;
         }
 
         @keyframes floatParticle {
@@ -92,10 +184,10 @@
                 transform: translateY(100vh) scale(0);
             }
             10% {
-                opacity: 0.3;
+                opacity: 0.5;
             }
             90% {
-                opacity: 0.3;
+                opacity: 0.5;
             }
             100% {
                 opacity: 0;
@@ -279,8 +371,8 @@
             color: var(--text-primary);
         }
 
-        .btn-danger {
-            background: linear-gradient(135deg, var(--crimson), #c0392b);
+        .btn-success {
+            background: linear-gradient(135deg, var(--green), var(--green-dark));
             color: white;
         }
 
@@ -296,7 +388,7 @@
 
         .page {
             display: none;
-            animation: fadeIn 0.3s ease;
+            animation: fadeIn 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .page.active {
@@ -304,13 +396,19 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .games-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 1.5rem;
             margin-bottom: 3rem;
         }
@@ -318,7 +416,7 @@
         .game-card {
             background: var(--bg-card);
             border: 1px solid var(--border);
-            border-radius: 20px;
+            border-radius: 24px;
             overflow: hidden;
             cursor: pointer;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -338,7 +436,7 @@
         }
 
         .game-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-8px);
             border-color: var(--border-light);
             box-shadow: var(--shadow);
         }
@@ -348,7 +446,7 @@
         }
 
         .game-icon {
-            height: 160px;
+            height: 180px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -356,8 +454,8 @@
         }
 
         .game-icon img {
-            width: 80px;
-            height: 80px;
+            width: 100px;
+            height: 100px;
             object-fit: contain;
             filter: drop-shadow(0 8px 24px rgba(0,0,0,0.5));
             transition: transform 0.3s;
@@ -397,7 +495,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.9);
+            background: rgba(0, 0, 0, 0.95);
             backdrop-filter: blur(20px);
             z-index: 2000;
             align-items: center;
@@ -411,9 +509,9 @@
 
         .modal-content {
             background: var(--bg-secondary);
-            border-radius: 24px;
+            border-radius: 32px;
             width: 90%;
-            max-width: 900px;
+            max-width: 1000px;
             max-height: 85vh;
             overflow-y: auto;
             border: 1px solid var(--border);
@@ -447,17 +545,106 @@
 
         .modal-close:hover {
             background: var(--crimson);
+            transform: rotate(90deg);
         }
 
         .modal-body {
             padding: 1.5rem;
         }
 
+        /* Payment Cards */
+        .payment-methods {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .payment-card {
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: 20px;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .payment-card:hover {
+            border-color: var(--gold);
+            transform: scale(1.02);
+        }
+
+        .payment-card.selected {
+            border-color: var(--gold);
+            background: linear-gradient(135deg, rgba(255,217,102,0.1), rgba(255,217,102,0.05));
+        }
+
+        .payment-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 0.5rem;
+        }
+
+        .payment-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .robux-products {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .robux-product {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .robux-product:hover {
+            border-color: var(--gold);
+            transform: scale(1.05);
+        }
+
+        .robux-amount {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--gold);
+        }
+
+        .xcoin-amount {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin: 0.5rem 0;
+        }
+
+        .price {
+            font-size: 0.8rem;
+            color: var(--green);
+        }
+
+        .vip-badge {
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+            color: var(--bg-primary);
+            font-size: 0.7rem;
+            padding: 2px 8px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-top: 5px;
+        }
+
         .slot-machine {
-            background: linear-gradient(135deg, #1a1a2e, #0f0f1a);
+            background: linear-gradient(135deg, #1A1A2E, #0F0F1A);
             border-radius: 20px;
             padding: 1.5rem;
-            margin-bottom: 1.5rem;
         }
 
         .slot-reels {
@@ -470,270 +657,37 @@
         .slot-reel {
             background: var(--bg-primary);
             border-radius: 12px;
-            aspect-ratio: 1;
-            display: flex;
-            flex-direction: column;
             overflow: hidden;
             border: 2px solid var(--border);
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+            position: relative;
         }
 
-        .slot-row {
-            flex: 1;
+        .reel-symbols {
+            transition: transform 0.1s linear;
+        }
+
+        .reel-symbol {
+            aspect-ratio: 1;
             display: flex;
             align-items: center;
             justify-content: center;
             border-bottom: 1px solid var(--border);
-            background: linear-gradient(135deg, #0a0a0f, #111118);
+            background: linear-gradient(135deg, #0A0A0F, #111118);
         }
 
-        .slot-row img {
+        .reel-symbol img {
             width: 50px;
             height: 50px;
             object-fit: contain;
         }
 
-        .slot-row:last-child {
-            border-bottom: none;
+        .slot-reel.spinning .reel-symbols {
+            animation: reelSpin 0.1s linear infinite;
         }
 
-        .slot-reel.spinning .slot-row {
-            animation: slotSpin 0.1s linear infinite;
-        }
-
-        @keyframes slotSpin {
+        @keyframes reelSpin {
             0% { transform: translateY(0); }
             100% { transform: translateY(-100%); }
-        }
-
-        .slot-reel.winning {
-            border-color: var(--gold);
-            box-shadow: 0 0 20px var(--gold-glow);
-            animation: winPulse 0.5s ease 3;
-        }
-
-        @keyframes winPulse {
-            0%, 100% { box-shadow: 0 0 20px var(--gold-glow); }
-            50% { box-shadow: 0 0 40px var(--gold); }
-        }
-
-        .blackjack-table {
-            background: linear-gradient(135deg, #0a3a2a, #052015);
-            border-radius: 20px;
-            padding: 1.5rem;
-            border: 2px solid var(--gold-dark);
-        }
-
-        .cards {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin: 1rem 0;
-        }
-
-        .card {
-            width: 70px;
-            height: 90px;
-            background: white;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.8rem;
-            font-weight: bold;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-            transition: transform 0.2s;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-        }
-
-        .card.heart, .card.diamond {
-            color: var(--crimson);
-        }
-
-        .card.spade, .card.club {
-            color: var(--bg-primary);
-        }
-
-        .card-back {
-            background: linear-gradient(135deg, #2c3e50, #1a2632);
-            background-image: repeating-linear-gradient(45deg, rgba(255,255,255,0.1) 0px, rgba(255,255,255,0.1) 2px, transparent 2px, transparent 8px);
-        }
-
-        .mines-grid {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 8px;
-            margin: 1rem 0;
-        }
-
-        .mine-tile {
-            aspect-ratio: 1;
-            background: linear-gradient(135deg, var(--bg-elevated), var(--bg-card));
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            cursor: pointer;
-            transition: all 0.2s;
-            border: 1px solid var(--border);
-        }
-
-        .mine-tile:hover:not(.revealed) {
-            transform: scale(1.05);
-            border-color: var(--gold);
-        }
-
-        .mine-tile.revealed {
-            background: var(--green-dark);
-        }
-
-        .mine-tile.mine {
-            background: var(--crimson);
-        }
-
-        .plinko-board {
-            background: var(--bg-primary);
-            border-radius: 20px;
-            padding: 1rem;
-            margin: 1rem 0;
-            position: relative;
-            overflow-x: auto;
-        }
-
-        .plinko-canvas {
-            width: 100%;
-            height: 400px;
-            display: block;
-            background: linear-gradient(180deg, #1a1a2e, #0f0f1a);
-            border-radius: 12px;
-        }
-
-        .crash-graph {
-            background: var(--bg-primary);
-            border-radius: 20px;
-            padding: 1rem;
-            margin: 1rem 0;
-        }
-
-        .crash-multiplier {
-            font-family: 'Orbitron', monospace;
-            font-size: 4rem;
-            text-align: center;
-            color: var(--green);
-            margin: 1rem 0;
-            text-shadow: 0 0 20px var(--green);
-        }
-
-        .bet-controls {
-            background: var(--bg-elevated);
-            border-radius: 16px;
-            padding: 1rem;
-            margin-top: 1rem;
-        }
-
-        .bet-input {
-            width: 100%;
-            padding: 12px;
-            background: var(--bg-primary);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            color: var(--text-primary);
-            font-size: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        .quick-bets {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 1rem;
-            flex-wrap: wrap;
-        }
-
-        .quick-bet {
-            padding: 6px 12px;
-            background: var(--bg-card);
-            border-radius: 20px;
-            font-size: 0.8rem;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .quick-bet:hover {
-            background: var(--gold);
-            color: var(--bg-primary);
-        }
-
-        .result-message {
-            padding: 12px;
-            border-radius: 12px;
-            text-align: center;
-            margin-top: 1rem;
-            display: none;
-        }
-
-        .result-message.win {
-            display: block;
-            background: rgba(46, 204, 113, 0.2);
-            border: 1px solid var(--green);
-            color: var(--green);
-        }
-
-        .result-message.lose {
-            display: block;
-            background: rgba(231, 76, 60, 0.2);
-            border: 1px solid var(--crimson);
-            color: var(--crimson);
-        }
-
-        .dice-display {
-            text-align: center;
-            margin: 1rem 0;
-        }
-
-        .dice-display img {
-            width: 100px;
-            height: 100px;
-            object-fit: contain;
-            filter: drop-shadow(0 0 20px rgba(255,217,102,0.5));
-            transition: transform 0.3s;
-        }
-
-        .dice-display.rolling img {
-            animation: diceRoll 0.5s ease;
-        }
-
-        @keyframes diceRoll {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .slider-wrap {
-            margin: 1rem 0;
-        }
-
-        input[type="range"] {
-            width: 100%;
-            height: 4px;
-            background: var(--border);
-            border-radius: 2px;
-            -webkit-appearance: none;
-        }
-
-        input[type="range"]:focus {
-            outline: none;
-        }
-
-        input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: var(--gold);
-            cursor: pointer;
         }
 
         .toast-container {
@@ -766,84 +720,6 @@
             }
         }
 
-        .chat-widget {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 320px;
-            background: var(--bg-secondary);
-            border-radius: 20px;
-            border: 1px solid var(--border);
-            z-index: 1500;
-            display: none;
-            flex-direction: column;
-            box-shadow: var(--shadow);
-        }
-
-        .chat-widget.open {
-            display: flex;
-        }
-
-        .chat-header {
-            padding: 12px;
-            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
-            border-radius: 20px 20px 0 0;
-            display: flex;
-            justify-content: space-between;
-            cursor: pointer;
-            color: var(--bg-primary);
-            font-weight: 600;
-        }
-
-        .chat-messages {
-            height: 300px;
-            overflow-y: auto;
-            padding: 12px;
-        }
-
-        .chat-message {
-            margin-bottom: 8px;
-            font-size: 0.85rem;
-        }
-
-        .chat-username {
-            color: var(--gold);
-            font-weight: 600;
-        }
-
-        .chat-input-area {
-            display: flex;
-            padding: 12px;
-            border-top: 1px solid var(--border);
-            gap: 8px;
-        }
-
-        .chat-input {
-            flex: 1;
-            padding: 8px 12px;
-            background: var(--bg-primary);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            color: var(--text-primary);
-        }
-
-        .chat-toggle {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            z-index: 1499;
-            box-shadow: var(--shadow);
-            font-size: 1.3rem;
-        }
-
         @media (max-width: 768px) {
             .main-content {
                 padding: 80px 1rem 1rem;
@@ -857,7 +733,7 @@
             .slot-reels {
                 gap: 5px;
             }
-            .slot-row img {
+            .reel-symbol img {
                 width: 30px;
                 height: 30px;
             }
@@ -866,6 +742,18 @@
 </head>
 <body>
 
+<!-- Spectacular Entrance Animation -->
+<div class="entrance-overlay" id="entrance-overlay">
+    <div class="entrance-content">
+        <div class="entrance-logo">
+            <img src="/assets/ui/xbet-logo.png" alt="XBET" style="width: 100%; height: 100%; object-fit: contain;">
+        </div>
+        <h1 class="entrance-title">XBET</h1>
+        <p class="entrance-subtitle">THE ULTIMATE CASINO EXPERIENCE</p>
+        <div class="entrance-spinner"></div>
+    </div>
+</div>
+
 <div class="bg-animation"></div>
 <div class="particles" id="particles"></div>
 
@@ -873,7 +761,7 @@
     <div class="nav-inner">
         <div class="logo" onclick="closeAllModals()">
             <div class="logo-icon">
-                <img src="/assets/ui/xbet-logo.png">
+                <img src="/assets/ui/xbet-logo.png" alt="XBET">
             </div>
             <div class="logo-text">XBET</div>
             <div class="logo-badge">PROVABLY FAIR</div>
@@ -881,26 +769,30 @@
         <div class="nav-links">
             <div class="nav-link active" data-page="casino">CASINO</div>
             <div class="nav-link" data-page="promotions">PROMOS</div>
+            <div class="nav-link" data-page="shop">SHOP</div>
+            <div class="nav-link" data-page="vip">VIP</div>
         </div>
         <div class="user-section">
             <div id="auth-buttons">
-                <button class="btn btn-secondary" onclick="showAuthModal('login')">Sign In</button>
-                <button class="btn btn-primary" onclick="showAuthModal('register')">Join Now</button>
+                <button class="btn btn-secondary" onclick="showAuthModal('login')">SIGN IN</button>
+                <button class="btn btn-primary" onclick="showAuthModal('register')">JOIN NOW</button>
             </div>
             <div id="user-info" class="hidden">
-                <div class="balance-card">
+                <div class="balance-card" onclick="showShop()">
                     <div class="balance-icon">
-                        <img src="/assets/coins/xcoin-gold.png">
+                        <img src="/assets/coins/xcoin-gold.png" alt="XCoin">
                     </div>
                     <div class="balance-info">
                         <div class="balance-value" id="balance">0.00</div>
                         <div class="balance-label">XCOIN</div>
                     </div>
                 </div>
-                <button class="btn btn-secondary" onclick="deposit()">Deposit</button>
-                <button class="btn btn-secondary" onclick="withdraw()">Withdraw</button>
+                <div id="roblox-badge" class="hidden" style="background: rgba(0,0,0,0.5); padding: 5px 10px; border-radius: 20px; font-size: 0.8rem;">
+                    <span>🎮</span> <span id="roblox-id-display"></span>
+                </div>
+                <button class="btn btn-secondary" onclick="showDepositModal()">DEPOSIT</button>
                 <span id="admin-link" class="hidden" onclick="showAdminPanel()" style="cursor:pointer; color:var(--crimson);">ADMIN</span>
-                <span onclick="logout()" style="cursor:pointer; color:var(--text-muted);">Logout</span>
+                <span onclick="logout()" style="cursor:pointer; color:var(--text-muted);">LOGOUT</span>
             </div>
         </div>
     </div>
@@ -914,9 +806,9 @@
                     <img src="/assets/games/slots-icon.png">
                 </div>
                 <div class="game-info">
-                    <div class="game-title">Crypto Slots</div>
-                    <div class="game-desc">5x3 Reels • 10 Paylines • Jackpot up to 1000x</div>
-                    <div class="game-stats"><span>Max 1000x</span></div>
+                    <div class="game-title">DIAMOND SLOTS</div>
+                    <div class="game-desc">8 Premium Symbols • 5 Reels • Jackpot up to 5000x</div>
+                    <div class="game-stats"><span>Max Win: 5000x</span><span>RTP: 97.5%</span></div>
                 </div>
             </div>
             <div class="game-card" onclick="openGame('blackjack')">
@@ -924,29 +816,9 @@
                     <img src="/assets/games/poker-icon.png">
                 </div>
                 <div class="game-info">
-                    <div class="game-title">Blackjack</div>
-                    <div class="game-desc">Classic 21 • Hit • Stand • Double</div>
-                    <div class="game-stats"><span>3:2 Payout</span></div>
-                </div>
-            </div>
-            <div class="game-card" onclick="openGame('mines')">
-                <div class="game-icon">
-                    <img src="/assets/games/crash-icon.png">
-                </div>
-                <div class="game-info">
-                    <div class="game-title">Mines</div>
-                    <div class="game-desc">Avoid mines • Cash out anytime • Up to 1000x</div>
-                    <div class="game-stats"><span>High Risk</span></div>
-                </div>
-            </div>
-            <div class="game-card" onclick="openGame('plinko')">
-                <div class="game-icon">
-                    <img src="/assets/games/crash-icon.png">
-                </div>
-                <div class="game-info">
-                    <div class="game-title">Plinko</div>
-                    <div class="game-desc">Drop the ball • Choose risk • Up to 1000x</div>
-                    <div class="game-stats"><span>16 Rows</span></div>
+                    <div class="game-title">BLACKJACK</div>
+                    <div class="game-desc">Classic 21 • Hit • Stand • Double Down</div>
+                    <div class="game-stats"><span>3:2 Payout</span><span>House Edge: 0.5%</span></div>
                 </div>
             </div>
             <div class="game-card" onclick="openGame('crash')">
@@ -954,9 +826,29 @@
                     <img src="/assets/games/crash-icon.png">
                 </div>
                 <div class="game-info">
-                    <div class="game-title">Crash</div>
-                    <div class="game-desc">Watch multiplier climb • Cash out before crash</div>
-                    <div class="game-stats"><span>Live</span></div>
+                    <div class="game-title">CRASH</div>
+                    <div class="game-desc">Watch multiplier climb • Cash out before crash • Up to 10000x</div>
+                    <div class="game-stats"><span>Provably Fair</span><span>Max: 10000x</span></div>
+                </div>
+            </div>
+            <div class="game-card" onclick="openGame('mines')">
+                <div class="game-icon">
+                    <img src="/assets/games/crash-icon.png">
+                </div>
+                <div class="game-info">
+                    <div class="game-title">MINES</div>
+                    <div class="game-desc">Avoid mines • Cash out anytime • Up to 1000x</div>
+                    <div class="game-stats"><span>5x5 Grid</span><span>High Risk</span></div>
+                </div>
+            </div>
+            <div class="game-card" onclick="openGame('plinko')">
+                <div class="game-icon">
+                    <img src="/assets/games/crash-icon.png">
+                </div>
+                <div class="game-info">
+                    <div class="game-title">PLINKO</div>
+                    <div class="game-desc">Drop the ball • Choose risk level • Up to 1000x</div>
+                    <div class="game-stats"><span>16 Rows</span><span>3 Risk Levels</span></div>
                 </div>
             </div>
             <div class="game-card" onclick="openGame('dice')">
@@ -964,23 +856,24 @@
                     <img src="/assets/games/dice-icon.png">
                 </div>
                 <div class="game-info">
-                    <div class="game-title">Dice</div>
+                    <div class="game-title">DICE</div>
                     <div class="game-desc">Roll under/over • Custom odds • Up to 99x</div>
-                    <div class="game-stats"><span>99% RTP</span></div>
+                    <div class="game-stats"><span>99% RTP</span><span>Provably Fair</span></div>
                 </div>
             </div>
         </div>
 
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
             <div class="game-card" style="background: var(--bg-card); padding: 1rem;">
-                <h3 style="margin-bottom: 1rem;">Top Players</h3>
+                <h3 style="margin-bottom: 1rem;">🏆 TOP PLAYERS</h3>
                 <div id="leaderboard"></div>
             </div>
             <div class="game-card" style="background: var(--bg-card); padding: 1rem;">
-                <h3 style="margin-bottom: 1rem;">Live Stats</h3>
-                <div>Online Players: <span id="online-count">0</span></div>
-                <div>Total Bets: <span id="total-bets">0</span></div>
-                <div>Total Wagered: <span id="total-wagered">0</span> XCoin</div>
+                <h3 style="margin-bottom: 1rem;">📊 LIVE STATS</h3>
+                <div>👥 Online Players: <span id="online-count">0</span></div>
+                <div>🎲 Total Bets: <span id="total-bets">0</span></div>
+                <div>💰 Total Wagered: <span id="total-wagered">0</span> XCoin</div>
+                <div>💎 VIP Players: <span id="vip-count">0</span></div>
             </div>
         </div>
     </div>
@@ -989,53 +882,103 @@
         <div class="games-grid">
             <div class="game-card" onclick="claimDailyBonus()">
                 <div class="game-icon">
-                    <div style="width:80px;height:80px;background:linear-gradient(135deg,var(--gold),var(--gold-dark));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2rem;">🎁</div>
+                    <div style="width:80px;height:80px;background:linear-gradient(135deg,var(--gold),var(--gold-dark));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2.5rem;">🎁</div>
                 </div>
                 <div class="game-info">
-                    <div class="game-title">Daily Bonus</div>
+                    <div class="game-title">DAILY BONUS</div>
                     <div class="game-desc">Claim 100 XCoin every day!</div>
                     <div class="game-stats"><span id="daily-status">Available</span><span>+100 XCoin</span></div>
                 </div>
             </div>
             <div class="game-card" onclick="showReferral()">
                 <div class="game-icon">
-                    <div style="width:80px;height:80px;background:linear-gradient(135deg,var(--gold),var(--gold-dark));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2rem;">👥</div>
+                    <div style="width:80px;height:80px;background:linear-gradient(135deg,var(--gold),var(--gold-dark));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2.5rem;">👥</div>
                 </div>
                 <div class="game-info">
-                    <div class="game-title">Referral Program</div>
-                    <div class="game-desc">Earn 10% of friend's deposits</div>
+                    <div class="game-title">REFERRAL PROGRAM</div>
+                    <div class="game-desc">Earn 10% of friend's deposits forever!</div>
                     <div class="game-stats"><span>Your code: <span id="ref-code">Loading...</span></span></div>
                 </div>
             </div>
-            <div class="game-card" onclick="showVIP()">
+            <div class="game-card" onclick="showWelcomeBonus()">
                 <div class="game-icon">
-                    <div style="width:80px;height:80px;background:linear-gradient(135deg,var(--gold),var(--gold-dark));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2rem;">👑</div>
+                    <div style="width:80px;height:80px;background:linear-gradient(135deg,var(--gold),var(--gold-dark));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2.5rem;">🎉</div>
                 </div>
                 <div class="game-info">
-                    <div class="game-title">VIP Program</div>
-                    <div class="game-desc">Exclusive perks & rewards</div>
-                    <div class="game-stats"><span>Level <span id="vip-level">1</span></span><span>Benefits</span></div>
+                    <div class="game-title">WELCOME BONUS</div>
+                    <div class="game-desc">100% match on first deposit up to 5000 XCoin!</div>
+                    <div class="game-stats"><span>New Players Only</span><span>Up to 5000</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="shop-page" class="page">
+        <div class="payment-methods">
+            <div class="payment-card" onclick="selectPaymentMethod('stripe')" id="stripe-card">
+                <div class="payment-icon">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/b/ba/Stripe_Logo%2C_revised_2016.svg" alt="Stripe">
+                </div>
+                <h4>Credit/Debit Card</h4>
+                <p>Visa, Mastercard, Amex</p>
+            </div>
+            <div class="payment-card" onclick="selectPaymentMethod('roblox')" id="roblox-card">
+                <div class="payment-icon">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Roblox_logo_2022.svg/1200px-Roblox_logo_2022.svg.png" alt="Roblox">
+                </div>
+                <h4>Roblox</h4>
+                <p>Pay with Robux • Like Bloxflip</p>
+            </div>
+        </div>
+        
+        <div id="stripe-products" class="robux-products">
+            <h3 style="margin-bottom: 1rem;">Buy XCoin with Card</h3>
+            <div class="robux-products" id="stripe-offers"></div>
+        </div>
+        
+        <div id="roblox-products" class="hidden">
+            <h3 style="margin-bottom: 1rem;">Buy XCoin with Robux</h3>
+            <div class="robux-products" id="roblox-offers"></div>
+            <div style="margin-top: 1rem; padding: 1rem; background: var(--bg-card); border-radius: 16px;">
+                <p>🔒 How it works:</p>
+                <ol style="margin-left: 1.5rem; margin-top: 0.5rem; color: var(--text-secondary);">
+                    <li>Click on a Robux package</li>
+                    <li>You'll be redirected to Roblox</li>
+                    <li>Complete the purchase with Robux</li>
+                    <li>XCoin added instantly to your account!</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <div id="vip-page" class="page">
+        <div class="games-grid">
+            <div class="game-card">
+                <div class="game-icon">
+                    <div style="width:80px;height:80px;background:linear-gradient(135deg,var(--gold),var(--gold-dark));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2.5rem;">👑</div>
+                </div>
+                <div class="game-info">
+                    <div class="game-title">VIP LEVEL <span id="vip-level">1</span></div>
+                    <div class="game-desc">Next level: <span id="next-vip">1000</span> XCoin wagered</div>
+                    <div class="game-stats"><span>Progress: <span id="vip-progress">0</span>%</span></div>
+                </div>
+            </div>
+            <div class="game-card">
+                <div class="game-icon">
+                    <div style="width:80px;height:80px;background:linear-gradient(135deg,var(--gold),var(--gold-dark));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2.5rem;">🎁</div>
+                </div>
+                <div class="game-info">
+                    <div class="game-title">VIP Benefits</div>
+                    <div class="game-desc">• Lower house edge<br>• Exclusive tournaments<br>• Priority support<br>• Higher withdrawal limits</div>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<div class="chat-toggle" id="chat-toggle" onclick="toggleChat()">💬</div>
-<div class="chat-widget" id="chat-widget">
-    <div class="chat-header" onclick="toggleChat()">
-        <span>Live Chat</span>
-        <span id="chat-online">0</span>
-    </div>
-    <div class="chat-messages" id="chat-messages"></div>
-    <div class="chat-input-area">
-        <input type="text" class="chat-input" id="chat-input" placeholder="Type a message..." onkeypress="if(event.key==='Enter') sendChat()">
-        <button class="btn btn-primary" style="padding: 8px 16px;" onclick="sendChat()">Send</button>
-    </div>
-</div>
-
 <div class="toast-container" id="toast-container"></div>
 
+<!-- Modals -->
 <div class="modal" id="auth-modal">
     <div class="modal-content">
         <div class="modal-header">
@@ -1048,18 +991,58 @@
                 <button class="btn btn-secondary" style="flex:1;" onclick="setAuthMode('register')">Create Account</button>
             </div>
             <div id="login-form">
-                <input type="email" class="bet-input" id="login-email" placeholder="Email">
-                <input type="password" class="bet-input" id="login-password" placeholder="Password">
+                <input type="text" class="bet-input" id="login-identifier" placeholder="Email or Username" style="width:100%; padding:12px; background:var(--bg-primary); border:1px solid var(--border); border-radius:12px; color:white; margin-bottom:1rem;">
+                <input type="password" class="bet-input" id="login-password" placeholder="Password" style="width:100%; padding:12px; background:var(--bg-primary); border:1px solid var(--border); border-radius:12px; color:white; margin-bottom:1rem;">
                 <button class="btn btn-primary" style="width:100%;" onclick="handleAuth()">Sign In</button>
             </div>
             <div id="register-form" class="hidden">
-                <input type="text" class="bet-input" id="reg-username" placeholder="Username">
-                <input type="email" class="bet-input" id="reg-email" placeholder="Email">
-                <input type="password" class="bet-input" id="reg-password" placeholder="Password">
+                <input type="text" class="bet-input" id="reg-username" placeholder="Username" style="width:100%; padding:12px; background:var(--bg-primary); border:1px solid var(--border); border-radius:12px; color:white; margin-bottom:1rem;">
+                <input type="email" class="bet-input" id="reg-email" placeholder="Email (optional)" style="width:100%; padding:12px; background:var(--bg-primary); border:1px solid var(--border); border-radius:12px; color:white; margin-bottom:1rem;">
+                <input type="text" class="bet-input" id="reg-roblox" placeholder="Roblox ID (optional)" style="width:100%; padding:12px; background:var(--bg-primary); border:1px solid var(--border); border-radius:12px; color:white; margin-bottom:1rem;">
+                <input type="password" class="bet-input" id="reg-password" placeholder="Password" style="width:100%; padding:12px; background:var(--bg-primary); border:1px solid var(--border); border-radius:12px; color:white; margin-bottom:1rem;">
+                <input type="text" class="bet-input" id="reg-referral" placeholder="Referral Code (optional)" style="width:100%; padding:12px; background:var(--bg-primary); border:1px solid var(--border); border-radius:12px; color:white; margin-bottom:1rem;">
                 <button class="btn btn-primary" style="width:100%;" onclick="handleRegister()">Create Account</button>
+                <div style="text-align: center; margin-top: 1rem; font-size: 0.8rem; color: var(--text-muted);">
+                    Get 100 XCoin FREE on signup! Link Roblox for bonus!
+                </div>
             </div>
-            <div style="text-align: center; margin-top: 1rem; font-size: 0.8rem; color: var(--text-muted);">
-                Get 100 XCoin FREE on signup!
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="deposit-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <div class="modal-title">Add Funds</div>
+            <div class="modal-close" onclick="closeModal('deposit-modal')">✕</div>
+        </div>
+        <div class="modal-body">
+            <div class="payment-methods">
+                <div class="payment-card" onclick="showDepositMethod('stripe')">
+                    <div class="payment-icon">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/b/ba/Stripe_Logo%2C_revised_2016.svg">
+                    </div>
+                    <h4>Credit Card</h4>
+                </div>
+                <div class="payment-card" onclick="showDepositMethod('roblox')">
+                    <div class="payment-icon">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Roblox_logo_2022.svg/1200px-Roblox_logo_2022.svg.png">
+                    </div>
+                    <h4>Robux</h4>
+                </div>
+            </div>
+            <div id="stripe-deposit" class="hidden">
+                <h3>Select Amount</h3>
+                <div class="robux-products" id="stripe-deposit-options"></div>
+                <button class="btn btn-primary" style="width:100%; margin-top:1rem;" onclick="processStripePayment()">Pay with Card</button>
+            </div>
+            <div id="roblox-deposit" class="hidden">
+                <h3>Select Robux Amount</h3>
+                <div class="robux-products" id="roblox-deposit-options"></div>
+                <div style="margin-top:1rem; padding:1rem; background:var(--bg-card); border-radius:12px;">
+                    <p>⚠️ You will be redirected to Roblox to complete the purchase.</p>
+                    <p>Make sure you're logged into Roblox!</p>
+                </div>
             </div>
         </div>
     </div>
@@ -1076,7 +1059,7 @@
 </div>
 
 <div class="modal" id="admin-modal">
-    <div class="modal-content" style="max-width: 900px;">
+    <div class="modal-content" style="max-width: 1200px;">
         <div class="modal-header">
             <div class="modal-title">Admin Dashboard</div>
             <div class="modal-close" onclick="closeModal('admin-modal')">✕</div>
@@ -1086,49 +1069,35 @@
 </div>
 
 <script>
-    const API_URL = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'http://localhost:5000' : 'https://xbetb.onrender.com';
+    const API_URL = 'https://xbetb.onrender.com';
     let token = localStorage.getItem('token');
     let currentUser = null;
     let ws = null;
-    let crashInterval = null;
-    let crashMult = 1;
-    let crashActive = false;
-    let crashBetActive = false;
-    let crashBetAmount = 0;
-
-    const SYMBOL_IMAGES = {
-        cherry: '/assets/games/slots/cherry.png',
-        lemon: '/assets/games/slots/lemon.png',
-        orange: '/assets/games/slots/orange.png',
-        plum: '/assets/games/slots/plum.png',
-        bell: '/assets/games/slots/bell.png',
-        xbet: '/assets/games/slots/xbet.png'
-    };
-
-    const DICE_IMAGES = {
-        1: '/assets/games/dice/dice-1.png',
-        2: '/assets/games/dice/dice-2.png',
-        3: '/assets/games/dice/dice-3.png',
-        4: '/assets/games/dice/dice-4.png',
-        5: '/assets/games/dice/dice-5.png',
-        6: '/assets/games/dice/dice-6.png'
-    };
-
+    let stripe = null;
+    let selectedPaymentMethod = 'stripe';
+    let selectedRobuxProduct = null;
+    
+    // Initialize Stripe
+    if (typeof Stripe !== 'undefined') {
+        stripe = Stripe('pk_test_your_stripe_key');
+    }
+    
+    // Create particles
     function createParticles() {
         const container = document.getElementById('particles');
-        for (let i = 0; i < 50; i++) {
+        for (let i = 0; i < 100; i++) {
             const particle = document.createElement('div');
             particle.className = 'particle';
             particle.style.left = Math.random() * 100 + '%';
-            particle.style.width = Math.random() * 3 + 1 + 'px';
+            particle.style.width = Math.random() * 4 + 1 + 'px';
             particle.style.height = particle.style.width;
-            particle.style.animationDelay = Math.random() * 8 + 's';
-            particle.style.animationDuration = Math.random() * 5 + 5 + 's';
+            particle.style.animationDelay = Math.random() * 10 + 's';
+            particle.style.animationDuration = Math.random() * 8 + 5 + 's';
             container.appendChild(particle);
         }
     }
     createParticles();
-
+    
     async function verifyToken() {
         if (!token) return;
         try {
@@ -1137,18 +1106,13 @@
             });
             if (res.ok) {
                 const data = await res.json();
-                currentUser = {
-                    id: data.id,
-                    username: data.username,
-                    role: data.role,
-                    xcoin_balance: data.xcoin_balance,
-                    referral_code: data.referral_code
-                };
+                currentUser = data;
                 updateUI(true);
                 initWebSocket();
                 loadLeaderboard();
-                loadReferralCode();
-                updateOnlinePlayers();
+                loadRobloxProducts();
+                loadStripeProducts();
+                updateStats();
             } else {
                 logout();
             }
@@ -1156,39 +1120,58 @@
             logout();
         }
     }
-
+    
     function updateUI(loggedIn) {
         document.getElementById('auth-buttons').classList.toggle('hidden', loggedIn);
         document.getElementById('user-info').classList.toggle('hidden', !loggedIn);
         if (loggedIn && currentUser) {
             document.getElementById('balance').textContent = currentUser.xcoin_balance.toFixed(2);
             document.getElementById('admin-link').classList.toggle('hidden', currentUser.role !== 'admin');
+            if (currentUser.roblox_id) {
+                document.getElementById('roblox-badge').classList.remove('hidden');
+                document.getElementById('roblox-id-display').textContent = currentUser.roblox_id;
+            }
         }
     }
-
+    
     function showAuthModal(mode) {
         setAuthMode(mode);
         openModal('auth-modal');
     }
-
+    
+    function showDepositModal() {
+        if (!currentUser) {
+            showAuthModal('login');
+            return;
+        }
+        openModal('deposit-modal');
+        loadStripeDepositOptions();
+        loadRobloxDepositOptions();
+    }
+    
     function setAuthMode(mode) {
         const isLogin = mode === 'login';
         document.getElementById('login-form').classList.toggle('hidden', !isLogin);
         document.getElementById('register-form').classList.toggle('hidden', isLogin);
     }
-
+    
     async function handleAuth() {
-        const email = document.getElementById('login-email').value;
+        const identifier = document.getElementById('login-identifier').value;
         const password = document.getElementById('login-password').value;
-        if (!email || !password) {
+        
+        if (!identifier || !password) {
             toast('Please fill all fields', 'error');
             return;
         }
+        
+        const isEmail = identifier.includes('@');
+        const body = isEmail ? { email: identifier, password } : { username: identifier, password };
+        
         try {
             const res = await fetch(`${API_URL}/api/auth/login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password })
+                body: JSON.stringify(body)
             });
             const data = await res.json();
             if (res.ok) {
@@ -1201,26 +1184,30 @@
                 loadLeaderboard();
                 toast(`Welcome back, ${currentUser.username}!`, 'success');
             } else {
-                toast(data.error || 'Login failed', 'error');
+                toast(data.detail || 'Login failed', 'error');
             }
         } catch {
             toast('Server error', 'error');
         }
     }
-
+    
     async function handleRegister() {
         const username = document.getElementById('reg-username').value;
         const email = document.getElementById('reg-email').value;
+        const roblox_id = document.getElementById('reg-roblox').value;
         const password = document.getElementById('reg-password').value;
-        if (!username || !email || !password) {
-            toast('Please fill all fields', 'error');
+        const referral = document.getElementById('reg-referral').value;
+        
+        if (!username || !password) {
+            toast('Username and password required', 'error');
             return;
         }
+        
         try {
             const res = await fetch(`${API_URL}/api/auth/register`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username, email, password })
+                body: JSON.stringify({ username, email: email || undefined, roblox_id: roblox_id || undefined, password, referral_code: referral || undefined })
             });
             const data = await res.json();
             if (res.ok) {
@@ -1232,13 +1219,13 @@
                 initWebSocket();
                 toast(`Welcome to XBET, ${currentUser.username}! You got 100 free XCoin!`, 'success');
             } else {
-                toast(data.error || 'Registration failed', 'error');
+                toast(data.detail || 'Registration failed', 'error');
             }
         } catch {
             toast('Server error', 'error');
         }
     }
-
+    
     async function logout() {
         token = null;
         currentUser = null;
@@ -1247,7 +1234,7 @@
         updateUI(false);
         toast('Logged out', 'info');
     }
-
+    
     function initWebSocket() {
         if (!token) return;
         const wsUrl = API_URL.replace('http', 'ws') + `/ws/${token}`;
@@ -1255,719 +1242,188 @@
         ws.onmessage = (e) => {
             const data = JSON.parse(e.data);
             if (data.type === 'chat') {
-                addChatMessage(data.username, data.message);
-            } else if (data.type === 'crash_multiplier') {
-                updateCrashMultiplier(data.multiplier);
-            } else if (data.type === 'crash_crashed') {
-                onCrashCrashed(data.multiplier);
+                console.log('Chat:', data);
             }
         };
         ws.onclose = () => setTimeout(initWebSocket, 5000);
     }
-
-    function openGame(game) {
+    
+    async function loadRobloxProducts() {
+        try {
+            const res = await fetch(`${API_URL}/api/payments/roblox-products`);
+            const data = await res.json();
+            
+            const robloxOffers = document.getElementById('roblox-offers');
+            const robloxDepositOffers = document.getElementById('roblox-deposit-options');
+            
+            robloxOffers.innerHTML = data.products.map(p => `
+                <div class="robux-product" onclick="purchaseRoblox(${p.robux}, '${p.product_id}')">
+                    <div class="robux-amount">${p.robux} R$</div>
+                    <div class="xcoin-amount">+${p.xcoin} XCoin</div>
+                    <div class="price">$${p.price_usd}</div>
+                    ${p.vip_bonus ? '<div class="vip-badge">VIP BONUS!</div>' : ''}
+                </div>
+            `).join('');
+            
+            robloxDepositOffers.innerHTML = data.products.map(p => `
+                <div class="robux-product" onclick="selectRobuxPurchase(${p.robux}, ${p.xcoin}, '${p.product_id}')">
+                    <div class="robux-amount">${p.robux} R$</div>
+                    <div class="xcoin-amount">${p.xcoin} XCoin</div>
+                    <div class="price">$${p.price_usd}</div>
+                </div>
+            `).join('');
+        } catch (error) {
+            console.error('Failed to load Roblox products', error);
+        }
+    }
+    
+    function loadStripeProducts() {
+        const stripeOffers = document.getElementById('stripe-offers');
+        const amounts = [100, 500, 1000, 5000, 10000, 50000];
+        
+        stripeOffers.innerHTML = amounts.map(amount => `
+            <div class="robux-product" onclick="purchaseStripe(${amount})">
+                <div class="robux-amount">${amount} XCoin</div>
+                <div class="price">$${(amount * 0.01).toFixed(2)} USD</div>
+            </div>
+        `).join('');
+    }
+    
+    function loadStripeDepositOptions() {
+        const stripeDeposit = document.getElementById('stripe-deposit-options');
+        const amounts = [100, 500, 1000, 5000, 10000, 50000];
+        
+        stripeDeposit.innerHTML = amounts.map(amount => `
+            <div class="robux-product" onclick="selectStripeAmount(${amount})">
+                <div class="robux-amount">${amount} XCoin</div>
+                <div class="price">$${(amount * 0.01).toFixed(2)} USD</div>
+            </div>
+        `).join('');
+    }
+    
+    function loadRobloxDepositOptions() {
+        // Already loaded in loadRobloxProducts
+    }
+    
+    let selectedStripeAmount = null;
+    
+    function selectStripeAmount(amount) {
+        selectedStripeAmount = amount;
+        toast(`Selected ${amount} XCoin`, 'info');
+    }
+    
+    async function processStripePayment() {
+        if (!selectedStripeAmount) {
+            toast('Please select an amount first', 'error');
+            return;
+        }
+        
+        try {
+            const res = await fetch(`${API_URL}/api/payments/create-stripe-session`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ amount_xcoin: selectedStripeAmount })
+            });
+            const data = await res.json();
+            
+            if (data.url) {
+                window.location.href = data.url;
+            }
+        } catch (error) {
+            toast('Payment initiation failed', 'error');
+        }
+    }
+    
+    async function purchaseRoblox(robux, productId) {
         if (!currentUser) {
             showAuthModal('login');
             return;
         }
-        const content = document.getElementById('game-content');
-        const titles = {
-            slots: 'Crypto Slots', blackjack: 'Blackjack', mines: 'Mines',
-            plinko: 'Plinko', crash: 'Crash', dice: 'Dice'
-        };
-        document.getElementById('game-title').textContent = titles[game] || game;
         
-        if (game === 'slots') content.innerHTML = getSlotsHTML();
-        else if (game === 'blackjack') content.innerHTML = getBlackjackHTML();
-        else if (game === 'mines') content.innerHTML = getMinesHTML();
-        else if (game === 'plinko') content.innerHTML = getPlinkoHTML();
-        else if (game === 'crash') content.innerHTML = getCrashHTML();
-        else if (game === 'dice') content.innerHTML = getDiceHTML();
-        
-        openModal('game-modal');
-        
-        if (game === 'crash') initCrashGame();
-        if (game === 'plinko') initPlinkoCanvas();
-    }
-
-    function getSlotsHTML() {
-        return `
-            <div class="slot-machine">
-                <div class="slot-reels" id="slot-reels">
-                    ${Array(5).fill(0).map(() => `
-                        <div class="slot-reel">
-                            <div class="slot-row"><img src="/assets/games/slots/cherry.png"></div>
-                            <div class="slot-row"><img src="/assets/games/slots/lemon.png"></div>
-                            <div class="slot-row"><img src="/assets/games/slots/orange.png"></div>
-                        </div>
-                    `).join('')}
-                </div>
-                <div class="bet-controls">
-                    <input type="number" class="bet-input" id="slot-bet" value="10" min="1" step="10">
-                    <div class="quick-bets">
-                        <span class="quick-bet" onclick="document.getElementById('slot-bet').value=10">10</span>
-                        <span class="quick-bet" onclick="document.getElementById('slot-bet').value=25">25</span>
-                        <span class="quick-bet" onclick="document.getElementById('slot-bet').value=50">50</span>
-                        <span class="quick-bet" onclick="document.getElementById('slot-bet').value=100">100</span>
-                        <span class="quick-bet" onclick="document.getElementById('slot-bet').value=250">250</span>
-                    </div>
-                    <button class="btn btn-primary" style="width:100%;" onclick="spinSlots()">SPIN</button>
-                    <div class="result-message" id="slot-result"></div>
-                </div>
-            </div>
-        `;
-    }
-
-    async function spinSlots() {
-        const bet = parseFloat(document.getElementById('slot-bet').value);
-        if (bet > currentUser.xcoin_balance) {
-            toast('Insufficient balance', 'error');
+        if (!currentUser.roblox_id) {
+            toast('Please link your Roblox account first! Go to Settings', 'error');
             return;
         }
         
-        const reels = document.querySelectorAll('.slot-reel');
-        reels.forEach(reel => reel.classList.add('spinning'));
-        
         try {
-            const res = await fetch(`${API_URL}/api/games/slots/play`, {
+            const res = await fetch(`${API_URL}/api/payments/roblox-purchase`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-                body: JSON.stringify({ game: 'slots', xcoin_amount: bet, params: {} })
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    roblox_id: currentUser.roblox_id,
+                    product_id: productId,
+                    amount_robux: robux
+                })
             });
             const data = await res.json();
-            setTimeout(() => applySlotResult(data, bet, reels), 800);
-        } catch {
-            toast('Game error', 'error');
-            reels.forEach(reel => reel.classList.remove('spinning'));
-        }
-    }
-
-    function applySlotResult(data, bet, reels) {
-        const grid = data.result.reel_grid;
-        reels.forEach((reel, col) => {
-            reel.classList.remove('spinning');
-            const rows = reel.querySelectorAll('.slot-row');
-            for (let row = 0; row < 3; row++) {
-                const symbol = grid[row][col];
-                const img = rows[row].querySelector('img');
-                img.src = SYMBOL_IMAGES[symbol] || SYMBOL_IMAGES.cherry;
-            }
-            if (data.result.winning_lines && data.result.winning_lines.some(line => line.positions && (line.positions.includes(col * 3) || line.positions.includes(col * 3 + 1) || line.positions.includes(col * 3 + 2)))) {
-                reel.classList.add('winning');
-                setTimeout(() => reel.classList.remove('winning'), 1000);
-            }
-        });
-        
-        currentUser.xcoin_balance = data.new_balance;
-        document.getElementById('balance').textContent = currentUser.xcoin_balance.toFixed(2);
-        
-        const resultDiv = document.getElementById('slot-result');
-        if (data.outcome === 'win') {
-            resultDiv.className = 'result-message win';
-            resultDiv.textContent = `WIN! +${data.win_amount.toFixed(2)} XCOIN! Multiplier: ${data.multiplier.toFixed(2)}x`;
-            toast(`+${data.win_amount.toFixed(2)} XCOIN`, 'success');
-        } else {
-            resultDiv.className = 'result-message lose';
-            resultDiv.textContent = `LOSS! -${bet} XCOIN`;
-        }
-    }
-
-    function getDiceHTML() {
-        return `
-            <div class="bet-controls">
-                <div class="dice-display" id="dice-display">
-                    <img src="/assets/games/dice/dice-default.png" id="dice-image">
-                </div>
-                <div class="slider-wrap">
-                    <input type="range" id="dice-target" min="2" max="98" value="50">
-                    <div style="display: flex; justify-content: space-between; margin-top: 5px;">
-                        <span>Under 2</span><span>Target: <span id="target-value">50</span></span><span>Over 98</span>
-                    </div>
-                </div>
-                <div style="display: flex; gap: 10px; margin-bottom: 1rem;">
-                    <button class="btn btn-primary" style="flex:1;" id="dice-under" onclick="setDiceMode('under')">Roll Under</button>
-                    <button class="btn btn-secondary" style="flex:1;" id="dice-over" onclick="setDiceMode('over')">Roll Over</button>
-                </div>
-                <input type="number" class="bet-input" id="dice-bet" value="10" min="1">
-                <div class="quick-bets">
-                    <span class="quick-bet" onclick="document.getElementById('dice-bet').value=10">10</span>
-                    <span class="quick-bet" onclick="document.getElementById('dice-bet').value=25">25</span>
-                    <span class="quick-bet" onclick="document.getElementById('dice-bet').value=50">50</span>
-                    <span class="quick-bet" onclick="document.getElementById('dice-bet').value=100">100</span>
-                </div>
-                <button class="btn btn-primary" style="width:100%;" onclick="rollDice()">Roll Dice</button>
-                <div class="result-message" id="dice-result-msg"></div>
-            </div>
-        `;
-    }
-
-    let diceMode = 'under';
-    
-    function setDiceMode(mode) {
-        diceMode = mode;
-        document.getElementById('dice-under').className = mode === 'under' ? 'btn btn-primary' : 'btn btn-secondary';
-        document.getElementById('dice-over').className = mode === 'over' ? 'btn btn-primary' : 'btn btn-secondary';
-    }
-
-    async function rollDice() {
-        const bet = parseFloat(document.getElementById('dice-bet').value);
-        const target = parseInt(document.getElementById('dice-target').value);
-        if (bet > currentUser.xcoin_balance) {
-            toast('Insufficient balance', 'error');
-            return;
-        }
-        
-        const diceDisplay = document.getElementById('dice-display');
-        diceDisplay.classList.add('rolling');
-        
-        try {
-            const res = await fetch(`${API_URL}/api/games/dice/play`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-                body: JSON.stringify({ game: 'dice', xcoin_amount: bet, params: { target, condition: diceMode } })
-            });
-            const data = await res.json();
-            setTimeout(() => applyDiceResult(data, bet), 500);
-        } catch {
-            toast('Game error', 'error');
-            diceDisplay.classList.remove('rolling');
-        }
-    }
-
-    function applyDiceResult(data, bet) {
-        const diceDisplay = document.getElementById('dice-display');
-        diceDisplay.classList.remove('rolling');
-        
-        const roll = data.result.roll;
-        const face = Math.min(6, Math.max(1, Math.floor(roll / 100 * 6) + 1));
-        const diceImg = document.getElementById('dice-image');
-        diceImg.src = DICE_IMAGES[face] || DICE_IMAGES[1];
-        
-        currentUser.xcoin_balance = data.new_balance;
-        document.getElementById('balance').textContent = currentUser.xcoin_balance.toFixed(2);
-        
-        const resultDiv = document.getElementById('dice-result-msg');
-        if (data.outcome === 'win') {
-            resultDiv.className = 'result-message win';
-            resultDiv.textContent = `WIN! +${data.win_amount.toFixed(2)} XCOIN! Roll: ${roll.toFixed(1)}`;
-            toast(`+${data.win_amount.toFixed(2)} XCOIN`, 'success');
-        } else {
-            resultDiv.className = 'result-message lose';
-            resultDiv.textContent = `LOSS! -${bet} XCOIN. Roll: ${roll.toFixed(1)}`;
-        }
-    }
-
-    function getBlackjackHTML() {
-        return `
-            <div class="blackjack-table">
-                <div style="margin-bottom: 1rem;">
-                    <h4>Dealer</h4>
-                    <div class="cards" id="dealer-cards">
-                        <div class="card card-back">?</div>
-                        <div class="card card-back">?</div>
-                    </div>
-                    <div id="dealer-score"></div>
-                </div>
-                <div style="margin-bottom: 1rem;">
-                    <h4>Player</h4>
-                    <div class="cards" id="player-cards"></div>
-                    <div id="player-score"></div>
-                </div>
-                <div class="bet-controls">
-                    <input type="number" class="bet-input" id="bj-bet" value="10" min="1">
-                    <div style="display: flex; gap: 10px;">
-                        <button class="btn btn-primary" style="flex:1;" onclick="blackjackStart()">Deal</button>
-                        <button class="btn btn-secondary" style="flex:1;" id="bj-hit" disabled onclick="blackjackHit()">Hit</button>
-                        <button class="btn btn-secondary" style="flex:1;" id="bj-stand" disabled onclick="blackjackStand()">Stand</button>
-                    </div>
-                    <div class="result-message" id="bj-result"></div>
-                </div>
-            </div>
-        `;
-    }
-
-    let blackjackGame = null;
-
-    async function blackjackStart() {
-        const bet = parseFloat(document.getElementById('bj-bet').value);
-        if (bet > currentUser.xcoin_balance) {
-            toast('Insufficient balance', 'error');
-            return;
-        }
-        try {
-            const res = await fetch(`${API_URL}/api/games/blackjack/start`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-                body: JSON.stringify({ game: 'blackjack', xcoin_amount: bet, params: {} })
-            });
-            const data = await res.json();
-            blackjackGame = data;
-            updateBlackjackUI(data);
-            document.getElementById('bj-hit').disabled = false;
-            document.getElementById('bj-stand').disabled = false;
-        } catch {
-            toast('Game error', 'error');
-        }
-    }
-
-    async function blackjackHit() {
-        try {
-            const res = await fetch(`${API_URL}/api/games/blackjack/action`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-                body: JSON.stringify({ action: 'hit' })
-            });
-            const data = await res.json();
-            updateBlackjackUI(data);
-            if (data.game_over) {
-                document.getElementById('bj-hit').disabled = true;
-                document.getElementById('bj-stand').disabled = true;
-                currentUser.xcoin_balance = data.new_balance;
-                document.getElementById('balance').textContent = currentUser.xcoin_balance.toFixed(2);
-            }
-        } catch {
-            toast('Game error', 'error');
-        }
-    }
-
-    async function blackjackStand() {
-        try {
-            const res = await fetch(`${API_URL}/api/games/blackjack/action`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-                body: JSON.stringify({ action: 'stand' })
-            });
-            const data = await res.json();
-            updateBlackjackUI(data);
-            document.getElementById('bj-hit').disabled = true;
-            document.getElementById('bj-stand').disabled = true;
-            currentUser.xcoin_balance = data.new_balance;
-            document.getElementById('balance').textContent = currentUser.xcoin_balance.toFixed(2);
-        } catch {
-            toast('Game error', 'error');
-        }
-    }
-
-    function updateBlackjackUI(data) {
-        const playerCards = document.getElementById('player-cards');
-        const dealerCards = document.getElementById('dealer-cards');
-        playerCards.innerHTML = data.player_hand.map(c => `<div class="card ${c.suit === '♥' || c.suit === '♦' ? 'heart' : 'spade'}">${c.display}</div>`).join('');
-        dealerCards.innerHTML = data.dealer_hand.map(c => `<div class="card ${c.suit === '♥' || c.suit === '♦' ? 'heart' : 'spade'}">${c.display}</div>`).join('');
-        document.getElementById('player-score').textContent = `Score: ${data.player_score}`;
-        if (data.dealer_score) document.getElementById('dealer-score').textContent = `Score: ${data.dealer_score}`;
-        
-        const resultDiv = document.getElementById('bj-result');
-        if (data.result) {
-            resultDiv.className = `result-message ${data.result === 'win' || data.result === 'blackjack' ? 'win' : 'lose'}`;
-            resultDiv.textContent = data.result === 'blackjack' ? 'BLACKJACK! You win 2.5x!' :
-                                    data.result === 'win' ? 'You win!' :
-                                    data.result === 'push' ? 'Push! Bet returned' : 'You lose!';
-        }
-    }
-
-    function getMinesHTML() {
-        return `
-            <div class="bet-controls">
-                <input type="number" class="bet-input" id="mines-bet" value="10" min="1">
-                <div class="quick-bets">
-                    <span class="quick-bet" onclick="document.getElementById('mines-bet').value=10">10</span>
-                    <span class="quick-bet" onclick="document.getElementById('mines-bet').value=25">25</span>
-                    <span class="quick-bet" onclick="document.getElementById('mines-bet').value=50">50</span>
-                    <span class="quick-bet" onclick="document.getElementById('mines-bet').value=100">100</span>
-                </div>
-                <div style="display: flex; gap: 10px;">
-                    <button class="btn btn-primary" style="flex:1;" onclick="startMines()">Start Game</button>
-                    <button class="btn btn-secondary" style="flex:1;" id="mines-cashout" disabled onclick="cashoutMines()">Cash Out</button>
-                </div>
-                <div class="result-message" id="mines-result"></div>
-                <div class="mines-grid" id="mines-grid"></div>
-                <div id="mines-multiplier" style="text-align: center; font-size: 1.5rem; margin-top: 1rem;">Multiplier: 1.00x</div>
-            </div>
-        `;
-    }
-
-    let minesGameActive = false;
-    let minesMultiplier = 1;
-
-    async function startMines() {
-        const bet = parseFloat(document.getElementById('mines-bet').value);
-        if (bet > currentUser.xcoin_balance) {
-            toast('Insufficient balance', 'error');
-            return;
-        }
-        try {
-            const res = await fetch(`${API_URL}/api/games/mines/start`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-                body: JSON.stringify({ game: 'mines', xcoin_amount: bet, params: { mines: 5, grid_size: 5 } })
-            });
-            const data = await res.json();
-            minesGameActive = true;
-            minesMultiplier = 1;
-            document.getElementById('mines-cashout').disabled = false;
-            document.getElementById('mines-multiplier').textContent = 'Multiplier: 1.00x';
-            createMinesGrid();
-        } catch {
-            toast('Game error', 'error');
-        }
-    }
-
-    function createMinesGrid() {
-        const grid = document.getElementById('mines-grid');
-        grid.innerHTML = '';
-        for (let i = 0; i < 25; i++) {
-            const tile = document.createElement('div');
-            tile.className = 'mine-tile';
-            tile.textContent = '?';
-            tile.onclick = () => revealMineTile(i);
-            grid.appendChild(tile);
-        }
-    }
-
-    async function revealMineTile(index) {
-        if (!minesGameActive) return;
-        try {
-            const res = await fetch(`${API_URL}/api/games/mines/reveal`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-                body: JSON.stringify({ tile_index: index })
-            });
-            const data = await res.json();
-            const tiles = document.querySelectorAll('.mine-tile');
             
-            if (data.result === 'lose') {
-                tiles[index].classList.add('mine');
-                tiles[index].textContent = '💣';
-                document.getElementById('mines-result').className = 'result-message lose';
-                document.getElementById('mines-result').textContent = 'You hit a mine!';
-                minesGameActive = false;
-                document.getElementById('mines-cashout').disabled = true;
+            if (res.ok) {
                 currentUser.xcoin_balance = data.new_balance;
                 document.getElementById('balance').textContent = currentUser.xcoin_balance.toFixed(2);
-            } else if (data.result === 'continue') {
-                tiles[index].classList.add('revealed');
-                tiles[index].textContent = '✓';
-                minesMultiplier = data.multiplier;
-                document.getElementById('mines-multiplier').textContent = `Multiplier: ${data.multiplier.toFixed(2)}x`;
-                document.getElementById('mines-result').className = 'result-message win';
-                document.getElementById('mines-result').textContent = `Safe! Current multiplier: ${data.multiplier.toFixed(2)}x`;
-            } else if (data.result === 'win') {
-                tiles[index].classList.add('revealed');
-                tiles[index].textContent = '✓';
-                document.getElementById('mines-result').className = 'result-message win';
-                document.getElementById('mines-result').textContent = `WIN! +${data.payout.toFixed(2)} XCOIN!`;
-                minesGameActive = false;
-                document.getElementById('mines-cashout').disabled = true;
-                currentUser.xcoin_balance = data.new_balance;
-                document.getElementById('balance').textContent = currentUser.xcoin_balance.toFixed(2);
-                toast(`+${data.payout.toFixed(2)} XCOIN`, 'success');
-            }
-        } catch {
-            toast('Game error', 'error');
-        }
-    }
-
-    async function cashoutMines() {
-        if (!minesGameActive) return;
-        try {
-            const res = await fetch(`${API_URL}/api/games/mines/cashout`, {
-                method: 'POST',
-                headers: { 'Authorization': `Bearer ${token}` }
-            });
-            const data = await res.json();
-            document.getElementById('mines-result').className = 'result-message win';
-            document.getElementById('mines-result').textContent = `Cashed out! Won ${data.payout.toFixed(2)} XCOIN!`;
-            minesGameActive = false;
-            document.getElementById('mines-cashout').disabled = true;
-            currentUser.xcoin_balance = data.new_balance;
-            document.getElementById('balance').textContent = currentUser.xcoin_balance.toFixed(2);
-            toast(`+${data.payout.toFixed(2)} XCOIN`, 'success');
-        } catch {
-            toast('Cashout error', 'error');
-        }
-    }
-
-    function getPlinkoHTML() {
-        return `
-            <div class="bet-controls">
-                <input type="number" class="bet-input" id="plinko-bet" value="10" min="1">
-                <div class="quick-bets">
-                    <span class="quick-bet" onclick="document.getElementById('plinko-bet').value=10">10</span>
-                    <span class="quick-bet" onclick="document.getElementById('plinko-bet').value=25">25</span>
-                    <span class="quick-bet" onclick="document.getElementById('plinko-bet').value=50">50</span>
-                    <span class="quick-bet" onclick="document.getElementById('plinko-bet').value=100">100</span>
-                </div>
-                <div style="display: flex; gap: 10px; margin-bottom: 1rem;">
-                    <button class="btn btn-secondary" onclick="setPlinkoRisk('low')">Low Risk</button>
-                    <button class="btn btn-primary" onclick="setPlinkoRisk('medium')">Medium Risk</button>
-                    <button class="btn btn-danger" onclick="setPlinkoRisk('high')">High Risk</button>
-                </div>
-                <button class="btn btn-primary" style="width:100%;" onclick="dropPlinko()">Drop Ball</button>
-                <div class="result-message" id="plinko-result"></div>
-                <canvas id="plinko-canvas" class="plinko-canvas" width="600" height="400"></canvas>
-            </div>
-        `;
-    }
-
-    let plinkoRisk = 'medium';
-    let plinkoCtx = null;
-
-    function initPlinkoCanvas() {
-        const canvas = document.getElementById('plinko-canvas');
-        if (canvas) {
-            canvas.width = canvas.clientWidth;
-            canvas.height = 400;
-            plinkoCtx = canvas.getContext('2d');
-            drawPlinkoBoard();
-        }
-    }
-
-    function drawPlinkoBoard() {
-        if (!plinkoCtx) return;
-        const canvas = document.getElementById('plinko-canvas');
-        const w = canvas.width, h = canvas.height;
-        plinkoCtx.fillStyle = '#1a1a2e';
-        plinkoCtx.fillRect(0, 0, w, h);
-        
-        const rows = 16;
-        const spacingX = w / 18;
-        
-        for (let row = 0; row < rows; row++) {
-            const y = 30 + row * (h - 60) / rows;
-            const offsetX = (row % 2) * spacingX / 2;
-            for (let col = 0; col <= row + 1; col++) {
-                const x = offsetX + col * spacingX;
-                if (x > 0 && x < w) {
-                    plinkoCtx.beginPath();
-                    plinkoCtx.arc(x, y, 4, 0, Math.PI * 2);
-                    plinkoCtx.fillStyle = '#ffd966';
-                    plinkoCtx.fill();
-                }
-            }
-        }
-    }
-
-    function setPlinkoRisk(risk) {
-        plinkoRisk = risk;
-        toast(`Risk set to ${risk}`, 'info');
-    }
-
-    async function dropPlinko() {
-        const bet = parseFloat(document.getElementById('plinko-bet').value);
-        if (bet > currentUser.xcoin_balance) {
-            toast('Insufficient balance', 'error');
-            return;
-        }
-        try {
-            const res = await fetch(`${API_URL}/api/games/plinko/play`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-                body: JSON.stringify({ game: 'plinko', xcoin_amount: bet, params: { risk: plinkoRisk } })
-            });
-            const data = await res.json();
-            currentUser.xcoin_balance = data.new_balance;
-            document.getElementById('balance').textContent = currentUser.xcoin_balance.toFixed(2);
-            
-            const resultDiv = document.getElementById('plinko-result');
-            if (data.outcome === 'win') {
-                resultDiv.className = 'result-message win';
-                resultDiv.textContent = `WIN! +${data.win_amount.toFixed(2)} XCOIN! Multiplier: ${data.result.multiplier.toFixed(2)}x`;
-                toast(`+${data.win_amount.toFixed(2)} XCOIN`, 'success');
+                toast(data.message, 'success');
+                closeModal('deposit-modal');
             } else {
-                resultDiv.className = 'result-message lose';
-                resultDiv.textContent = `LOSS! -${bet} XCOIN`;
+                toast(data.detail || 'Purchase failed', 'error');
             }
-            drawPlinkoBallPath(data.result.path);
-        } catch {
-            toast('Game error', 'error');
+        } catch (error) {
+            toast('Purchase failed', 'error');
         }
     }
-
-    function drawPlinkoBallPath(path) {
-        if (!plinkoCtx) return;
-        const canvas = document.getElementById('plinko-canvas');
-        const w = canvas.width, h = canvas.height;
-        const spacingX = w / 18;
-        
-        let x = path[0] * spacingX;
-        let y = 20;
-        
-        for (let i = 1; i < path.length; i++) {
-            const nextX = path[i] * spacingX;
-            const nextY = 30 + i * (h - 60) / path.length;
-            
-            plinkoCtx.beginPath();
-            plinkoCtx.moveTo(x, y);
-            plinkoCtx.lineTo(nextX, nextY);
-            plinkoCtx.strokeStyle = '#ffd966';
-            plinkoCtx.lineWidth = 3;
-            plinkoCtx.stroke();
-            
-            plinkoCtx.beginPath();
-            plinkoCtx.arc(nextX, nextY, 6, 0, Math.PI * 2);
-            plinkoCtx.fillStyle = '#ffd966';
-            plinkoCtx.fill();
-            
-            x = nextX;
-            y = nextY;
-        }
+    
+    function selectRobuxPurchase(robux, xcoin, productId) {
+        purchaseRoblox(robux, productId);
     }
-
-    function getCrashHTML() {
-        return `
-            <div class="crash-graph">
-                <div class="crash-multiplier" id="crash-mult">1.00x</div>
-                <canvas id="crash-canvas" width="600" height="300" style="width:100%; background:#0a0a0f; border-radius:12px;"></canvas>
-            </div>
-            <div class="bet-controls">
-                <input type="number" class="bet-input" id="crash-bet" value="10" min="1">
-                <input type="number" class="bet-input" id="crash-auto" placeholder="Auto cashout at (x)" step="0.1">
-                <div style="display: flex; gap: 10px;">
-                    <button class="btn btn-primary" style="flex:1;" id="crash-bet-btn" onclick="placeCrashBet()">Place Bet</button>
-                    <button class="btn btn-danger" style="flex:1;" id="crash-cash-btn" disabled onclick="cashoutCrash()">Cash Out</button>
-                </div>
-                <div class="result-message" id="crash-result"></div>
-            </div>
-        `;
-    }
-
-    function initCrashGame() {
-        crashMult = 1;
-        crashActive = true;
-        updateCrashMultiplier(1);
-        drawCrashGraph();
-        
-        if (crashInterval) clearInterval(crashInterval);
-        crashInterval = setInterval(() => {
-            if (crashActive) {
-                crashMult *= 1.03;
-                updateCrashMultiplier(crashMult);
-                drawCrashGraph();
-                if (crashMult > 1.5 + Math.random() * 8) {
-                    crash();
-                }
-            }
-        }, 100);
-    }
-
-    function updateCrashMultiplier(mult) {
-        document.getElementById('crash-mult').textContent = mult.toFixed(2) + 'x';
-    }
-
-    function drawCrashGraph() {
-        const canvas = document.getElementById('crash-canvas');
-        if (!canvas) return;
-        const ctx = canvas.getContext('2d');
-        const w = canvas.width = canvas.clientWidth;
-        const h = canvas.height = 300;
-        
-        ctx.clearRect(0, 0, w, h);
-        ctx.strokeStyle = '#2ecc71';
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        
-        for (let x = 0; x <= w; x++) {
-            const t = x / w;
-            const m = Math.pow(1.03, t * 30);
-            const y = h - (m / 15) * h;
-            if (x === 0) ctx.moveTo(x, y);
-            else ctx.lineTo(x, y);
-        }
-        ctx.stroke();
-        
-        const currentX = w * (Math.log(crashMult) / Math.log(1.03)) / 30;
-        const currentY = h - (crashMult / 15) * h;
-        ctx.fillStyle = '#ffd966';
-        ctx.beginPath();
-        ctx.arc(currentX, currentY, 8, 0, Math.PI * 2);
-        ctx.fill();
-    }
-
-    function crash() {
-        crashActive = false;
-        if (crashBetActive) {
-            document.getElementById('crash-result').className = 'result-message lose';
-            document.getElementById('crash-result').textContent = `Crashed at ${crashMult.toFixed(2)}x - You lost ${crashBetAmount} XCoin!`;
-            crashBetActive = false;
-            document.getElementById('crash-bet-btn').disabled = false;
-            document.getElementById('crash-cash-btn').disabled = true;
-        }
-        setTimeout(() => {
-            crashMult = 1;
-            crashActive = true;
-            updateCrashMultiplier(1);
-            drawCrashGraph();
-        }, 3000);
-    }
-
-    function onCrashCrashed(mult) {
-        crashActive = false;
-        if (crashBetActive) {
-            document.getElementById('crash-result').className = 'result-message lose';
-            document.getElementById('crash-result').textContent = `Crashed at ${mult.toFixed(2)}x - You lost!`;
-            crashBetActive = false;
-            document.getElementById('crash-bet-btn').disabled = false;
-            document.getElementById('crash-cash-btn').disabled = true;
-        }
-    }
-
-    function placeCrashBet() {
-        const bet = parseFloat(document.getElementById('crash-bet').value);
-        if (bet > currentUser.xcoin_balance) {
-            toast('Insufficient balance', 'error');
+    
+    async function purchaseStripe(amount) {
+        if (!currentUser) {
+            showAuthModal('login');
             return;
         }
-        if (!crashActive) {
-            toast('Wait for next round', 'info');
-            return;
-        }
-        crashBetActive = true;
-        crashBetAmount = bet;
-        currentUser.xcoin_balance -= bet;
-        document.getElementById('balance').textContent = currentUser.xcoin_balance.toFixed(2);
-        document.getElementById('crash-bet-btn').disabled = true;
-        document.getElementById('crash-cash-btn').disabled = false;
-        toast(`Bet placed: ${bet} XCoin`, 'info');
         
-        if (ws) ws.send(JSON.stringify({ type: 'crash_bet', amount: bet, auto_cashout: parseFloat(document.getElementById('crash-auto').value) || null }));
+        try {
+            const res = await fetch(`${API_URL}/api/payments/create-stripe-session`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ amount_xcoin: amount })
+            });
+            const data = await res.json();
+            
+            if (data.url) {
+                window.location.href = data.url;
+            }
+        } catch (error) {
+            toast('Payment initiation failed', 'error');
+        }
     }
-
-    function cashoutCrash() {
-        if (!crashBetActive || !crashActive) return;
-        const win = crashBetAmount * crashMult;
-        currentUser.xcoin_balance += win;
-        document.getElementById('balance').textContent = currentUser.xcoin_balance.toFixed(2);
-        document.getElementById('crash-result').className = 'result-message win';
-        document.getElementById('crash-result').textContent = `Cashed out ${win.toFixed(2)} XCoin at ${crashMult.toFixed(2)}x!`;
-        crashBetActive = false;
-        document.getElementById('crash-bet-btn').disabled = false;
-        document.getElementById('crash-cash-btn').disabled = true;
-        toast(`+${win.toFixed(2)} XCoin`, 'success');
-        if (ws) ws.send(JSON.stringify({ type: 'crash_cashout' }));
+    
+    function selectPaymentMethod(method) {
+        selectedPaymentMethod = method;
+        document.getElementById('stripe-card').classList.toggle('selected', method === 'stripe');
+        document.getElementById('roblox-card').classList.toggle('selected', method === 'roblox');
+        document.getElementById('stripe-products').classList.toggle('hidden', method !== 'stripe');
+        document.getElementById('roblox-products').classList.toggle('hidden', method !== 'roblox');
     }
-
-    function toggleChat() {
-        document.getElementById('chat-widget').classList.toggle('open');
+    
+    function showDepositMethod(method) {
+        document.getElementById('stripe-deposit').classList.toggle('hidden', method !== 'stripe');
+        document.getElementById('roblox-deposit').classList.toggle('hidden', method !== 'roblox');
     }
-
-    function sendChat() {
-        const input = document.getElementById('chat-input');
-        const msg = input.value.trim();
-        if (!msg || !ws) return;
-        ws.send(JSON.stringify({ type: 'chat', message: msg, room: 'global' }));
-        input.value = '';
+    
+    function showShop() {
+        document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById('shop-page').classList.add('active');
     }
-
-    function addChatMessage(username, message) {
-        const container = document.getElementById('chat-messages');
-        const div = document.createElement('div');
-        div.className = 'chat-message';
-        div.innerHTML = `<span class="chat-username">${escapeHtml(username)}:</span> ${escapeHtml(message)}`;
-        container.appendChild(div);
-        container.scrollTop = container.scrollHeight;
-        while (container.children.length > 100) container.removeChild(container.firstChild);
-    }
-
+    
     async function claimDailyBonus() {
         if (!currentUser) {
             showAuthModal('login');
@@ -1985,66 +1441,57 @@
                 document.getElementById('daily-status').textContent = 'Claimed Today';
                 toast(`+${data.bonus} XCoin daily bonus!`, 'success');
             } else {
-                toast(data.error || 'Already claimed today', 'info');
+                toast(data.detail || 'Already claimed today', 'info');
             }
         } catch {
             toast('Bonus unavailable', 'error');
         }
     }
-
+    
     function showReferral() {
         toast(`Your referral code: ${currentUser?.referral_code || 'Loading...'}`, 'info');
     }
-
-    function showVIP() {
-        toast('VIP Benefits: Reduced house edge, exclusive tournaments, dedicated support', 'info');
+    
+    function showWelcomeBonus() {
+        toast('Deposit $10 or more to claim 100% match bonus up to 5000 XCoin!', 'info');
     }
-
-    async function deposit() {
-        const amount = prompt('Enter deposit amount (XCoin):', '100');
-        if (!amount) return;
+    
+    async function loadLeaderboard() {
         try {
-            const res = await fetch(`${API_URL}/api/payments/create-deposit`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-                body: JSON.stringify({ xcoin_amount: parseFloat(amount) })
-            });
+            const res = await fetch(`${API_URL}/api/leaderboard`);
             const data = await res.json();
-            if (data.url) window.location.href = data.url;
-            else if (data.new_balance) {
-                currentUser.xcoin_balance = data.new_balance;
-                document.getElementById('balance').textContent = currentUser.xcoin_balance.toFixed(2);
-                toast(`Deposited ${amount} XCoin`, 'success');
-            }
-        } catch {
-            toast('Deposit error', 'error');
-        }
-    }
-
-    async function withdraw() {
-        const amount = prompt('Enter withdrawal amount (XCoin):', '5000');
-        if (!amount) return;
-        const address = prompt('Enter your withdrawal address:');
-        if (!address) return;
-        try {
-            const res = await fetch(`${API_URL}/api/user/withdraw`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-                body: JSON.stringify({ xcoin_amount: parseFloat(amount), address })
-            });
-            const data = await res.json();
-            if (res.ok) {
-                currentUser.xcoin_balance = data.new_balance;
-                document.getElementById('balance').textContent = currentUser.xcoin_balance.toFixed(2);
-                toast(`Withdrawal request for ${amount} XCoin submitted`, 'success');
+            const leaderboard = document.getElementById('leaderboard');
+            if (data.players && data.players.length) {
+                leaderboard.innerHTML = data.players.slice(0, 5).map((p, i) => `
+                    <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border);">
+                        <span>${i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : '📌'} ${escapeHtml(p.username)}</span>
+                        <span style="color: var(--gold);">${p.xcoin_balance.toFixed(0)} XC</span>
+                    </div>
+                `).join('');
             } else {
-                toast(data.error || 'Withdrawal failed', 'error');
+                leaderboard.innerHTML = '<div>Be the first!</div>';
             }
         } catch {
-            toast('Withdrawal error', 'error');
+            document.getElementById('leaderboard').innerHTML = '<div>Loading...</div>';
         }
     }
-
+    
+    async function updateStats() {
+        try {
+            const res = await fetch(`${API_URL}/api/stats`);
+            const data = await res.json();
+            document.getElementById('online-count').textContent = data.online_players;
+            document.getElementById('total-bets').textContent = data.total_bets;
+            document.getElementById('total-wagered').textContent = data.total_wagered.toFixed(0);
+        } catch {}
+        
+        try {
+            const res = await fetch(`${API_URL}/api/online-players`);
+            const data = await res.json();
+            document.getElementById('online-count').textContent = data.count;
+        } catch {}
+    }
+    
     function showAdminPanel() {
         if (currentUser?.role !== 'admin') {
             toast('Admin access required', 'error');
@@ -2053,7 +1500,7 @@
         openModal('admin-modal');
         loadAdminUsers();
     }
-
+    
     async function loadAdminUsers() {
         try {
             const res = await fetch(`${API_URL}/api/admin/users`, {
@@ -2062,26 +1509,41 @@
             const data = await res.json();
             document.getElementById('admin-content').innerHTML = `
                 <h3>User Management</h3>
-                <table style="width:100%; border-collapse: collapse;">
-                    <thead><tr><th>User</th><th>Email</th><th>Balance</th><th>Status</th><th>Action</th></thead>
-                    <tbody>
-                        ${data.users.map(u => `
-                            <tr style="border-bottom:1px solid var(--border);">
-                                <td style="padding:8px;">${escapeHtml(u.username)}</td>
-                                <td>${escapeHtml(u.email)}</td>
-                                <td>${u.xcoin_balance.toFixed(0)}</td>
-                                <td>${u.banned ? 'Banned' : 'Active'}</td>
-                                <td><button class="btn btn-secondary" onclick="banUser('${u.id}',${!u.banned})">${u.banned ? 'Unban' : 'Ban'}</button></td>
+                <div style="overflow-x: auto;">
+                    <table style="width:100%; border-collapse: collapse;">
+                        <thead>
+                            <tr style="border-bottom:2px solid var(--border);">
+                                <th style="padding:8px; text-align:left;">User</th>
+                                <th style="padding:8px; text-align:left;">Email/Roblox</th>
+                                <th style="padding:8px; text-align:left;">Balance</th>
+                                <th style="padding:8px; text-align:left;">Role</th>
+                                <th style="padding:8px; text-align:left;">Status</th>
+                                <th style="padding:8px; text-align:left;">Actions</th>
                             </tr>
-                        `).join('')}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            ${data.users.map(u => `
+                                <tr style="border-bottom:1px solid var(--border);">
+                                    <td style="padding:8px;">${escapeHtml(u.username)}</td>
+                                    <td style="padding:8px;">${escapeHtml(u.email || '')}<br>${u.roblox_id ? '🎮 ' + u.roblox_id : ''}</td>
+                                    <td style="padding:8px;">${u.xcoin_balance.toFixed(0)} XC</td>
+                                    <td style="padding:8px;">${u.role}</td>
+                                    <td style="padding:8px;">${u.banned ? '🚫 Banned' : '✅ Active'}</td>
+                                    <td style="padding:8px;">
+                                        <button class="btn btn-secondary" style="padding:4px 12px;" onclick="banUser('${u.id}', ${!u.banned})">${u.banned ? 'Unban' : 'Ban'}</button>
+                                        <button class="btn btn-secondary" style="padding:4px 12px; margin-left:5px;" onclick="adjustBalance('${u.id}')">Adjust</button>
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
             `;
         } catch {
             document.getElementById('admin-content').innerHTML = '<div>Failed to load users</div>';
         }
     }
-
+    
     async function banUser(userId, ban) {
         try {
             await fetch(`${API_URL}/api/admin/users/${userId}/ban`, {
@@ -2095,42 +1557,267 @@
             toast('Action failed', 'error');
         }
     }
-
-    async function loadLeaderboard() {
-        try {
-            const res = await fetch(`${API_URL}/api/leaderboard`);
-            const data = await res.json();
-            const leaderboard = document.getElementById('leaderboard');
-            if (data.players && data.players.length) {
-                leaderboard.innerHTML = data.players.slice(0, 5).map((p, i) => `
-                    <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border);">
-                        <span>${i === 0 ? '1' : i === 1 ? '2' : i === 2 ? '3' : i+1}. ${escapeHtml(p.username)}</span>
-                        <span style="color: var(--gold);">${p.xcoin_balance.toFixed(0)} XC</span>
+    
+    function adjustBalance(userId) {
+        const amount = prompt('Enter new balance (XCoin):');
+        if (amount) {
+            fetch(`${API_URL}/api/admin/users/${userId}/balance`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                body: JSON.stringify({ balance: parseFloat(amount) })
+            }).then(() => {
+                toast('Balance updated', 'success');
+                loadAdminUsers();
+            }).catch(() => toast('Update failed', 'error'));
+        }
+    }
+    
+    function openGame(game) {
+        if (!currentUser) {
+            showAuthModal('login');
+            return;
+        }
+        const content = document.getElementById('game-content');
+        const titles = {
+            slots: 'DIAMOND SLOTS', blackjack: 'BLACKJACK', mines: 'MINES',
+            plinko: 'PLINKO', crash: 'CRASH', dice: 'DICE'
+        };
+        document.getElementById('game-title').textContent = titles[game] || game;
+        
+        if (game === 'slots') content.innerHTML = getSlotsHTML();
+        else if (game === 'dice') content.innerHTML = getDiceHTML();
+        else if (game === 'blackjack') content.innerHTML = getBlackjackHTML();
+        else content.innerHTML = `<div style="text-align:center; padding:2rem;"><h3>Coming Soon!</h3><p>This game is under development</p></div>`;
+        
+        openModal('game-modal');
+        
+        if (game === 'slots') initSlotsGame();
+    }
+    
+    function getSlotsHTML() {
+        return `
+            <div class="slot-machine">
+                <div class="slot-reels" id="slot-reels">
+                    ${Array(5).fill(0).map(() => `
+                        <div class="slot-reel">
+                            <div class="reel-symbols">
+                                ${Array(9).fill(0).map(() => `
+                                    <div class="reel-symbol"><img src="/assets/games/slots/cherry.png"></div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+                <div class="bet-controls" style="margin-top: 1rem;">
+                    <input type="number" class="bet-input" id="slot-bet" value="10" min="1" step="10" style="width:100%; padding:12px; background:var(--bg-primary); border:1px solid var(--border); border-radius:12px; color:white; margin-bottom:1rem;">
+                    <div class="quick-bets" style="display: flex; gap: 8px; margin-bottom: 1rem;">
+                        <span class="quick-bet" onclick="document.getElementById('slot-bet').value=10" style="padding:6px 12px; background:var(--bg-card); border-radius:20px; cursor:pointer;">10</span>
+                        <span class="quick-bet" onclick="document.getElementById('slot-bet').value=25" style="padding:6px 12px; background:var(--bg-card); border-radius:20px; cursor:pointer;">25</span>
+                        <span class="quick-bet" onclick="document.getElementById('slot-bet').value=50" style="padding:6px 12px; background:var(--bg-card); border-radius:20px; cursor:pointer;">50</span>
+                        <span class="quick-bet" onclick="document.getElementById('slot-bet').value=100" style="padding:6px 12px; background:var(--bg-card); border-radius:20px; cursor:pointer;">100</span>
+                        <span class="quick-bet" onclick="document.getElementById('slot-bet').value=250" style="padding:6px 12px; background:var(--bg-card); border-radius:20px; cursor:pointer;">250</span>
                     </div>
-                `).join('');
-            } else {
-                leaderboard.innerHTML = '<div>No data yet</div>';
+                    <button class="btn btn-primary" style="width:100%;" onclick="spinSlots()">SPIN</button>
+                    <div class="result-message" id="slot-result" style="margin-top:1rem; padding:12px; border-radius:12px; display:none;"></div>
+                </div>
+            </div>
+        `;
+    }
+    
+    function initSlotsGame() {
+        // Initialize slot symbols
+        const symbols = ['cherry', 'lemon', 'orange', 'plum', 'bell', 'xbet', 'diamond', 'crown'];
+        const reels = document.querySelectorAll('.slot-reel');
+        
+        reels.forEach(reel => {
+            const symbolsContainer = reel.querySelector('.reel-symbols');
+            symbolsContainer.innerHTML = '';
+            for (let i = 0; i < 20; i++) {
+                const symbol = symbols[Math.floor(Math.random() * symbols.length)];
+                const div = document.createElement('div');
+                div.className = 'reel-symbol';
+                div.innerHTML = `<img src="/assets/games/slots/${symbol}.png">`;
+                symbolsContainer.appendChild(div);
             }
-        } catch {
-            document.getElementById('leaderboard').innerHTML = '<div>Loading...</div>';
-        }
+        });
     }
-
-    async function updateOnlinePlayers() {
+    
+    async function spinSlots() {
+        const bet = parseFloat(document.getElementById('slot-bet').value);
+        if (bet > currentUser.xcoin_balance) {
+            toast('Insufficient balance', 'error');
+            return;
+        }
+        
+        const reels = document.querySelectorAll('.slot-reel');
+        reels.forEach(reel => reel.classList.add('spinning'));
+        
         try {
-            const res = await fetch(`${API_URL}/api/online-players`);
+            const res = await fetch(`${API_URL}/api/games/slots/play`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                body: JSON.stringify({ game: 'slots', xcoin_amount: bet, params: {} })
+            });
             const data = await res.json();
-            document.getElementById('online-count').textContent = data.count;
-            document.getElementById('chat-online').textContent = data.count;
-        } catch {}
-    }
-
-    async function loadReferralCode() {
-        if (currentUser && currentUser.referral_code) {
-            document.getElementById('ref-code').textContent = currentUser.referral_code;
+            
+            setTimeout(() => {
+                reels.forEach((reel, idx) => {
+                    reel.classList.remove('spinning');
+                    const symbolsContainer = reel.querySelector('.reel-symbols');
+                    const resultSymbols = data.result.reel_grid.map(row => row[idx]);
+                    symbolsContainer.innerHTML = '';
+                    for (let i = 0; i < 9; i++) {
+                        const symbolIdx = i % resultSymbols.length;
+                        const symbol = resultSymbols[symbolIdx];
+                        const div = document.createElement('div');
+                        div.className = 'reel-symbol';
+                        div.innerHTML = `<img src="/assets/games/slots/${symbol}.png">`;
+                        symbolsContainer.appendChild(div);
+                    }
+                });
+                
+                currentUser.xcoin_balance = data.new_balance;
+                document.getElementById('balance').textContent = currentUser.xcoin_balance.toFixed(2);
+                
+                const resultDiv = document.getElementById('slot-result');
+                resultDiv.style.display = 'block';
+                if (data.outcome === 'win') {
+                    resultDiv.className = 'result-message win';
+                    resultDiv.style.background = 'rgba(46,204,113,0.2)';
+                    resultDiv.style.border = '1px solid var(--green)';
+                    resultDiv.style.color = 'var(--green)';
+                    resultDiv.innerHTML = `🎉 WIN! +${data.win_amount.toFixed(2)} XCOIN! Multiplier: ${data.multiplier.toFixed(2)}x 🎉`;
+                    toast(`+${data.win_amount.toFixed(2)} XCOIN`, 'success');
+                } else {
+                    resultDiv.className = 'result-message lose';
+                    resultDiv.style.background = 'rgba(231,76,60,0.2)';
+                    resultDiv.style.border = '1px solid var(--crimson)';
+                    resultDiv.style.color = 'var(--crimson)';
+                    resultDiv.innerHTML = `💔 LOSS! -${bet} XCOIN 💔`;
+                }
+                
+                setTimeout(() => {
+                    resultDiv.style.display = 'none';
+                }, 3000);
+            }, 1000);
+        } catch (error) {
+            toast('Spin failed', 'error');
+            reels.forEach(reel => reel.classList.remove('spinning'));
         }
     }
-
+    
+    function getDiceHTML() {
+        return `
+            <div class="bet-controls">
+                <div class="dice-display" style="text-align:center; margin-bottom:1rem;">
+                    <img src="/assets/games/dice/dice-default.png" id="dice-image" style="width:100px; height:100px;">
+                </div>
+                <div class="slider-wrap">
+                    <input type="range" id="dice-target" min="2" max="98" value="50" style="width:100%;">
+                    <div style="display: flex; justify-content: space-between; margin-top: 5px;">
+                        <span>Under 2</span><span>Target: <span id="target-value">50</span></span><span>Over 98</span>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 10px; margin: 1rem 0;">
+                    <button class="btn btn-primary" style="flex:1;" id="dice-under" onclick="setDiceMode('under')">Roll Under</button>
+                    <button class="btn btn-secondary" style="flex:1;" id="dice-over" onclick="setDiceMode('over')">Roll Over</button>
+                </div>
+                <input type="number" class="bet-input" id="dice-bet" value="10" min="1" style="width:100%; padding:12px; background:var(--bg-primary); border:1px solid var(--border); border-radius:12px; color:white; margin-bottom:1rem;">
+                <div class="quick-bets" style="display: flex; gap: 8px; margin-bottom: 1rem;">
+                    <span class="quick-bet" onclick="document.getElementById('dice-bet').value=10">10</span>
+                    <span class="quick-bet" onclick="document.getElementById('dice-bet').value=25">25</span>
+                    <span class="quick-bet" onclick="document.getElementById('dice-bet').value=50">50</span>
+                    <span class="quick-bet" onclick="document.getElementById('dice-bet').value=100">100</span>
+                </div>
+                <button class="btn btn-primary" style="width:100%;" onclick="rollDice()">Roll Dice</button>
+                <div class="result-message" id="dice-result" style="margin-top:1rem; padding:12px; border-radius:12px; display:none;"></div>
+            </div>
+        `;
+    }
+    
+    let diceMode = 'under';
+    
+    function setDiceMode(mode) {
+        diceMode = mode;
+        document.getElementById('dice-under').className = mode === 'under' ? 'btn btn-primary' : 'btn btn-secondary';
+        document.getElementById('dice-over').className = mode === 'over' ? 'btn btn-primary' : 'btn btn-secondary';
+    }
+    
+    async function rollDice() {
+        const bet = parseFloat(document.getElementById('dice-bet').value);
+        const target = parseInt(document.getElementById('dice-target').value);
+        
+        if (bet > currentUser.xcoin_balance) {
+            toast('Insufficient balance', 'error');
+            return;
+        }
+        
+        const diceDisplay = document.getElementById('dice-image');
+        diceDisplay.style.animation = 'diceRoll 0.5s ease';
+        
+        try {
+            const res = await fetch(`${API_URL}/api/games/dice/play`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                body: JSON.stringify({ game: 'dice', xcoin_amount: bet, params: { target, condition: diceMode } })
+            });
+            const data = await res.json();
+            
+            setTimeout(() => {
+                diceDisplay.style.animation = '';
+                const roll = data.result.roll;
+                const face = Math.min(6, Math.max(1, Math.floor(roll / 100 * 6) + 1));
+                diceDisplay.src = `/assets/games/dice/dice-${face}.png`;
+                
+                currentUser.xcoin_balance = data.new_balance;
+                document.getElementById('balance').textContent = currentUser.xcoin_balance.toFixed(2);
+                
+                const resultDiv = document.getElementById('dice-result');
+                resultDiv.style.display = 'block';
+                if (data.outcome === 'win') {
+                    resultDiv.className = 'result-message win';
+                    resultDiv.style.background = 'rgba(46,204,113,0.2)';
+                    resultDiv.style.border = '1px solid var(--green)';
+                    resultDiv.innerHTML = `🎲 WIN! +${data.win_amount.toFixed(2)} XCOIN! Roll: ${roll.toFixed(1)} 🎲`;
+                    toast(`+${data.win_amount.toFixed(2)} XCOIN`, 'success');
+                } else {
+                    resultDiv.className = 'result-message lose';
+                    resultDiv.style.background = 'rgba(231,76,60,0.2)';
+                    resultDiv.style.border = '1px solid var(--crimson)';
+                    resultDiv.innerHTML = `🎲 LOSS! -${bet} XCOIN. Roll: ${roll.toFixed(1)} 🎲`;
+                }
+                
+                setTimeout(() => {
+                    resultDiv.style.display = 'none';
+                }, 3000);
+            }, 500);
+        } catch (error) {
+            toast('Roll failed', 'error');
+            diceDisplay.style.animation = '';
+        }
+    }
+    
+    function getBlackjackHTML() {
+        return `
+            <div style="text-align:center; padding:2rem;">
+                <h3>Coming Soon!</h3>
+                <p>Blackjack is under development</p>
+            </div>
+        `;
+    }
+    
+    function openModal(id) {
+        document.getElementById(id).classList.add('active');
+    }
+    
+    function closeModal(id) {
+        document.getElementById(id).classList.remove('active');
+    }
+    
+    function closeAllModals() {
+        ['auth-modal', 'game-modal', 'admin-modal', 'deposit-modal'].forEach(closeModal);
+    }
+    
     function toast(message, type = 'info') {
         const container = document.getElementById('toast-container');
         const toast = document.createElement('div');
@@ -2139,25 +1826,13 @@
         container.appendChild(toast);
         setTimeout(() => toast.remove(), 3000);
     }
-
-    function openModal(id) {
-        document.getElementById(id).classList.add('active');
-    }
-
-    function closeModal(id) {
-        document.getElementById(id).classList.remove('active');
-    }
-
-    function closeAllModals() {
-        ['auth-modal', 'game-modal', 'admin-modal'].forEach(closeModal);
-    }
-
+    
     function escapeHtml(text) {
         const div = document.createElement('div');
         div.textContent = text;
         return div.innerHTML;
     }
-
+    
     document.querySelectorAll('.nav-link').forEach(link => {
         link.addEventListener('click', () => {
             const page = link.dataset.page;
@@ -2167,10 +1842,14 @@
             document.getElementById(`${page}-page`).classList.add('active');
         });
     });
-
+    
+    document.getElementById('dice-target')?.addEventListener('input', (e) => {
+        document.getElementById('target-value').textContent = e.target.value;
+    });
+    
     verifyToken();
-    setInterval(updateOnlinePlayers, 10000);
-    updateOnlinePlayers();
+    setInterval(updateStats, 10000);
+    updateStats();
     setInterval(() => {
         if (currentUser) {
             fetch(`${API_URL}/api/user/balance`, {
