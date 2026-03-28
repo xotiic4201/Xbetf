@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>XBET</title>
+    <title>XBET — Premium Crypto Casino</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://js.stripe.com/v3/"></script>
     <style>
@@ -88,6 +88,12 @@
             height: 200px;
             margin-bottom: 30px;
             animation: floatLogo 2s ease-in-out infinite;
+        }
+
+        .entrance-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
         }
 
         @keyframes floatLogo {
@@ -451,6 +457,7 @@
             align-items: center;
             justify-content: center;
             background: linear-gradient(135deg, var(--bg-secondary), var(--bg-elevated));
+            font-size: 4rem;
         }
 
         .game-icon img {
@@ -641,6 +648,60 @@
             margin-top: 5px;
         }
 
+        .bet-input {
+            width: 100%;
+            padding: 12px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            color: white;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .quick-bets {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .quick-bet {
+            padding: 6px 12px;
+            background: var(--bg-card);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .quick-bet:hover {
+            background: var(--gold);
+            color: var(--bg-primary);
+        }
+
+        .result-message {
+            margin-top: 1rem;
+            padding: 12px;
+            border-radius: 12px;
+            text-align: center;
+            display: none;
+        }
+
+        .result-message.win {
+            display: block;
+            background: rgba(46, 204, 113, 0.2);
+            border: 1px solid var(--green);
+            color: var(--green);
+        }
+
+        .result-message.lose {
+            display: block;
+            background: rgba(231, 76, 60, 0.2);
+            border: 1px solid var(--crimson);
+            color: var(--crimson);
+        }
+
         .slot-machine {
             background: linear-gradient(135deg, #1A1A2E, #0F0F1A);
             border-radius: 20px;
@@ -660,19 +721,21 @@
             overflow: hidden;
             border: 2px solid var(--border);
             position: relative;
+            height: 300px;
         }
 
         .reel-symbols {
-            transition: transform 0.1s linear;
+            transition: transform 0.05s linear;
         }
 
         .reel-symbol {
-            aspect-ratio: 1;
+            height: 100px;
             display: flex;
             align-items: center;
             justify-content: center;
             border-bottom: 1px solid var(--border);
             background: linear-gradient(135deg, #0A0A0F, #111118);
+            font-size: 2.5rem;
         }
 
         .reel-symbol img {
@@ -687,7 +750,34 @@
 
         @keyframes reelSpin {
             0% { transform: translateY(0); }
-            100% { transform: translateY(-100%); }
+            100% { transform: translateY(-100px); }
+        }
+
+        .dice-display {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .dice-image {
+            width: 100px;
+            height: 100px;
+            background: var(--gold);
+            border-radius: 20px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            transition: transform 0.3s;
+        }
+
+        .dice-image.rolling {
+            animation: diceRoll 0.5s ease;
+        }
+
+        @keyframes diceRoll {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         .toast-container {
@@ -733,6 +823,13 @@
             .slot-reels {
                 gap: 5px;
             }
+            .reel-symbol {
+                font-size: 1.5rem;
+                height: 70px;
+            }
+            .slot-reel {
+                height: 210px;
+            }
             .reel-symbol img {
                 width: 30px;
                 height: 30px;
@@ -746,7 +843,7 @@
 <div class="entrance-overlay" id="entrance-overlay">
     <div class="entrance-content">
         <div class="entrance-logo">
-            <img src="/assets/ui/xbet-logo.png" alt="XBET" style="width: 100%; height: 100%; object-fit: contain;">
+            <img src="/assets/ui/xbet-logo.png" alt="XBET" onerror="this.style.display='none'">
         </div>
         <h1 class="entrance-title">XBET</h1>
         <p class="entrance-subtitle">THE ULTIMATE CASINO EXPERIENCE</p>
@@ -761,7 +858,7 @@
     <div class="nav-inner">
         <div class="logo" onclick="closeAllModals()">
             <div class="logo-icon">
-                <img src="/assets/ui/xbet-logo.png" alt="XBET">
+                <img src="/assets/ui/xbet-logo.png" alt="XBET" onerror="this.style.display='none'">
             </div>
             <div class="logo-text">XBET</div>
             <div class="logo-badge">PROVABLY FAIR</div>
@@ -780,7 +877,7 @@
             <div id="user-info" class="hidden">
                 <div class="balance-card" onclick="showShop()">
                     <div class="balance-icon">
-                        <img src="/assets/coins/xcoin-gold.png" alt="XCoin">
+                        <img src="/assets/coins/xcoin-gold.png" alt="XCoin" onerror="this.style.display='none'">
                     </div>
                     <div class="balance-info">
                         <div class="balance-value" id="balance">0.00</div>
@@ -802,9 +899,7 @@
     <div id="casino-page" class="page active">
         <div class="games-grid">
             <div class="game-card" onclick="openGame('slots')">
-                <div class="game-icon">
-                    <img src="/assets/games/slots-icon.png">
-                </div>
+                <div class="game-icon">🎰</div>
                 <div class="game-info">
                     <div class="game-title">DIAMOND SLOTS</div>
                     <div class="game-desc">8 Premium Symbols • 5 Reels • Jackpot up to 5000x</div>
@@ -812,49 +907,15 @@
                 </div>
             </div>
             <div class="game-card" onclick="openGame('blackjack')">
-                <div class="game-icon">
-                    <img src="/assets/games/poker-icon.png">
-                </div>
+                <div class="game-icon">🃏</div>
                 <div class="game-info">
                     <div class="game-title">BLACKJACK</div>
                     <div class="game-desc">Classic 21 • Hit • Stand • Double Down</div>
                     <div class="game-stats"><span>3:2 Payout</span><span>House Edge: 0.5%</span></div>
                 </div>
             </div>
-            <div class="game-card" onclick="openGame('crash')">
-                <div class="game-icon">
-                    <img src="/assets/games/crash-icon.png">
-                </div>
-                <div class="game-info">
-                    <div class="game-title">CRASH</div>
-                    <div class="game-desc">Watch multiplier climb • Cash out before crash • Up to 10000x</div>
-                    <div class="game-stats"><span>Provably Fair</span><span>Max: 10000x</span></div>
-                </div>
-            </div>
-            <div class="game-card" onclick="openGame('mines')">
-                <div class="game-icon">
-                    <img src="/assets/games/crash-icon.png">
-                </div>
-                <div class="game-info">
-                    <div class="game-title">MINES</div>
-                    <div class="game-desc">Avoid mines • Cash out anytime • Up to 1000x</div>
-                    <div class="game-stats"><span>5x5 Grid</span><span>High Risk</span></div>
-                </div>
-            </div>
-            <div class="game-card" onclick="openGame('plinko')">
-                <div class="game-icon">
-                    <img src="/assets/games/crash-icon.png">
-                </div>
-                <div class="game-info">
-                    <div class="game-title">PLINKO</div>
-                    <div class="game-desc">Drop the ball • Choose risk level • Up to 1000x</div>
-                    <div class="game-stats"><span>16 Rows</span><span>3 Risk Levels</span></div>
-                </div>
-            </div>
             <div class="game-card" onclick="openGame('dice')">
-                <div class="game-icon">
-                    <img src="/assets/games/dice-icon.png">
-                </div>
+                <div class="game-icon">🎲</div>
                 <div class="game-info">
                     <div class="game-title">DICE</div>
                     <div class="game-desc">Roll under/over • Custom odds • Up to 99x</div>
@@ -881,9 +942,7 @@
     <div id="promotions-page" class="page">
         <div class="games-grid">
             <div class="game-card" onclick="claimDailyBonus()">
-                <div class="game-icon">
-                    <div style="width:80px;height:80px;background:linear-gradient(135deg,var(--gold),var(--gold-dark));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2.5rem;">🎁</div>
-                </div>
+                <div class="game-icon">🎁</div>
                 <div class="game-info">
                     <div class="game-title">DAILY BONUS</div>
                     <div class="game-desc">Claim 100 XCoin every day!</div>
@@ -891,9 +950,7 @@
                 </div>
             </div>
             <div class="game-card" onclick="showReferral()">
-                <div class="game-icon">
-                    <div style="width:80px;height:80px;background:linear-gradient(135deg,var(--gold),var(--gold-dark));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2.5rem;">👥</div>
-                </div>
+                <div class="game-icon">👥</div>
                 <div class="game-info">
                     <div class="game-title">REFERRAL PROGRAM</div>
                     <div class="game-desc">Earn 10% of friend's deposits forever!</div>
@@ -901,9 +958,7 @@
                 </div>
             </div>
             <div class="game-card" onclick="showWelcomeBonus()">
-                <div class="game-icon">
-                    <div style="width:80px;height:80px;background:linear-gradient(135deg,var(--gold),var(--gold-dark));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2.5rem;">🎉</div>
-                </div>
+                <div class="game-icon">🎉</div>
                 <div class="game-info">
                     <div class="game-title">WELCOME BONUS</div>
                     <div class="game-desc">100% match on first deposit up to 5000 XCoin!</div>
@@ -954,9 +1009,7 @@
     <div id="vip-page" class="page">
         <div class="games-grid">
             <div class="game-card">
-                <div class="game-icon">
-                    <div style="width:80px;height:80px;background:linear-gradient(135deg,var(--gold),var(--gold-dark));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2.5rem;">👑</div>
-                </div>
+                <div class="game-icon">👑</div>
                 <div class="game-info">
                     <div class="game-title">VIP LEVEL <span id="vip-level">1</span></div>
                     <div class="game-desc">Next level: <span id="next-vip">1000</span> XCoin wagered</div>
@@ -964,9 +1017,7 @@
                 </div>
             </div>
             <div class="game-card">
-                <div class="game-icon">
-                    <div style="width:80px;height:80px;background:linear-gradient(135deg,var(--gold),var(--gold-dark));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2.5rem;">🎁</div>
-                </div>
+                <div class="game-icon">🎁</div>
                 <div class="game-info">
                     <div class="game-title">VIP Benefits</div>
                     <div class="game-desc">• Lower house edge<br>• Exclusive tournaments<br>• Priority support<br>• Higher withdrawal limits</div>
@@ -991,16 +1042,16 @@
                 <button class="btn btn-secondary" style="flex:1;" onclick="setAuthMode('register')">Create Account</button>
             </div>
             <div id="login-form">
-                <input type="text" class="bet-input" id="login-identifier" placeholder="Email or Username" style="width:100%; padding:12px; background:var(--bg-primary); border:1px solid var(--border); border-radius:12px; color:white; margin-bottom:1rem;">
-                <input type="password" class="bet-input" id="login-password" placeholder="Password" style="width:100%; padding:12px; background:var(--bg-primary); border:1px solid var(--border); border-radius:12px; color:white; margin-bottom:1rem;">
+                <input type="text" class="bet-input" id="login-identifier" placeholder="Email or Username">
+                <input type="password" class="bet-input" id="login-password" placeholder="Password">
                 <button class="btn btn-primary" style="width:100%;" onclick="handleAuth()">Sign In</button>
             </div>
             <div id="register-form" class="hidden">
-                <input type="text" class="bet-input" id="reg-username" placeholder="Username" style="width:100%; padding:12px; background:var(--bg-primary); border:1px solid var(--border); border-radius:12px; color:white; margin-bottom:1rem;">
-                <input type="email" class="bet-input" id="reg-email" placeholder="Email (optional)" style="width:100%; padding:12px; background:var(--bg-primary); border:1px solid var(--border); border-radius:12px; color:white; margin-bottom:1rem;">
-                <input type="text" class="bet-input" id="reg-roblox" placeholder="Roblox ID (optional)" style="width:100%; padding:12px; background:var(--bg-primary); border:1px solid var(--border); border-radius:12px; color:white; margin-bottom:1rem;">
-                <input type="password" class="bet-input" id="reg-password" placeholder="Password" style="width:100%; padding:12px; background:var(--bg-primary); border:1px solid var(--border); border-radius:12px; color:white; margin-bottom:1rem;">
-                <input type="text" class="bet-input" id="reg-referral" placeholder="Referral Code (optional)" style="width:100%; padding:12px; background:var(--bg-primary); border:1px solid var(--border); border-radius:12px; color:white; margin-bottom:1rem;">
+                <input type="text" class="bet-input" id="reg-username" placeholder="Username">
+                <input type="email" class="bet-input" id="reg-email" placeholder="Email (optional)">
+                <input type="text" class="bet-input" id="reg-roblox" placeholder="Roblox ID (optional)">
+                <input type="password" class="bet-input" id="reg-password" placeholder="Password">
+                <input type="text" class="bet-input" id="reg-referral" placeholder="Referral Code (optional)">
                 <button class="btn btn-primary" style="width:100%;" onclick="handleRegister()">Create Account</button>
                 <div style="text-align: center; margin-top: 1rem; font-size: 0.8rem; color: var(--text-muted);">
                     Get 100 XCoin FREE on signup! Link Roblox for bonus!
@@ -1072,10 +1123,7 @@
     const API_URL = 'https://xbetb.onrender.com';
     let token = localStorage.getItem('token');
     let currentUser = null;
-    let ws = null;
     let stripe = null;
-    let selectedPaymentMethod = 'stripe';
-    let selectedRobuxProduct = null;
     
     // Initialize Stripe
     if (typeof Stripe !== 'undefined') {
@@ -1108,11 +1156,13 @@
                 const data = await res.json();
                 currentUser = data;
                 updateUI(true);
-                initWebSocket();
                 loadLeaderboard();
                 loadRobloxProducts();
                 loadStripeProducts();
                 updateStats();
+                if (currentUser.role === 'admin') {
+                    document.getElementById('admin-link').classList.remove('hidden');
+                }
             } else {
                 logout();
             }
@@ -1126,7 +1176,7 @@
         document.getElementById('user-info').classList.toggle('hidden', !loggedIn);
         if (loggedIn && currentUser) {
             document.getElementById('balance').textContent = currentUser.xcoin_balance.toFixed(2);
-            document.getElementById('admin-link').classList.toggle('hidden', currentUser.role !== 'admin');
+            document.getElementById('vip-level').textContent = currentUser.vip_level || 1;
             if (currentUser.roblox_id) {
                 document.getElementById('roblox-badge').classList.remove('hidden');
                 document.getElementById('roblox-id-display').textContent = currentUser.roblox_id;
@@ -1180,7 +1230,6 @@
                 currentUser = data.user;
                 updateUI(true);
                 closeModal('auth-modal');
-                initWebSocket();
                 loadLeaderboard();
                 toast(`Welcome back, ${currentUser.username}!`, 'success');
             } else {
@@ -1216,7 +1265,6 @@
                 currentUser = data.user;
                 updateUI(true);
                 closeModal('auth-modal');
-                initWebSocket();
                 toast(`Welcome to XBET, ${currentUser.username}! You got 100 free XCoin!`, 'success');
             } else {
                 toast(data.detail || 'Registration failed', 'error');
@@ -1230,22 +1278,8 @@
         token = null;
         currentUser = null;
         localStorage.removeItem('token');
-        if (ws) ws.close();
         updateUI(false);
         toast('Logged out', 'info');
-    }
-    
-    function initWebSocket() {
-        if (!token) return;
-        const wsUrl = API_URL.replace('http', 'ws') + `/ws/${token}`;
-        ws = new WebSocket(wsUrl);
-        ws.onmessage = (e) => {
-            const data = JSON.parse(e.data);
-            if (data.type === 'chat') {
-                console.log('Chat:', data);
-            }
-        };
-        ws.onclose = () => setTimeout(initWebSocket, 5000);
     }
     
     async function loadRobloxProducts() {
@@ -1266,7 +1300,7 @@
             `).join('');
             
             robloxDepositOffers.innerHTML = data.products.map(p => `
-                <div class="robux-product" onclick="selectRobuxPurchase(${p.robux}, ${p.xcoin}, '${p.product_id}')">
+                <div class="robux-product" onclick="purchaseRoblox(${p.robux}, '${p.product_id}')">
                     <div class="robux-amount">${p.robux} R$</div>
                     <div class="xcoin-amount">${p.xcoin} XCoin</div>
                     <div class="price">$${p.price_usd}</div>
@@ -1279,7 +1313,7 @@
     
     function loadStripeProducts() {
         const stripeOffers = document.getElementById('stripe-offers');
-        const amounts = [100, 500, 1000, 5000, 10000, 50000];
+        const amounts = [100, 500, 1000, 5000, 10000];
         
         stripeOffers.innerHTML = amounts.map(amount => `
             <div class="robux-product" onclick="purchaseStripe(${amount})">
@@ -1291,7 +1325,7 @@
     
     function loadStripeDepositOptions() {
         const stripeDeposit = document.getElementById('stripe-deposit-options');
-        const amounts = [100, 500, 1000, 5000, 10000, 50000];
+        const amounts = [100, 500, 1000, 5000, 10000];
         
         stripeDeposit.innerHTML = amounts.map(amount => `
             <div class="robux-product" onclick="selectStripeAmount(${amount})">
@@ -1376,10 +1410,6 @@
         }
     }
     
-    function selectRobuxPurchase(robux, xcoin, productId) {
-        purchaseRoblox(robux, productId);
-    }
-    
     async function purchaseStripe(amount) {
         if (!currentUser) {
             showAuthModal('login');
@@ -1406,7 +1436,6 @@
     }
     
     function selectPaymentMethod(method) {
-        selectedPaymentMethod = method;
         document.getElementById('stripe-card').classList.toggle('selected', method === 'stripe');
         document.getElementById('roblox-card').classList.toggle('selected', method === 'roblox');
         document.getElementById('stripe-products').classList.toggle('hidden', method !== 'stripe');
@@ -1480,15 +1509,15 @@
         try {
             const res = await fetch(`${API_URL}/api/stats`);
             const data = await res.json();
-            document.getElementById('online-count').textContent = data.online_players;
-            document.getElementById('total-bets').textContent = data.total_bets;
-            document.getElementById('total-wagered').textContent = data.total_wagered.toFixed(0);
+            document.getElementById('online-count').textContent = data.online_players || 0;
+            document.getElementById('total-bets').textContent = data.total_bets || 0;
+            document.getElementById('total-wagered').textContent = (data.total_wagered || 0).toFixed(0);
         } catch {}
         
         try {
             const res = await fetch(`${API_URL}/api/online-players`);
             const data = await res.json();
-            document.getElementById('online-count').textContent = data.count;
+            document.getElementById('online-count').textContent = data.count || 0;
         } catch {}
     }
     
@@ -1579,19 +1608,25 @@
         }
         const content = document.getElementById('game-content');
         const titles = {
-            slots: 'DIAMOND SLOTS', blackjack: 'BLACKJACK', mines: 'MINES',
-            plinko: 'PLINKO', crash: 'CRASH', dice: 'DICE'
+            slots: 'DIAMOND SLOTS',
+            blackjack: 'BLACKJACK',
+            dice: 'DICE'
         };
         document.getElementById('game-title').textContent = titles[game] || game;
         
-        if (game === 'slots') content.innerHTML = getSlotsHTML();
-        else if (game === 'dice') content.innerHTML = getDiceHTML();
-        else if (game === 'blackjack') content.innerHTML = getBlackjackHTML();
-        else content.innerHTML = `<div style="text-align:center; padding:2rem;"><h3>Coming Soon!</h3><p>This game is under development</p></div>`;
+        if (game === 'slots') {
+            content.innerHTML = getSlotsHTML();
+            setTimeout(initSlotsGame, 100);
+        } else if (game === 'dice') {
+            content.innerHTML = getDiceHTML();
+            initDiceEvents();
+        } else if (game === 'blackjack') {
+            content.innerHTML = getBlackjackHTML();
+        } else {
+            content.innerHTML = `<div style="text-align:center; padding:2rem;"><h3>Coming Soon!</h3><p>This game is under development</p></div>`;
+        }
         
         openModal('game-modal');
-        
-        if (game === 'slots') initSlotsGame();
     }
     
     function getSlotsHTML() {
@@ -1601,42 +1636,37 @@
                     ${Array(5).fill(0).map(() => `
                         <div class="slot-reel">
                             <div class="reel-symbols">
-                                ${Array(9).fill(0).map(() => `
-                                    <div class="reel-symbol"><img src="/assets/games/slots/cherry.png"></div>
-                                `).join('')}
+                                ${Array(9).fill(0).map(() => `<div class="reel-symbol">🎰</div>`).join('')}
                             </div>
                         </div>
                     `).join('')}
                 </div>
-                <div class="bet-controls" style="margin-top: 1rem;">
-                    <input type="number" class="bet-input" id="slot-bet" value="10" min="1" step="10" style="width:100%; padding:12px; background:var(--bg-primary); border:1px solid var(--border); border-radius:12px; color:white; margin-bottom:1rem;">
-                    <div class="quick-bets" style="display: flex; gap: 8px; margin-bottom: 1rem;">
-                        <span class="quick-bet" onclick="document.getElementById('slot-bet').value=10" style="padding:6px 12px; background:var(--bg-card); border-radius:20px; cursor:pointer;">10</span>
-                        <span class="quick-bet" onclick="document.getElementById('slot-bet').value=25" style="padding:6px 12px; background:var(--bg-card); border-radius:20px; cursor:pointer;">25</span>
-                        <span class="quick-bet" onclick="document.getElementById('slot-bet').value=50" style="padding:6px 12px; background:var(--bg-card); border-radius:20px; cursor:pointer;">50</span>
-                        <span class="quick-bet" onclick="document.getElementById('slot-bet').value=100" style="padding:6px 12px; background:var(--bg-card); border-radius:20px; cursor:pointer;">100</span>
-                        <span class="quick-bet" onclick="document.getElementById('slot-bet').value=250" style="padding:6px 12px; background:var(--bg-card); border-radius:20px; cursor:pointer;">250</span>
+                <div class="bet-controls">
+                    <input type="number" class="bet-input" id="slot-bet" value="10" min="1" step="10">
+                    <div class="quick-bets">
+                        <span class="quick-bet" onclick="document.getElementById('slot-bet').value=10">10</span>
+                        <span class="quick-bet" onclick="document.getElementById('slot-bet').value=25">25</span>
+                        <span class="quick-bet" onclick="document.getElementById('slot-bet').value=50">50</span>
+                        <span class="quick-bet" onclick="document.getElementById('slot-bet').value=100">100</span>
+                        <span class="quick-bet" onclick="document.getElementById('slot-bet').value=250">250</span>
                     </div>
                     <button class="btn btn-primary" style="width:100%;" onclick="spinSlots()">SPIN</button>
-                    <div class="result-message" id="slot-result" style="margin-top:1rem; padding:12px; border-radius:12px; display:none;"></div>
+                    <div class="result-message" id="slot-result"></div>
                 </div>
             </div>
         `;
     }
     
     function initSlotsGame() {
-        // Initialize slot symbols
-        const symbols = ['cherry', 'lemon', 'orange', 'plum', 'bell', 'xbet', 'diamond', 'crown'];
+        const symbols = ['🍒', '🍋', '🍊', '🍇', '🔔', '⭐', '💎', '👑'];
         const reels = document.querySelectorAll('.slot-reel');
-        
         reels.forEach(reel => {
             const symbolsContainer = reel.querySelector('.reel-symbols');
             symbolsContainer.innerHTML = '';
             for (let i = 0; i < 20; i++) {
-                const symbol = symbols[Math.floor(Math.random() * symbols.length)];
                 const div = document.createElement('div');
                 div.className = 'reel-symbol';
-                div.innerHTML = `<img src="/assets/games/slots/${symbol}.png">`;
+                div.textContent = symbols[Math.floor(Math.random() * symbols.length)];
                 symbolsContainer.appendChild(div);
             }
         });
@@ -1661,6 +1691,12 @@
             const data = await res.json();
             
             setTimeout(() => {
+                const symbols = ['🍒', '🍋', '🍊', '🍇', '🔔', '⭐', '💎', '👑'];
+                const symbolMap = {
+                    'cherry': '🍒', 'lemon': '🍋', 'orange': '🍊', 'plum': '🍇',
+                    'bell': '🔔', 'xbet': '⭐', 'diamond': '💎', 'crown': '👑'
+                };
+                
                 reels.forEach((reel, idx) => {
                     reel.classList.remove('spinning');
                     const symbolsContainer = reel.querySelector('.reel-symbols');
@@ -1671,7 +1707,7 @@
                         const symbol = resultSymbols[symbolIdx];
                         const div = document.createElement('div');
                         div.className = 'reel-symbol';
-                        div.innerHTML = `<img src="/assets/games/slots/${symbol}.png">`;
+                        div.textContent = symbolMap[symbol] || '🎰';
                         symbolsContainer.appendChild(div);
                     }
                 });
@@ -1680,25 +1716,10 @@
                 document.getElementById('balance').textContent = currentUser.xcoin_balance.toFixed(2);
                 
                 const resultDiv = document.getElementById('slot-result');
+                resultDiv.className = data.outcome === 'win' ? 'result-message win' : 'result-message lose';
+                resultDiv.textContent = data.outcome === 'win' ? `🎉 WIN! +${data.win_amount.toFixed(2)} XCoin! Multiplier: ${data.multiplier.toFixed(2)}x 🎉` : `💔 LOSS! -${bet} XCoin 💔`;
                 resultDiv.style.display = 'block';
-                if (data.outcome === 'win') {
-                    resultDiv.className = 'result-message win';
-                    resultDiv.style.background = 'rgba(46,204,113,0.2)';
-                    resultDiv.style.border = '1px solid var(--green)';
-                    resultDiv.style.color = 'var(--green)';
-                    resultDiv.innerHTML = `🎉 WIN! +${data.win_amount.toFixed(2)} XCOIN! Multiplier: ${data.multiplier.toFixed(2)}x 🎉`;
-                    toast(`+${data.win_amount.toFixed(2)} XCOIN`, 'success');
-                } else {
-                    resultDiv.className = 'result-message lose';
-                    resultDiv.style.background = 'rgba(231,76,60,0.2)';
-                    resultDiv.style.border = '1px solid var(--crimson)';
-                    resultDiv.style.color = 'var(--crimson)';
-                    resultDiv.innerHTML = `💔 LOSS! -${bet} XCOIN 💔`;
-                }
-                
-                setTimeout(() => {
-                    resultDiv.style.display = 'none';
-                }, 3000);
+                setTimeout(() => resultDiv.style.display = 'none', 3000);
             }, 1000);
         } catch (error) {
             toast('Spin failed', 'error');
@@ -1708,31 +1729,39 @@
     
     function getDiceHTML() {
         return `
-            <div class="bet-controls">
-                <div class="dice-display" style="text-align:center; margin-bottom:1rem;">
-                    <img src="/assets/games/dice/dice-default.png" id="dice-image" style="width:100px; height:100px;">
+            <div>
+                <div class="dice-display">
+                    <div class="dice-image" id="dice-image">🎲</div>
                 </div>
-                <div class="slider-wrap">
-                    <input type="range" id="dice-target" min="2" max="98" value="50" style="width:100%;">
+                <div>
+                    <input type="range" id="dice-target" min="2" max="98" value="50" style="width:100%">
                     <div style="display: flex; justify-content: space-between; margin-top: 5px;">
-                        <span>Under 2</span><span>Target: <span id="target-value">50</span></span><span>Over 98</span>
+                        <span>Under 2</span>
+                        <span>Target: <span id="target-value">50</span></span>
+                        <span>Over 98</span>
                     </div>
                 </div>
                 <div style="display: flex; gap: 10px; margin: 1rem 0;">
                     <button class="btn btn-primary" style="flex:1;" id="dice-under" onclick="setDiceMode('under')">Roll Under</button>
                     <button class="btn btn-secondary" style="flex:1;" id="dice-over" onclick="setDiceMode('over')">Roll Over</button>
                 </div>
-                <input type="number" class="bet-input" id="dice-bet" value="10" min="1" style="width:100%; padding:12px; background:var(--bg-primary); border:1px solid var(--border); border-radius:12px; color:white; margin-bottom:1rem;">
-                <div class="quick-bets" style="display: flex; gap: 8px; margin-bottom: 1rem;">
+                <input type="number" class="bet-input" id="dice-bet" value="10" min="1">
+                <div class="quick-bets">
                     <span class="quick-bet" onclick="document.getElementById('dice-bet').value=10">10</span>
                     <span class="quick-bet" onclick="document.getElementById('dice-bet').value=25">25</span>
                     <span class="quick-bet" onclick="document.getElementById('dice-bet').value=50">50</span>
                     <span class="quick-bet" onclick="document.getElementById('dice-bet').value=100">100</span>
                 </div>
                 <button class="btn btn-primary" style="width:100%;" onclick="rollDice()">Roll Dice</button>
-                <div class="result-message" id="dice-result" style="margin-top:1rem; padding:12px; border-radius:12px; display:none;"></div>
+                <div class="result-message" id="dice-result"></div>
             </div>
         `;
+    }
+    
+    function initDiceEvents() {
+        document.getElementById('dice-target').addEventListener('input', (e) => {
+            document.getElementById('target-value').textContent = e.target.value;
+        });
     }
     
     let diceMode = 'under';
@@ -1752,8 +1781,8 @@
             return;
         }
         
-        const diceDisplay = document.getElementById('dice-image');
-        diceDisplay.style.animation = 'diceRoll 0.5s ease';
+        const diceImage = document.getElementById('dice-image');
+        diceImage.classList.add('rolling');
         
         try {
             const res = await fetch(`${API_URL}/api/games/dice/play`, {
@@ -1764,36 +1793,24 @@
             const data = await res.json();
             
             setTimeout(() => {
-                diceDisplay.style.animation = '';
+                diceImage.classList.remove('rolling');
                 const roll = data.result.roll;
+                const diceFaces = ['⚀', '⚁', '⚂', '⚃', '⚄', '⚅'];
                 const face = Math.min(6, Math.max(1, Math.floor(roll / 100 * 6) + 1));
-                diceDisplay.src = `/assets/games/dice/dice-${face}.png`;
+                diceImage.textContent = diceFaces[face - 1] || '🎲';
                 
                 currentUser.xcoin_balance = data.new_balance;
                 document.getElementById('balance').textContent = currentUser.xcoin_balance.toFixed(2);
                 
                 const resultDiv = document.getElementById('dice-result');
+                resultDiv.className = data.outcome === 'win' ? 'result-message win' : 'result-message lose';
+                resultDiv.textContent = data.outcome === 'win' ? `🎲 WIN! +${data.win_amount.toFixed(2)} XCoin! Roll: ${roll.toFixed(1)} 🎲` : `🎲 LOSS! -${bet} XCoin. Roll: ${roll.toFixed(1)} 🎲`;
                 resultDiv.style.display = 'block';
-                if (data.outcome === 'win') {
-                    resultDiv.className = 'result-message win';
-                    resultDiv.style.background = 'rgba(46,204,113,0.2)';
-                    resultDiv.style.border = '1px solid var(--green)';
-                    resultDiv.innerHTML = `🎲 WIN! +${data.win_amount.toFixed(2)} XCOIN! Roll: ${roll.toFixed(1)} 🎲`;
-                    toast(`+${data.win_amount.toFixed(2)} XCOIN`, 'success');
-                } else {
-                    resultDiv.className = 'result-message lose';
-                    resultDiv.style.background = 'rgba(231,76,60,0.2)';
-                    resultDiv.style.border = '1px solid var(--crimson)';
-                    resultDiv.innerHTML = `🎲 LOSS! -${bet} XCOIN. Roll: ${roll.toFixed(1)} 🎲`;
-                }
-                
-                setTimeout(() => {
-                    resultDiv.style.display = 'none';
-                }, 3000);
+                setTimeout(() => resultDiv.style.display = 'none', 3000);
             }, 500);
         } catch (error) {
             toast('Roll failed', 'error');
-            diceDisplay.style.animation = '';
+            diceImage.classList.remove('rolling');
         }
     }
     
@@ -1820,11 +1837,11 @@
     
     function toast(message, type = 'info') {
         const container = document.getElementById('toast-container');
-        const toast = document.createElement('div');
-        toast.className = 'toast';
-        toast.innerHTML = message;
-        container.appendChild(toast);
-        setTimeout(() => toast.remove(), 3000);
+        const toastDiv = document.createElement('div');
+        toastDiv.className = 'toast';
+        toastDiv.innerHTML = message;
+        container.appendChild(toastDiv);
+        setTimeout(() => toastDiv.remove(), 3000);
     }
     
     function escapeHtml(text) {
@@ -1833,6 +1850,7 @@
         return div.innerHTML;
     }
     
+    // Navigation
     document.querySelectorAll('.nav-link').forEach(link => {
         link.addEventListener('click', () => {
             const page = link.dataset.page;
@@ -1843,11 +1861,9 @@
         });
     });
     
-    document.getElementById('dice-target')?.addEventListener('input', (e) => {
-        document.getElementById('target-value').textContent = e.target.value;
-    });
-    
+    // Initialize
     verifyToken();
+    setInterval(loadLeaderboard, 30000);
     setInterval(updateStats, 10000);
     updateStats();
     setInterval(() => {
