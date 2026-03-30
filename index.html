@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>XBET — Premium Crypto Casino</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <script src="https://js.stripe.com/v3/"></script>
+    <!-- Font Awesome 6 (Free Icons) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -43,23 +44,6 @@
             overflow-x: hidden;
             min-height: 100vh;
         }
-
-        /* Icon Styles - No Emojis */
-        .icon {
-            display: inline-block;
-            width: 24px;
-            height: 24px;
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
-        }
-
-        .icon-dice { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23FFD966'%3E%3Cpath d='M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zm2 4a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm10 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM7 15a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm10 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4z'/%3E%3C/svg%3E"); }
-        .icon-cards { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23FFD966'%3E%3Cpath d='M3 4h18a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1zm3 3v10h12V7H6z'/%3E%3C/svg%3E"); }
-        .icon-chart { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23FFD966'%3E%3Cpath d='M3 3v18h18v-2H5V3H3zm16 5h-4v10h4V8zm-6 4H9v6h4v-6zm-6-4H5v10h2V8z'/%3E%3C/svg%3E"); }
-        .icon-bomb { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23FFD966'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 4c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm0 13c-2.5 0-4.5-1.5-5-3.5 1 .5 3 1 5 1s4-.5 5-1c-.5 2-2.5 3.5-5 3.5z'/%3E%3C/svg%3E"); }
-        .icon-ball { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23FFD966'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3C/svg%3E"); }
-        .icon-slot { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23FFD966'%3E%3Cpath d='M7 3h10v4H7V3zm0 6h10v4H7V9zm0 6h10v4H7v-4z'/%3E%3C/svg%3E"); }
 
         /* Entrance Animation */
         .entrance-overlay {
@@ -101,9 +85,10 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-family: 'Orbitron', monospace;
-            font-size: 3rem;
-            font-weight: 900;
+        }
+
+        .entrance-logo i {
+            font-size: 5rem;
             color: var(--bg-primary);
         }
 
@@ -324,16 +309,17 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            background: linear-gradient(135deg, var(--bg-secondary), var(--bg-elevated));
         }
 
-        .game-icon svg {
-            width: 80px;
-            height: 80px;
+        .game-icon i {
+            font-size: 4rem;
+            color: var(--gold);
             filter: drop-shadow(0 8px 24px rgba(0,0,0,0.5));
             transition: transform 0.3s;
         }
 
-        .game-card:hover .game-icon svg {
+        .game-card:hover .game-icon i {
             transform: scale(1.1);
         }
 
@@ -478,9 +464,9 @@
             border-bottom: 1px solid var(--border);
         }
 
-        .reel-symbol svg {
-            width: 50px;
-            height: 50px;
+        .reel-symbol i {
+            font-size: 2rem;
+            color: var(--gold);
         }
 
         .slot-reel.spinning .reel-symbols {
@@ -564,14 +550,24 @@
             margin-bottom: 1rem;
         }
 
-        .dice-svg {
+        .dice-box {
             width: 100px;
             height: 100px;
+            background: var(--gold);
+            border-radius: 20px;
             margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             transition: transform 0.3s;
         }
 
-        .dice-svg.rolling {
+        .dice-box i {
+            font-size: 3rem;
+            color: var(--bg-primary);
+        }
+
+        .dice-box.rolling {
             animation: diceRoll 0.5s ease;
         }
 
@@ -636,7 +632,7 @@
             .main-content { padding: 80px 1rem 1rem; }
             .nav-links { display: none; }
             .slot-reel { height: 210px; }
-            .reel-symbol svg { width: 30px; height: 30px; }
+            .reel-symbol i { font-size: 1.5rem; }
         }
     </style>
 </head>
@@ -644,7 +640,9 @@
 
 <div class="entrance-overlay" id="entrance">
     <div class="entrance-content">
-        <div class="entrance-logo">XBET</div>
+        <div class="entrance-logo">
+            <i class="fas fa-crown"></i>
+        </div>
         <h1 class="entrance-title">XBET</h1>
         <div class="entrance-spinner"></div>
     </div>
@@ -670,8 +668,8 @@
             </div>
             <div id="user-info" class="hidden">
                 <div class="balance-card">
+                    <i class="fas fa-coins" style="color: var(--gold);"></i>
                     <div class="balance-value" id="balance">0.00</div>
-                    <span style="font-size:0.7rem;">XCoin</span>
                 </div>
                 <span id="admin-link" class="hidden" onclick="showAdminPanel()" style="cursor:pointer;color:var(--crimson);">ADMIN</span>
                 <span onclick="logout()" style="cursor:pointer;">LOGOUT</span>
@@ -683,12 +681,12 @@
 <div class="main-content">
     <div id="casino-page" class="page active">
         <div class="games-grid">
-            <div class="game-card" onclick="openGame('slots')"><div class="game-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><rect x="8" y="8" width="3" height="3"/><rect x="13" y="8" width="3" height="3"/><rect x="8" y="13" width="3" height="3"/><rect x="13" y="13" width="3" height="3"/></svg></div><div class="game-info"><div class="game-title">DIAMOND SLOTS</div><div class="game-desc">5 Reels • 8 Symbols • Jackpot up to 5000x</div></div></div>
-            <div class="game-card" onclick="openGame('blackjack')"><div class="game-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M8 12h8M12 8v8"/></svg></div><div class="game-info"><div class="game-title">BLACKJACK</div><div class="game-desc">Classic 21 • Hit • Stand</div></div></div>
-            <div class="game-card" onclick="openGame('crash')"><div class="game-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5"><path d="M3 17L9 11L13 15L21 6" stroke-linecap="round"/><path d="M21 12v7H3V5" stroke-linecap="round"/></svg></div><div class="game-info"><div class="game-title">CRASH</div><div class="game-desc">Cash out before it crashes • Up to 10000x</div></div></div>
-            <div class="game-card" onclick="openGame('mines')"><div class="game-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg></div><div class="game-info"><div class="game-title">MINES</div><div class="game-desc">Avoid mines • Cash out anytime • Up to 1000x</div></div></div>
-            <div class="game-card" onclick="openGame('plinko')"><div class="game-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5"><circle cx="12" cy="12" r="2"/><path d="M5 5l14 14M19 5L5 19"/></svg></div><div class="game-info"><div class="game-title">PLINKO</div><div class="game-desc">Drop the ball • Choose risk • Up to 1000x</div></div></div>
-            <div class="game-card" onclick="openGame('dice')"><div class="game-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8" cy="8" r="1.5"/><circle cx="16" cy="16" r="1.5"/><circle cx="8" cy="16" r="1.5"/><circle cx="16" cy="8" r="1.5"/></svg></div><div class="game-info"><div class="game-title">DICE</div><div class="game-desc">Roll under/over • Custom odds • Up to 99x</div></div></div>
+            <div class="game-card" onclick="openGame('slots')"><div class="game-icon"><i class="fas fa-layer-group"></i></div><div class="game-info"><div class="game-title">DIAMOND SLOTS</div><div class="game-desc">5 Reels • 8 Symbols • Jackpot up to 5000x</div></div></div>
+            <div class="game-card" onclick="openGame('blackjack')"><div class="game-icon"><i class="fas fa-club"></i></div><div class="game-info"><div class="game-title">BLACKJACK</div><div class="game-desc">Classic 21 • Hit • Stand</div></div></div>
+            <div class="game-card" onclick="openGame('crash')"><div class="game-icon"><i class="fas fa-chart-line"></i></div><div class="game-info"><div class="game-title">CRASH</div><div class="game-desc">Cash out before it crashes • Up to 10000x</div></div></div>
+            <div class="game-card" onclick="openGame('mines')"><div class="game-icon"><i class="fas fa-bomb"></i></div><div class="game-info"><div class="game-title">MINES</div><div class="game-desc">Avoid mines • Cash out anytime • Up to 1000x</div></div></div>
+            <div class="game-card" onclick="openGame('plinko')"><div class="game-icon"><i class="fas fa-circle-dot"></i></div><div class="game-info"><div class="game-title">PLINKO</div><div class="game-desc">Drop the ball • Choose risk • Up to 1000x</div></div></div>
+            <div class="game-card" onclick="openGame('dice')"><div class="game-icon"><i class="fas fa-dice"></i></div><div class="game-info"><div class="game-title">DICE</div><div class="game-desc">Roll under/over • Custom odds • Up to 99x</div></div></div>
         </div>
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
             <div class="game-card" style="padding: 1rem;"><h3>TOP PLAYERS</h3><div id="leaderboard"></div></div>
@@ -698,8 +696,8 @@
 
     <div id="promotions-page" class="page">
         <div class="games-grid">
-            <div class="game-card" onclick="claimDailyBonus()"><div class="game-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5"><path d="M12 2v4M4 8h16M6 8v10a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V8"/><path d="M12 12v4"/></svg></div><div class="game-info"><div class="game-title">DAILY BONUS</div><div class="game-desc">Claim 100 XCoin every day!</div></div></div>
-            <div class="game-card" onclick="showReferral()"><div class="game-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M5 20v-2a7 7 0 0 1 14 0v2"/></svg></div><div class="game-info"><div class="game-title">REFERRAL PROGRAM</div><div class="game-desc">Earn 10% of friend's deposits</div></div></div>
+            <div class="game-card" onclick="claimDailyBonus()"><div class="game-icon"><i class="fas fa-gift"></i></div><div class="game-info"><div class="game-title">DAILY BONUS</div><div class="game-desc">Claim 100 XCoin every day!</div></div></div>
+            <div class="game-card" onclick="showReferral()"><div class="game-icon"><i class="fas fa-users"></i></div><div class="game-info"><div class="game-title">REFERRAL PROGRAM</div><div class="game-desc">Earn 10% of friend's deposits</div></div></div>
         </div>
     </div>
 
@@ -718,7 +716,7 @@
 <div class="modal" id="admin-modal"><div class="modal-content" style="max-width: 1200px;"><div class="modal-header"><div class="modal-title">ADMIN DASHBOARD</div><div class="modal-close" onclick="closeModal('admin-modal')">×</div></div><div class="modal-body" id="admin-content"></div></div></div>
 
 <script>
-    const API_URL = 'https://xbetb.onrender.com';
+    const API_URL = window.location.hostname === 'localhost' ? 'http://localhost:5000' : window.location.origin;
     let token = localStorage.getItem('token');
     let currentUser = null;
     
@@ -881,7 +879,7 @@
         return `
             <div class="slot-machine">
                 <div class="slot-reels" id="slot-reels">
-                    ${Array(5).fill(0).map(() => `<div class="slot-reel"><div class="reel-symbols">${Array(9).fill(0).map(() => `<div class="reel-symbol"><svg viewBox="0 0 24 24" fill="none" stroke="var(--gold)" width="40" height="40"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="12" cy="12" r="2"/></svg></div>`).join('')}</div></div>`).join('')}
+                    ${Array(5).fill(0).map(() => `<div class="slot-reel"><div class="reel-symbols">${Array(9).fill(0).map(() => `<div class="reel-symbol"><i class="fas fa-gem"></i></div>`).join('')}</div></div>`).join('')}
                 </div>
                 <input type="number" class="bet-input" id="slot-bet" value="10" min="1">
                 <div class="quick-bets"><span class="quick-bet" onclick="document.getElementById('slot-bet').value=10">10</span><span class="quick-bet" onclick="document.getElementById('slot-bet').value=25">25</span><span class="quick-bet" onclick="document.getElementById('slot-bet').value=50">50</span><span class="quick-bet" onclick="document.getElementById('slot-bet').value=100">100</span></div>
@@ -892,14 +890,14 @@
     }
     
     function initSlots() {
-        const symbols = ['⭐', '💎', '👑', '🔔', '🍒', '🍋', '🍊', '🍇'];
+        const icons = ['fas fa-gem', 'fas fa-crown', 'fas fa-star', 'fas fa-bell', 'fas fa-cherry', 'fas fa-lemon', 'fas fa-apple-alt', 'fas fa-grapes'];
         document.querySelectorAll('.slot-reel').forEach(reel => {
             const container = reel.querySelector('.reel-symbols');
             container.innerHTML = '';
             for (let i = 0; i < 20; i++) {
                 const div = document.createElement('div');
                 div.className = 'reel-symbol';
-                div.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+                div.innerHTML = `<i class="${icons[Math.floor(Math.random() * icons.length)]}"></i>`;
                 container.appendChild(div);
             }
         });
@@ -917,7 +915,7 @@
             });
             const data = await res.json();
             setTimeout(() => {
-                const symbolMap = { 'cherry':'🍒','lemon':'🍋','orange':'🍊','plum':'🍇','bell':'🔔','xbet':'⭐','diamond':'💎','crown':'👑' };
+                const iconMap = { 'cherry':'fa-cherry', 'lemon':'fa-lemon', 'orange':'fa-orange', 'plum':'fa-plum', 'bell':'fa-bell', 'xbet':'fa-star', 'diamond':'fa-gem', 'crown':'fa-crown' };
                 reels.forEach((reel, idx) => {
                     reel.classList.remove('spinning');
                     const container = reel.querySelector('.reel-symbols');
@@ -927,7 +925,7 @@
                         const symbol = resultSymbols[i % resultSymbols.length];
                         const div = document.createElement('div');
                         div.className = 'reel-symbol';
-                        div.textContent = symbolMap[symbol] || '⭐';
+                        div.innerHTML = `<i class="fas ${iconMap[symbol] || 'fa-gem'}"></i>`;
                         container.appendChild(div);
                     }
                 });
@@ -945,7 +943,7 @@
     // ==================== DICE ====================
     function getDiceHTML() {
         return `
-            <div><div class="dice-container"><svg class="dice-svg" id="dice-svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="var(--gold)" rx="15"/><circle cx="50" cy="50" r="8" fill="var(--bg-primary)"/></svg></div>
+            <div><div class="dice-container"><div class="dice-box"><i class="fas fa-dice"></i></div></div>
             <div><input type="range" id="dice-target" min="2" max="98" value="50" style="width:100%"><div style="display:flex; justify-content:space-between;"><span>UNDER 2</span><span>TARGET: <span id="target-value">50</span></span><span>OVER 98</span></div></div>
             <div style="display:flex; gap:10px; margin:1rem 0;"><button class="btn btn-primary" style="flex:1" id="dice-under" onclick="setDiceMode('under')">ROLL UNDER</button><button class="btn btn-secondary" style="flex:1" id="dice-over" onclick="setDiceMode('over')">ROLL OVER</button></div>
             <input type="number" class="bet-input" id="dice-bet" value="10"><div class="quick-bets"><span class="quick-bet" onclick="document.getElementById('dice-bet').value=10">10</span><span class="quick-bet" onclick="document.getElementById('dice-bet').value=25">25</span><span class="quick-bet" onclick="document.getElementById('dice-bet').value=50">50</span><span class="quick-bet" onclick="document.getElementById('dice-bet').value=100">100</span></div>
@@ -957,18 +955,12 @@
     let diceMode = 'under';
     function setDiceMode(mode) { diceMode = mode; document.getElementById('dice-under').className = mode === 'under' ? 'btn btn-primary' : 'btn btn-secondary'; document.getElementById('dice-over').className = mode === 'over' ? 'btn btn-primary' : 'btn btn-secondary'; }
     
-    function getDiceSVG(face) {
-        const dots = { 1: [[50,50]], 2: [[25,25],[75,75]], 3: [[25,25],[50,50],[75,75]], 4: [[25,25],[25,75],[75,25],[75,75]], 5: [[25,25],[25,75],[50,50],[75,25],[75,75]], 6: [[25,25],[25,50],[25,75],[75,25],[75,50],[75,75]] };
-        const positions = dots[face] || dots[1];
-        return `<svg viewBox="0 0 100 100"><rect width="100" height="100" fill="var(--gold)" rx="15"/>${positions.map(p => `<circle cx="${p[0]}" cy="${p[1]}" r="8" fill="var(--bg-primary)"/>`).join('')}</svg>`;
-    }
-    
     async function rollDice() {
         const bet = parseFloat(document.getElementById('dice-bet').value);
         const target = parseInt(document.getElementById('dice-target').value);
         if (bet > currentUser.xcoin_balance) return toast('Insufficient balance', 'error');
-        const diceSvg = document.getElementById('dice-svg');
-        diceSvg.classList.add('rolling');
+        const diceBox = document.querySelector('.dice-box');
+        diceBox.classList.add('rolling');
         try {
             const res = await fetch(`${API_URL}/api/games/dice/play`, {
                 method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
@@ -976,10 +968,11 @@
             });
             const data = await res.json();
             setTimeout(() => {
-                diceSvg.classList.remove('rolling');
+                diceBox.classList.remove('rolling');
                 const roll = data.result.roll;
+                const faces = ['fa-dice-one', 'fa-dice-two', 'fa-dice-three', 'fa-dice-four', 'fa-dice-five', 'fa-dice-six'];
                 const face = Math.min(6, Math.max(1, Math.floor(roll / 100 * 6) + 1));
-                diceSvg.innerHTML = getDiceSVG(face);
+                diceBox.innerHTML = `<i class="fas ${faces[face-1]}"></i>`;
                 currentUser.xcoin_balance = data.new_balance;
                 document.getElementById('balance').textContent = currentUser.xcoin_balance.toFixed(2);
                 const resultDiv = document.getElementById('dice-result');
@@ -988,7 +981,7 @@
                 resultDiv.style.display = 'block';
                 setTimeout(() => resultDiv.style.display = 'none', 3000);
             }, 500);
-        } catch { toast('Roll failed', 'error'); diceSvg.classList.remove('rolling'); }
+        } catch { toast('Roll failed', 'error'); diceBox.classList.remove('rolling'); }
     }
     
     // ==================== CRASH ====================
@@ -1102,7 +1095,7 @@
         for (let i = 0; i < 25; i++) {
             const tile = document.createElement('div');
             tile.className = 'mine-tile';
-            tile.textContent = '?';
+            tile.innerHTML = '<i class="fas fa-gem"></i>';
             tile.onclick = () => revealMine(i);
             grid.appendChild(tile);
         }
@@ -1130,7 +1123,7 @@
         if (minesGrid[index]) {
             const tiles = document.querySelectorAll('.mine-tile');
             tiles[index].classList.add('mine');
-            tiles[index].textContent = '💣';
+            tiles[index].innerHTML = '<i class="fas fa-bomb"></i>';
             document.getElementById('mines-result').className = 'result-message lose';
             document.getElementById('mines-result').textContent = 'HIT A MINE | GAME OVER';
             minesActive = false;
@@ -1138,7 +1131,7 @@
         } else {
             const tiles = document.querySelectorAll('.mine-tile');
             tiles[index].classList.add('revealed');
-            tiles[index].textContent = '✓';
+            tiles[index].innerHTML = '<i class="fas fa-check"></i>';
             minesMultiplier += 0.5;
             document.getElementById('mines-multiplier').textContent = `MULTIPLIER: ${minesMultiplier.toFixed(2)}x`;
             const revealedCount = document.querySelectorAll('.mine-tile.revealed').length;
