@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>XBET - Premium Crypto Casino</title>
+    <title>XBET - Premium Online Casino</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <!-- Font Awesome 6 Pro (Better Icons) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         * {
@@ -134,6 +133,17 @@
             background: radial-gradient(circle at 20% 30%, #1A1A2E 0%, #0A0A0F 100%);
         }
 
+        /* Particle Canvas */
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
         .navbar {
             position: fixed;
             top: 0;
@@ -170,6 +180,12 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(255, 217, 102, 0.4); }
+            50% { box-shadow: 0 0 0 10px rgba(255, 217, 102, 0); }
         }
 
         .logo-icon i {
@@ -252,16 +268,6 @@
             color: var(--gold);
         }
 
-        .balance-flash {
-            animation: balancePulse 0.3s ease-out;
-        }
-
-        @keyframes balancePulse {
-            0% { transform: scale(1); color: var(--gold); }
-            50% { transform: scale(1.1); color: var(--green); }
-            100% { transform: scale(1); color: var(--gold); }
-        }
-
         .btn {
             padding: 8px 20px;
             border-radius: 40px;
@@ -294,6 +300,11 @@
 
         .btn-danger {
             background: linear-gradient(135deg, var(--crimson), #c0392b);
+            color: white;
+        }
+
+        .btn-cashout {
+            background: linear-gradient(135deg, var(--green), var(--green-dark));
             color: white;
         }
 
@@ -366,7 +377,6 @@
             align-items: center;
             justify-content: center;
             background: linear-gradient(135deg, var(--bg-secondary), var(--bg-elevated));
-            position: relative;
         }
 
         .game-icon i {
@@ -539,10 +549,10 @@
             border-radius: 12px;
             text-align: center;
             display: none;
-            animation: slideInUp 0.3s ease-out;
+            animation: slideUp 0.3s ease-out;
         }
 
-        @keyframes slideInUp {
+        @keyframes slideUp {
             from {
                 opacity: 0;
                 transform: translateY(10px);
@@ -567,18 +577,7 @@
             color: var(--crimson);
         }
 
-        /* Slot Machine Enhanced */
-        .slot-machine-v2 {
-            background: linear-gradient(135deg, var(--bg-card), var(--bg-elevated));
-            border-radius: 24px;
-            padding: 1.5rem;
-        }
-
-        .slot-header {
-            text-align: center;
-            margin-bottom: 1.5rem;
-        }
-
+        /* Slot Machine */
         .slot-reels-container {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
@@ -586,17 +585,12 @@
             margin-bottom: 1.5rem;
         }
 
-        .slot-reel-v2 {
+        .slot-reel {
             background: var(--bg-primary);
             border-radius: 16px;
             overflow: hidden;
             border: 2px solid var(--border);
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
-        }
-
-        .reel-window {
             height: 300px;
-            overflow: hidden;
             position: relative;
         }
 
@@ -604,7 +598,7 @@
             transition: transform 0.5s cubic-bezier(0.2, 0.9, 0.4, 1.1);
         }
 
-        .reel-symbol-v2 {
+        .reel-symbol {
             height: 100px;
             display: flex;
             align-items: center;
@@ -613,119 +607,32 @@
             font-size: 2.5rem;
         }
 
-        .btn-spin, .btn-roll, .btn-bet {
-            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
-            color: var(--bg-primary);
-            padding: 14px 32px;
-            border: none;
-            border-radius: 40px;
-            font-weight: 700;
-            font-size: 1.1rem;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .btn-spin:hover, .btn-roll:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 30px rgba(255,217,102,0.5);
-        }
-
-        .btn-spin.spinning {
-            animation: pulse 0.5s ease infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        /* 3D Dice */
-        .dice-3d-container {
-            perspective: 1000px;
-            margin: 2rem auto;
-            display: flex;
-            justify-content: center;
-        }
-
-        .dice-3d {
-            width: 120px;
-            height: 120px;
-            position: relative;
-            transform-style: preserve-3d;
-            transition: transform 0.5s;
-        }
-
-        .dice-3d.rolling {
-            animation: dice3DRoll 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-        }
-
-        @keyframes dice3DRoll {
-            0% { transform: rotateX(0) rotateY(0); }
-            100% { transform: rotateX(720deg) rotateY(720deg); }
-        }
-
-        .dice-face {
-            position: absolute;
-            width: 120px;
-            height: 120px;
-            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 3rem;
-            font-weight: bold;
-            box-shadow: 0 0 20px rgba(0,0,0,0.3);
-        }
-
-        .front { transform: translateZ(60px); background: radial-gradient(circle at 30% 30%, var(--gold), var(--gold-dark)); }
-        .back { transform: rotateY(180deg) translateZ(60px); }
-        .right { transform: rotateY(90deg) translateZ(60px); }
-        .left { transform: rotateY(-90deg) translateZ(60px); }
-        .top { transform: rotateX(90deg) translateZ(60px); }
-        .bottom { transform: rotateX(-90deg) translateZ(60px); }
-
-        /* Crash Game Enhanced */
-        .crash-game-v2 {
-            background: linear-gradient(135deg, var(--bg-card), var(--bg-elevated));
+        /* Crash Game */
+        .crash-container {
+            background: var(--bg-primary);
             border-radius: 24px;
             padding: 1.5rem;
-        }
-
-        .crash-visualization {
             position: relative;
-            margin-bottom: 1.5rem;
         }
 
-        #crash-canvas {
+        .crash-canvas {
             width: 100%;
             height: 400px;
             background: #0A0A0F;
             border-radius: 16px;
         }
 
-        .crash-multiplier-display {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+        .crash-multiplier {
             font-size: 4rem;
             font-weight: 900;
             font-family: 'Orbitron', monospace;
+            text-align: center;
             color: var(--green);
             text-shadow: 0 0 30px rgba(46,204,113,0.5);
-            pointer-events: none;
+            margin: 1rem 0;
         }
 
-        .btn-cashout {
-            background: linear-gradient(135deg, var(--green), var(--green-dark));
-            color: white;
-        }
-
-        /* Mines Enhanced */
+        /* Mines Grid */
         .mines-grid {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
@@ -773,7 +680,16 @@
             100% { transform: scale(1); }
         }
 
-        /* Blackjack Enhanced */
+        /* Plinko */
+        .plinko-canvas {
+            width: 100%;
+            height: 400px;
+            background: #0A0A0F;
+            border-radius: 16px;
+            margin-bottom: 1rem;
+        }
+
+        /* Blackjack */
         .blackjack-table {
             background: linear-gradient(135deg, #0a3a2a, #052015);
             border-radius: 24px;
@@ -800,7 +716,6 @@
             font-size: 2rem;
             font-weight: bold;
             box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-            transition: transform 0.2s;
             animation: cardDeal 0.3s ease-out;
         }
 
@@ -822,7 +737,6 @@
             color: white;
         }
 
-        /* Toast Animation */
         .toast-container {
             position: fixed;
             top: 80px;
@@ -851,33 +765,57 @@
             }
         }
 
-        /* Win Particles */
-        .slot-particle {
-            position: absolute;
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 1000;
+        /* Dice 3D */
+        .dice-3d-container {
+            perspective: 1000px;
+            margin: 2rem auto;
+            display: flex;
+            justify-content: center;
         }
 
-        @keyframes slotWinParticle {
-            0% {
-                transform: scale(1);
-                opacity: 1;
-            }
-            100% {
-                transform: scale(0) translateY(-100px);
-                opacity: 0;
-            }
+        .dice-3d {
+            width: 120px;
+            height: 120px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.5s;
         }
+
+        .dice-3d.rolling {
+            animation: diceRoll 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        @keyframes diceRoll {
+            0% { transform: rotateX(0) rotateY(0); }
+            100% { transform: rotateX(720deg) rotateY(720deg); }
+        }
+
+        .dice-face {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            font-weight: bold;
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+        }
+
+        .front { transform: translateZ(60px); }
+        .back { transform: rotateY(180deg) translateZ(60px); }
+        .right { transform: rotateY(90deg) translateZ(60px); }
+        .left { transform: rotateY(-90deg) translateZ(60px); }
+        .top { transform: rotateX(90deg) translateZ(60px); }
+        .bottom { transform: rotateX(-90deg) translateZ(60px); }
 
         @media (max-width: 768px) {
             .main-content { padding: 80px 1rem 1rem; }
             .nav-links { display: none; }
-            .slot-reels-container { gap: 6px; }
-            .reel-window { height: 210px; }
-            .reel-symbol-v2 { height: 70px; font-size: 1.8rem; }
+            .slot-reel { height: 210px; }
+            .reel-symbol { height: 70px; font-size: 1.8rem; }
             .card { width: 60px; height: 85px; font-size: 1.5rem; }
             .dice-3d { width: 80px; height: 80px; }
             .dice-face { width: 80px; height: 80px; font-size: 2rem; }
@@ -902,6 +840,7 @@
     </div>
 </div>
 
+<canvas id="particle-canvas"></canvas>
 <div class="bg-animation"></div>
 
 <nav class="navbar">
@@ -915,6 +854,7 @@
             <div class="nav-link active" data-page="casino"><i class="fas fa-gamepad"></i> CASINO</div>
             <div class="nav-link" data-page="promotions"><i class="fas fa-gift"></i> PROMOS</div>
             <div class="nav-link" data-page="vip"><i class="fas fa-crown"></i> VIP</div>
+            <div class="nav-link" data-page="shop"><i class="fas fa-shopping-cart"></i> SHOP</div>
         </div>
         <div class="user-section">
             <div id="auth-buttons">
@@ -922,7 +862,7 @@
                 <button class="btn btn-primary" onclick="showAuthModal('register')"><i class="fas fa-user-plus"></i> JOIN NOW</button>
             </div>
             <div id="user-info" class="hidden">
-                <div class="balance-card">
+                <div class="balance-card" onclick="showBalanceDetails()">
                     <i class="fas fa-coins" style="color: var(--gold);"></i>
                     <div class="balance-value" id="balance">0.00</div>
                 </div>
@@ -937,15 +877,15 @@
     <div id="casino-page" class="page active">
         <div class="games-grid">
             <div class="game-card" onclick="openGame('slots')"><div class="game-icon"><i class="fas fa-layer-group"></i></div><div class="game-info"><div class="game-title">DIAMOND SLOTS</div><div class="game-desc">5 Reels • 8 Symbols • Jackpot up to 5000x</div></div></div>
-            <div class="game-card" onclick="openGame('blackjack')"><div class="game-icon"><i class="fas fa-club"></i></div><div class="game-info"><div class="game-title">BLACKJACK</div><div class="game-desc">Classic 21 • Hit • Stand • Double Down</div></div></div>
+            <div class="game-card" onclick="openGame('dice')"><div class="game-icon"><i class="fas fa-dice-d6"></i></div><div class="game-info"><div class="game-title">LUCKY DICE</div><div class="game-desc">2% House Edge • Roll Under/Over • Up to 98x</div></div></div>
             <div class="game-card" onclick="openGame('crash')"><div class="game-icon"><i class="fas fa-chart-line"></i></div><div class="game-info"><div class="game-title">ROCKET CRASH</div><div class="game-desc">Cash out before it crashes • Up to 10000x</div></div></div>
             <div class="game-card" onclick="openGame('mines')"><div class="game-icon"><i class="fas fa-bomb"></i></div><div class="game-info"><div class="game-title">MINES</div><div class="game-desc">Avoid mines • Cash out anytime • Up to 1000x</div></div></div>
             <div class="game-card" onclick="openGame('plinko')"><div class="game-icon"><i class="fas fa-circle-dot"></i></div><div class="game-info"><div class="game-title">PLINKO</div><div class="game-desc">Drop the ball • Choose risk • Up to 1000x</div></div></div>
-            <div class="game-card" onclick="openGame('dice')"><div class="game-icon"><i class="fas fa-dice-d6"></i></div><div class="game-info"><div class="game-title">LUCKY DICE</div><div class="game-desc">Roll under/over • Custom odds • Up to 99x</div></div></div>
+            <div class="game-card" onclick="openGame('blackjack')"><div class="game-icon"><i class="fas fa-club"></i></div><div class="game-info"><div class="game-title">BLACKJACK</div><div class="game-desc">Classic 21 • Hit • Stand</div></div></div>
         </div>
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
             <div class="game-card" style="padding: 1rem;"><h3><i class="fas fa-trophy"></i> TOP PLAYERS</h3><div id="leaderboard"></div></div>
-            <div class="game-card" style="padding: 1rem;"><h3><i class="fas fa-chart-simple"></i> LIVE STATS</h3><div><i class="fas fa-users"></i> Online: <span id="online-count">0</span></div><div><i class="fas fa-dice"></i> Total Bets: <span id="total-bets">0</span></div></div>
+            <div class="game-card" style="padding: 1rem;"><h3><i class="fas fa-chart-simple"></i> LIVE STATS</h3><div><i class="fas fa-users"></i> Online: <span id="online-count">0</span></div><div><i class="fas fa-dice"></i> Total Bets: <span id="total-bets">0</span></div><div><i class="fas fa-chart-line"></i> House Edge: 2-5%</div></div>
         </div>
     </div>
 
@@ -953,37 +893,118 @@
         <div class="games-grid">
             <div class="game-card" onclick="claimDailyBonus()"><div class="game-icon"><i class="fas fa-gift"></i></div><div class="game-info"><div class="game-title">DAILY BONUS</div><div class="game-desc">Claim 100 XCoin every day!</div></div></div>
             <div class="game-card" onclick="showReferral()"><div class="game-icon"><i class="fas fa-users"></i></div><div class="game-info"><div class="game-title">REFERRAL PROGRAM</div><div class="game-desc">Earn 10% of friend's deposits</div></div></div>
+            <div class="game-card" onclick="showWelcomeBonus()"><div class="game-icon"><i class="fas fa-star"></i></div><div class="game-info"><div class="game-title">WELCOME BONUS</div><div class="game-desc">First deposit: 200% match up to 5000 XCoin</div></div></div>
         </div>
     </div>
 
     <div id="vip-page" class="page">
-        <div class="game-card" style="padding: 1rem;"><h3><i class="fas fa-crown"></i> VIP LEVEL <span id="vip-level">1</span></h3><p>Wager more to unlock higher VIP levels</p><div class="progress-bar" style="background:var(--bg-elevated); border-radius:10px; margin-top:1rem;"><div style="width:0%; background:var(--gold); height:10px; border-radius:10px;"></div></div></div>
+        <div class="game-card" style="padding: 1.5rem;">
+            <h3><i class="fas fa-crown"></i> VIP PROGRAM</h3>
+            <div id="vip-info">
+                <p>Current Level: <span id="vip-level">1</span></p>
+                <div class="progress-bar" style="background:var(--bg-elevated); border-radius:10px; margin:1rem 0;"><div id="vip-progress" style="width:0%; background:var(--gold); height:10px; border-radius:10px;"></div></div>
+                <p>Next Level: <span id="next-level">2</span> (Need 1000 more wagered)</p>
+                <div style="margin-top:1rem;">
+                    <h4>VIP Benefits:</h4>
+                    <ul style="list-style:none; margin-top:0.5rem;">
+                        <li><i class="fas fa-check-circle" style="color:var(--green);"></i> Level 1: 1% Cashback</li>
+                        <li><i class="fas fa-check-circle" style="color:var(--green);"></i> Level 5: 5% Cashback + Priority Support</li>
+                        <li><i class="fas fa-check-circle" style="color:var(--green);"></i> Level 10: 10% Cashback + Personal Manager</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="shop-page" class="page">
+        <div class="games-grid" id="shop-products">
+            <div class="game-card" style="text-align:center; padding:2rem;">
+                <i class="fas fa-spinner fa-spin" style="font-size:2rem;"></i>
+                <p>Loading products...</p>
+            </div>
+        </div>
     </div>
 </div>
 
 <div class="toast-container" id="toast-container"></div>
 
 <!-- Modals -->
-<div class="modal" id="auth-modal"><div class="modal-content"><div class="modal-header"><div class="modal-title"><i class="fas fa-crown"></i> WELCOME TO XBET</div><div class="modal-close" onclick="closeModal('auth-modal')">×</div></div><div class="modal-body"><div style="display: flex; gap: 1rem; margin-bottom: 1rem;"><button class="btn btn-primary" style="flex:1;" onclick="setAuthMode('login')"><i class="fas fa-sign-in-alt"></i> SIGN IN</button><button class="btn btn-secondary" style="flex:1;" onclick="setAuthMode('register')"><i class="fas fa-user-plus"></i> REGISTER</button></div><div id="login-form"><input type="text" class="bet-input" id="login-identifier" placeholder="Email or Username"><input type="password" class="bet-input" id="login-password" placeholder="Password"><button class="btn btn-primary" style="width:100%;" onclick="handleAuth()">SIGN IN</button></div><div id="register-form" class="hidden"><input type="text" class="bet-input" id="reg-username" placeholder="Username"><input type="email" class="bet-input" id="reg-email" placeholder="Email"><input type="password" class="bet-input" id="reg-password" placeholder="Password"><button class="btn btn-primary" style="width:100%;" onclick="handleRegister()">CREATE ACCOUNT</button><div style="text-align:center; margin-top:1rem;"><i class="fas fa-gift"></i> Get 100 XCoin FREE</div></div></div></div></div>
+<div class="modal" id="auth-modal"><div class="modal-content"><div class="modal-header"><div class="modal-title"><i class="fas fa-crown"></i> WELCOME TO XBET</div><div class="modal-close" onclick="closeModal('auth-modal')">×</div></div><div class="modal-body"><div style="display: flex; gap: 1rem; margin-bottom: 1rem;"><button class="btn btn-primary" style="flex:1;" onclick="setAuthMode('login')"><i class="fas fa-sign-in-alt"></i> SIGN IN</button><button class="btn btn-secondary" style="flex:1;" onclick="setAuthMode('register')"><i class="fas fa-user-plus"></i> REGISTER</button></div><div id="login-form"><input type="text" class="bet-input" id="login-identifier" placeholder="Email or Username"><input type="password" class="bet-input" id="login-password" placeholder="Password"><button class="btn btn-primary" style="width:100%;" onclick="handleAuth()">SIGN IN</button></div><div id="register-form" class="hidden"><input type="text" class="bet-input" id="reg-username" placeholder="Username"><input type="email" class="bet-input" id="reg-email" placeholder="Email (optional)"><input type="text" class="bet-input" id="reg-roblox" placeholder="Roblox ID (optional)"><input type="text" class="bet-input" id="reg-referral" placeholder="Referral Code (optional)"><input type="password" class="bet-input" id="reg-password" placeholder="Password"><button class="btn btn-primary" style="width:100%;" onclick="handleRegister()">CREATE ACCOUNT</button><div style="text-align:center; margin-top:1rem;"><i class="fas fa-gift"></i> Get 1000 XCoin FREE on registration!</div></div></div></div></div>
 
 <div class="modal" id="game-modal"><div class="modal-content"><div class="modal-header"><div class="modal-title" id="game-title">GAME</div><div class="modal-close" onclick="closeModal('game-modal')">×</div></div><div class="modal-body" id="game-content"></div></div></div>
 
 <div class="modal" id="admin-modal"><div class="modal-content" style="max-width: 1200px;"><div class="modal-header"><div class="modal-title"><i class="fas fa-shield-alt"></i> ADMIN DASHBOARD</div><div class="modal-close" onclick="closeModal('admin-modal')">×</div></div><div class="modal-body" id="admin-content"></div></div></div>
 
+<div class="modal" id="shop-modal"><div class="modal-content"><div class="modal-header"><div class="modal-title"><i class="fas fa-shopping-cart"></i> PURCHASE XCOIN</div><div class="modal-close" onclick="closeModal('shop-modal')">×</div></div><div class="modal-body" id="shop-modal-content"></div></div></div>
+
 <script>
-    const API_URL = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'https://xbetb.onrender.com' : window.location.origin;
+    const API_URL = 'https://xbetb.onrender.com';
     let token = localStorage.getItem('token');
     let currentUser = null;
-    let ws = null;
-    let currentAuthMode = 'login';
     
     // Game Variables
-    let crashActive = false, crashMult = 1, crashInterval = null, crashBetActive = false, crashBetAmount = 0;
-    let minesActive = false, minesMultiplier = 1, minesGrid = [], minesBetAmount = 0;
-    let plinkoRisk = 'medium', plinkoCtx = null;
-    let playerCards = [], dealerCards = [], bjBet = 0, blackjackGame = null;
+    let crashActive = true, crashMult = 1, crashInterval = null, crashBetActive = false, crashBetAmount = 0;
+    let minesActive = false, minesMultiplier = 1, minesGrid = [], minesBetAmount = 0, minesRevealed = 0;
+    let plinkoRisk = 'medium';
+    let playerCards = [], dealerCards = [], bjBet = 0, blackjackGame = null, bjDeck = [];
     let diceMode = 'under';
+    let spinning = false;
     
+    // Particle Animation
+    class ParticleSystem {
+        constructor() {
+            this.canvas = document.getElementById('particle-canvas');
+            this.ctx = this.canvas.getContext('2d');
+            this.particles = [];
+            this.resize();
+            window.addEventListener('resize', () => this.resize());
+            this.animate();
+        }
+        
+        resize() {
+            this.canvas.width = window.innerWidth;
+            this.canvas.height = window.innerHeight;
+        }
+        
+        addExplosion(x, y) {
+            for (let i = 0; i < 30; i++) {
+                this.particles.push({
+                    x: x,
+                    y: y,
+                    vx: (Math.random() - 0.5) * 8,
+                    vy: (Math.random() - 0.5) * 8,
+                    life: 1,
+                    size: Math.random() * 4 + 2,
+                    color: `hsl(${Math.random() * 60 + 40}, 100%, 60%)`
+                });
+            }
+        }
+        
+        animate() {
+            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            for (let i = this.particles.length - 1; i >= 0; i--) {
+                const p = this.particles[i];
+                p.x += p.vx;
+                p.y += p.vy;
+                p.life -= 0.02;
+                if (p.life <= 0) {
+                    this.particles.splice(i, 1);
+                    continue;
+                }
+                this.ctx.globalAlpha = p.life;
+                this.ctx.fillStyle = p.color;
+                this.ctx.beginPath();
+                this.ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                this.ctx.fill();
+            }
+            this.ctx.globalAlpha = 1;
+            requestAnimationFrame(() => this.animate());
+        }
+    }
+    
+    const particles = new ParticleSystem();
+    
+    // Auth Functions
     async function verifyToken() {
         if (!token) return;
         try {
@@ -996,6 +1017,7 @@
                 updateUI(true);
                 loadLeaderboard();
                 loadStats();
+                loadShopProducts();
                 if (currentUser.role === 'admin') {
                     document.getElementById('admin-link').classList.remove('hidden');
                 }
@@ -1009,6 +1031,9 @@
         if (loggedIn && currentUser) {
             document.getElementById('balance').textContent = currentUser.xcoin_balance.toFixed(2);
             document.getElementById('vip-level').textContent = currentUser.vip_level || 1;
+            const progress = ((currentUser.total_wagered || 0) % 1000) / 10;
+            document.getElementById('vip-progress').style.width = `${progress}%`;
+            document.getElementById('next-level').textContent = (currentUser.vip_level || 1) + 1;
         }
     }
     
@@ -1031,6 +1056,7 @@
                 updateUI(true);
                 closeModal('auth-modal');
                 loadLeaderboard();
+                loadShopProducts();
                 toast(`Welcome back, ${currentUser.username}!`, 'success');
             } else { toast(data.detail || 'Login failed', 'error'); }
         } catch { toast('Server error', 'error'); }
@@ -1039,12 +1065,14 @@
     async function handleRegister() {
         const username = document.getElementById('reg-username').value;
         const email = document.getElementById('reg-email').value;
+        const roblox_id = document.getElementById('reg-roblox').value;
+        const referral_code = document.getElementById('reg-referral').value;
         const password = document.getElementById('reg-password').value;
         if (!username || !password) return toast('Username and password required', 'error');
         try {
             const res = await fetch(`${API_URL}/api/auth/register`, {
                 method: 'POST', headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username, email: email || undefined, password })
+                body: JSON.stringify({ username, email: email || undefined, password, roblox_id: roblox_id || undefined, referral_code: referral_code || undefined })
             });
             const data = await res.json();
             if (res.ok) {
@@ -1053,7 +1081,7 @@
                 currentUser = data.user;
                 updateUI(true);
                 closeModal('auth-modal');
-                toast(`Welcome! You got 100 XCoin`, 'success');
+                toast(`Welcome! You got 1000 XCoin`, 'success');
             } else { toast(data.detail || 'Registration failed', 'error'); }
         } catch { toast('Server error', 'error'); }
     }
@@ -1076,6 +1104,7 @@
                 currentUser.xcoin_balance = data.new_balance;
                 document.getElementById('balance').textContent = currentUser.xcoin_balance.toFixed(2);
                 toast(`+${data.bonus} XCoin daily bonus`, 'success');
+                particles.addExplosion(window.innerWidth / 2, window.innerHeight / 2);
             } else { toast('Already claimed today', 'info'); }
         } catch { toast('Bonus unavailable', 'error'); }
     }
@@ -1088,7 +1117,7 @@
             if (data.players && data.players.length) {
                 container.innerHTML = data.players.slice(0, 5).map((p, i) => `
                     <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--border)">
-                        <span>${i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : i+1} ${p.username}</span>
+                        <span>${i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : '📌'} ${p.username}</span>
                         <span style="color:var(--gold)">${p.xcoin_balance.toFixed(0)} XC</span>
                     </div>
                 `).join('');
@@ -1103,63 +1132,114 @@
             document.getElementById('online-count').textContent = data.online_players || 0;
             document.getElementById('total-bets').textContent = data.total_bets || 0;
         } catch {}
+    }
+    
+    async function loadShopProducts() {
         try {
-            const res = await fetch(`${API_URL}/api/online-players`);
+            const res = await fetch(`${API_URL}/api/payments/roblox-products`);
             const data = await res.json();
-            document.getElementById('online-count').textContent = data.count || 0;
+            const container = document.getElementById('shop-products');
+            if (data.products) {
+                container.innerHTML = data.products.map(p => `
+                    <div class="game-card" onclick="showPurchaseModal(${p.robux}, ${p.xcoin}, '${p.product_id}')">
+                        <div class="game-icon"><i class="fas fa-robux" style="font-size:3rem;"></i></div>
+                        <div class="game-info">
+                            <div class="game-title">${p.robux} Robux</div>
+                            <div class="game-desc">Get ${p.xcoin} XCoin</div>
+                            <div class="game-desc" style="color:var(--gold);">$${p.price_usd} USD</div>
+                            ${p.vip_bonus ? '<div class="game-desc" style="color:var(--green);"><i class="fas fa-crown"></i> VIP Bonus Included!</div>' : ''}
+                        </div>
+                    </div>
+                `).join('');
+            }
         } catch {}
     }
     
+    function showPurchaseModal(robux, xcoin, productId) {
+        if (!currentUser) { showAuthModal('login'); return; }
+        const modalContent = document.getElementById('shop-modal-content');
+        modalContent.innerHTML = `
+            <div style="text-align:center;">
+                <i class="fas fa-robux" style="font-size:4rem; color:var(--gold);"></i>
+                <h3>Purchase ${robux} Robux</h3>
+                <p>You will receive: <strong>${xcoin} XCoin</strong></p>
+                <p>Price: <strong>$${(xcoin * 0.01).toFixed(2)} USD</strong></p>
+                <button class="btn btn-primary" style="width:100%; margin-top:1rem;" onclick="processRobloxPurchase(${robux}, '${productId}')">
+                    <i class="fab fa-roblox"></i> Purchase with Roblox
+                </button>
+                <p style="font-size:0.8rem; margin-top:1rem;">After purchase, your XCoin will be added automatically</p>
+            </div>
+        `;
+        openModal('shop-modal');
+    }
+    
+    async function processRobloxPurchase(amountRobux, productId) {
+        if (!currentUser) return;
+        try {
+            const res = await fetch(`${API_URL}/api/payments/roblox-purchase`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                body: JSON.stringify({ roblox_id: currentUser.roblox_id || 'pending', product_id: productId, amount_robux: amountRobux })
+            });
+            const data = await res.json();
+            if (res.ok) {
+                currentUser.xcoin_balance = data.new_balance;
+                document.getElementById('balance').textContent = currentUser.xcoin_balance.toFixed(2);
+                toast(data.message, 'success');
+                closeModal('shop-modal');
+                particles.addExplosion(window.innerWidth / 2, window.innerHeight / 2);
+            } else { toast(data.detail || 'Purchase failed', 'error'); }
+        } catch { toast('Purchase failed', 'error'); }
+    }
+    
     function showReferral() { toast(`Your referral code: ${currentUser?.referral_code || 'Loading...'}`, 'info'); }
+    function showWelcomeBonus() { toast('Welcome bonus: First deposit gets 200% match!', 'info'); }
+    function showBalanceDetails() { toast(`Your balance: ${currentUser?.xcoin_balance || 0} XCoin`, 'info'); }
     function showAuthModal(mode) { setAuthMode(mode); openModal('auth-modal'); }
-    function setAuthMode(mode) { document.getElementById('login-form').classList.toggle('hidden', mode !== 'login'); document.getElementById('register-form').classList.toggle('hidden', mode !== 'register'); }
+    function setAuthMode(mode) { 
+        document.getElementById('login-form').classList.toggle('hidden', mode !== 'login'); 
+        document.getElementById('register-form').classList.toggle('hidden', mode !== 'register'); 
+    }
     function openModal(id) { document.getElementById(id).classList.add('active'); }
     function closeModal(id) { document.getElementById(id).classList.remove('active'); }
-    function closeAllModals() { ['auth-modal', 'game-modal', 'admin-modal'].forEach(closeModal); }
-    function toast(message, type) { const container = document.getElementById('toast-container'); const t = document.createElement('div'); t.className = 'toast'; t.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle'}"></i> ${message}`; container.appendChild(t); setTimeout(() => t.remove(), 3000); }
+    function closeAllModals() { ['auth-modal', 'game-modal', 'admin-modal', 'shop-modal'].forEach(closeModal); }
+    function toast(message, type) { 
+        const container = document.getElementById('toast-container'); 
+        const t = document.createElement('div'); 
+        t.className = 'toast'; 
+        t.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle'}"></i> ${message}`; 
+        container.appendChild(t); 
+        setTimeout(() => t.remove(), 3000); 
+    }
     
-    // ==================== ENHANCED SLOTS ====================
+    // ==================== SLOTS GAME ====================
     function getSlotsHTML() {
         return `
-            <div class="slot-machine-v2">
-                <div class="slot-header">
-                    <h3><i class="fas fa-gem"></i> DIAMOND DELUXE SLOTS</h3>
-                </div>
+            <div>
                 <div class="slot-reels-container" id="slot-reels">
-                    ${Array(5).fill(0).map(() => `
-                        <div class="slot-reel-v2">
-                            <div class="reel-window">
-                                <div class="reel-strip"></div>
-                            </div>
-                        </div>
-                    `).join('')}
+                    ${Array(5).fill(0).map(() => `<div class="slot-reel"><div class="reel-strip"></div></div>`).join('')}
                 </div>
-                <div class="bet-controls">
-                    <div class="bet-input-group">
-                        <button class="bet-adjust" data-change="-5">-5</button>
-                        <input type="number" class="bet-input" id="slot-bet" value="10" min="1" step="1">
-                        <button class="bet-adjust" data-change="5">+5</button>
-                    </div>
-                    <div class="quick-bets">
-                        ${[10, 25, 50, 100, 250, 500].map(amt => `<span class="quick-bet-btn" data-amount="${amt}">${amt}</span>`).join('')}
-                    </div>
+                <div class="bet-input-group">
+                    <button class="bet-adjust" data-change="-5">-5</button>
+                    <input type="number" class="bet-input" id="slot-bet" value="10" min="1">
+                    <button class="bet-adjust" data-change="5">+5</button>
                 </div>
-                <button class="btn-spin" id="spin-button" style="width:100%;"><i class="fas fa-play"></i> SPIN</button>
+                <div class="quick-bets">${[10, 25, 50, 100, 250, 500].map(amt => `<span class="quick-bet-btn" data-amount="${amt}">${amt}</span>`).join('')}</div>
+                <button class="btn btn-primary" style="width:100%;" id="spin-slots-btn"><i class="fas fa-play"></i> SPIN</button>
                 <div class="result-message" id="slot-result"></div>
             </div>
         `;
     }
     
     function initSlots() {
-        const symbols = ['fa-gem', 'fa-crown', 'fa-star', 'fa-bell', 'fa-cherry', 'fa-lemon', 'fa-apple-alt', 'fa-grapes'];
-        document.querySelectorAll('.slot-reel-v2').forEach(reel => {
+        const symbols = ['🍒', '🍋', '🍊', '🍇', '🔔', '⭐', '💎', '👑'];
+        document.querySelectorAll('.slot-reel').forEach(reel => {
             const strip = reel.querySelector('.reel-strip');
             strip.innerHTML = '';
             for (let i = 0; i < 30; i++) {
                 const div = document.createElement('div');
-                div.className = 'reel-symbol-v2';
-                const randomIcon = symbols[Math.floor(Math.random() * symbols.length)];
-                div.innerHTML = `<i class="fas ${randomIcon}"></i>`;
+                div.className = 'reel-symbol';
+                div.textContent = symbols[Math.floor(Math.random() * symbols.length)];
                 strip.appendChild(div);
             }
         });
@@ -1172,69 +1252,63 @@
                 let val = parseInt(document.getElementById('slot-bet').value);
                 val += parseInt(btn.dataset.change);
                 if (val < 1) val = 1;
-                if (val > 1000) val = 1000;
                 document.getElementById('slot-bet').value = val;
             };
         });
-        document.getElementById('spin-button').onclick = spinSlots;
-    }
-    
-    let spinning = false;
-    async function spinSlots() {
-        if (spinning) return;
-        const bet = parseFloat(document.getElementById('slot-bet').value);
-        if (!currentUser || bet > currentUser.xcoin_balance) return toast('Insufficient balance', 'error');
-        spinning = true;
-        const reels = document.querySelectorAll('.slot-reel-v2');
-        const spinBtn = document.getElementById('spin-button');
-        spinBtn.classList.add('spinning');
         
-        reels.forEach((reel, i) => {
-            const strip = reel.querySelector('.reel-strip');
-            const spinDist = (Math.random() * 20 + 20) * 100;
-            strip.style.transition = `transform ${0.8 + i * 0.05}s cubic-bezier(0.2, 0.9, 0.4, 1.1)`;
-            strip.style.transform = `translateY(-${spinDist}px)`;
-        });
-        
-        try {
-            const res = await fetch(`${API_URL}/api/games/slots/play`, {
-                method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-                body: JSON.stringify({ game: 'slots', xcoin_amount: bet, params: {} })
+        document.getElementById('spin-slots-btn').onclick = async () => {
+            if (spinning) return;
+            const bet = parseFloat(document.getElementById('slot-bet').value);
+            if (!currentUser || bet > currentUser.xcoin_balance) return toast('Insufficient balance', 'error');
+            spinning = true;
+            const reels = document.querySelectorAll('.slot-reel');
+            reels.forEach((reel, i) => {
+                const strip = reel.querySelector('.reel-strip');
+                const spinDist = (Math.random() * 20 + 20) * 100;
+                strip.style.transition = `transform ${0.8 + i * 0.05}s cubic-bezier(0.2, 0.9, 0.4, 1.1)`;
+                strip.style.transform = `translateY(-${spinDist}px)`;
             });
-            const data = await res.json();
-            setTimeout(() => {
-                const iconMap = { 'cherry':'fa-cherry', 'lemon':'fa-lemon', 'orange':'fa-orange', 'plum':'fa-plum', 'bell':'fa-bell', 'xbet':'fa-star', 'diamond':'fa-gem', 'crown':'fa-crown' };
-                reels.forEach((reel, idx) => {
-                    const strip = reel.querySelector('.reel-strip');
-                    const resultSymbols = data.result.reel_grid.map(row => row[idx]);
-                    strip.style.transition = 'none';
-                    strip.innerHTML = '';
-                    for (let i = 0; i < 30; i++) {
-                        const symbol = resultSymbols[i % resultSymbols.length];
-                        const div = document.createElement('div');
-                        div.className = 'reel-symbol-v2';
-                        div.innerHTML = `<i class="fas ${iconMap[symbol] || 'fa-gem'}"></i>`;
-                        strip.appendChild(div);
-                    }
-                    setTimeout(() => { strip.style.transition = ''; }, 50);
+            
+            try {
+                const res = await fetch(`${API_URL}/api/games/slots/play`, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                    body: JSON.stringify({ game: 'slots', xcoin_amount: bet, params: {} })
                 });
-                currentUser.xcoin_balance = data.new_balance;
-                document.getElementById('balance').textContent = currentUser.xcoin_balance.toFixed(2);
-                const resultDiv = document.getElementById('slot-result');
-                resultDiv.className = data.outcome === 'win' ? 'result-message win' : 'result-message lose';
-                resultDiv.innerHTML = data.outcome === 'win' ? `<i class="fas fa-trophy"></i> WIN +${data.win_amount.toFixed(2)} XCOIN` : `<i class="fas fa-skull"></i> LOSS -${bet} XCOIN`;
-                resultDiv.style.display = 'block';
-                setTimeout(() => resultDiv.style.display = 'none', 3000);
-                spinning = false;
-                spinBtn.classList.remove('spinning');
-            }, 1000);
-        } catch { toast('Spin failed', 'error'); spinning = false; spinBtn.classList.remove('spinning'); }
+                const data = await res.json();
+                setTimeout(() => {
+                    const symbolMap = { 'cherry':'🍒','lemon':'🍋','orange':'🍊','plum':'🍇','bell':'🔔','xbet':'⭐','diamond':'💎','crown':'👑' };
+                    reels.forEach((reel, idx) => {
+                        const strip = reel.querySelector('.reel-strip');
+                        const resultSymbols = data.result.reel_grid.map(row => row[idx]);
+                        strip.style.transition = 'none';
+                        strip.innerHTML = '';
+                        for (let i = 0; i < 30; i++) {
+                            const symbol = resultSymbols[i % resultSymbols.length];
+                            const div = document.createElement('div');
+                            div.className = 'reel-symbol';
+                            div.textContent = symbolMap[symbol] || '⭐';
+                            strip.appendChild(div);
+                        }
+                        setTimeout(() => { strip.style.transition = ''; }, 50);
+                    });
+                    currentUser.xcoin_balance = data.new_balance;
+                    document.getElementById('balance').textContent = currentUser.xcoin_balance.toFixed(2);
+                    const resultDiv = document.getElementById('slot-result');
+                    resultDiv.className = data.outcome === 'win' ? 'result-message win' : 'result-message lose';
+                    resultDiv.innerHTML = data.outcome === 'win' ? `<i class="fas fa-trophy"></i> WIN +${data.win_amount.toFixed(2)} XCOIN | Multiplier: ${data.multiplier}x` : `<i class="fas fa-skull"></i> LOSS -${bet} XCOIN`;
+                    resultDiv.style.display = 'block';
+                    if (data.outcome === 'win') particles.addExplosion(window.innerWidth / 2, window.innerHeight / 2);
+                    setTimeout(() => resultDiv.style.display = 'none', 3000);
+                    spinning = false;
+                }, 1000);
+            } catch { toast('Spin failed', 'error'); spinning = false; }
+        };
     }
     
-    // ==================== ENHANCED DICE ====================
+    // ==================== DICE GAME ====================
     function getDiceHTML() {
         return `
-            <div class="dice-game-v2">
+            <div>
                 <div class="dice-3d-container">
                     <div class="dice-3d" id="dice-3d">
                         <div class="dice-face front">⚀</div>
@@ -1245,71 +1319,69 @@
                         <div class="dice-face bottom">⚅</div>
                     </div>
                 </div>
-                <div><input type="range" id="dice-target" min="2" max="98" value="50" style="width:100%"><div style="display:flex; justify-content:space-between;"><span><i class="fas fa-arrow-down"></i> UNDER 2</span><span>TARGET: <span id="target-value">50</span></span><span>OVER 98 <i class="fas fa-arrow-up"></i></span></div></div>
-                <div style="display:flex; gap:10px; margin:1rem 0;"><button class="btn btn-primary" style="flex:1" id="dice-under" onclick="setDiceMode('under')"><i class="fas fa-arrow-down"></i> ROLL UNDER</button><button class="btn btn-secondary" style="flex:1" id="dice-over" onclick="setDiceMode('over')"><i class="fas fa-arrow-up"></i> ROLL OVER</button></div>
+                <div><input type="range" id="dice-target" min="2" max="98" value="50" style="width:100%"><div style="display:flex; justify-content:space-between;"><span>UNDER 2</span><span>TARGET: <span id="target-value">50</span></span><span>OVER 98</span></div></div>
+                <div style="display:flex; gap:10px; margin:1rem 0;"><button class="btn btn-primary" style="flex:1" id="dice-under">ROLL UNDER</button><button class="btn btn-secondary" style="flex:1" id="dice-over">ROLL OVER</button></div>
                 <div class="bet-input-group">
                     <button class="bet-adjust" data-change="-10">-10</button>
                     <input type="number" class="bet-input" id="dice-bet" value="10">
                     <button class="bet-adjust" data-change="10">+10</button>
                 </div>
                 <div class="quick-bets">${[10, 25, 50, 100, 250].map(amt => `<span class="quick-bet-btn" data-amount="${amt}">${amt}</span>`).join('')}</div>
-                <button class="btn-roll" style="width:100%;" onclick="rollDice()"><i class="fas fa-dice-d6"></i> ROLL DICE</button>
+                <button class="btn btn-primary" style="width:100%;" id="roll-dice-btn"><i class="fas fa-dice-d6"></i> ROLL DICE</button>
                 <div class="result-message" id="dice-result"></div>
             </div>
         `;
     }
     
-    function setDiceMode(mode) { 
-        diceMode = mode; 
-        document.getElementById('dice-under').className = mode === 'under' ? 'btn btn-primary' : 'btn btn-secondary';
-        document.getElementById('dice-over').className = mode === 'over' ? 'btn btn-primary' : 'btn btn-secondary';
-    }
-    
-    let rolling = false;
-    async function rollDice() {
-        if (rolling) return;
-        const bet = parseFloat(document.getElementById('dice-bet').value);
-        const target = parseInt(document.getElementById('dice-target').value);
-        if (!currentUser || bet > currentUser.xcoin_balance) return toast('Insufficient balance', 'error');
-        rolling = true;
-        const dice3d = document.getElementById('dice-3d');
-        dice3d.classList.add('rolling');
+    function initDice() {
+        document.getElementById('dice-target').addEventListener('input', (e) => document.getElementById('target-value').textContent = e.target.value);
+        document.getElementById('dice-under').onclick = () => { diceMode = 'under'; document.getElementById('dice-under').className = 'btn btn-primary'; document.getElementById('dice-over').className = 'btn btn-secondary'; };
+        document.getElementById('dice-over').onclick = () => { diceMode = 'over'; document.getElementById('dice-over').className = 'btn btn-primary'; document.getElementById('dice-under').className = 'btn btn-secondary'; };
+        document.querySelectorAll('.quick-bet-btn').forEach(btn => { btn.onclick = () => { document.getElementById('dice-bet').value = btn.dataset.amount; }; });
+        document.querySelectorAll('.bet-adjust').forEach(btn => { btn.onclick = () => { let val = parseInt(document.getElementById('dice-bet').value); val += parseInt(btn.dataset.change); if (val < 1) val = 1; document.getElementById('dice-bet').value = val; }; });
         
-        try {
-            const res = await fetch(`${API_URL}/api/games/dice/play`, {
-                method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-                body: JSON.stringify({ game: 'dice', xcoin_amount: bet, params: { target, condition: diceMode } })
-            });
-            const data = await res.json();
-            setTimeout(() => {
-                dice3d.classList.remove('rolling');
-                const roll = data.result.roll;
-                const face = Math.min(6, Math.max(1, Math.floor(roll / 100 * 6) + 1));
-                const rotations = {1:'0deg,0deg',2:'180deg,0deg',3:'0deg,90deg',4:'0deg,-90deg',5:'-90deg,0deg',6:'90deg,0deg'};
-                dice3d.style.transform = `rotateX(${rotations[face].split(',')[0]}) rotateY(${rotations[face].split(',')[1]})`;
-                currentUser.xcoin_balance = data.new_balance;
-                document.getElementById('balance').textContent = currentUser.xcoin_balance.toFixed(2);
-                const resultDiv = document.getElementById('dice-result');
-                resultDiv.className = data.outcome === 'win' ? 'result-message win' : 'result-message lose';
-                resultDiv.innerHTML = data.outcome === 'win' ? `<i class="fas fa-trophy"></i> WIN +${data.win_amount.toFixed(2)} XCOIN | ROLL: ${roll.toFixed(1)}` : `<i class="fas fa-skull"></i> LOSS -${bet} XCOIN | ROLL: ${roll.toFixed(1)}`;
-                resultDiv.style.display = 'block';
-                setTimeout(() => resultDiv.style.display = 'none', 3000);
-                rolling = false;
-            }, 500);
-        } catch { toast('Roll failed', 'error'); rolling = false; dice3d.classList.remove('rolling'); }
+        document.getElementById('roll-dice-btn').onclick = async () => {
+            const bet = parseFloat(document.getElementById('dice-bet').value);
+            const target = parseInt(document.getElementById('dice-target').value);
+            if (!currentUser || bet > currentUser.xcoin_balance) return toast('Insufficient balance', 'error');
+            
+            const dice3d = document.getElementById('dice-3d');
+            dice3d.classList.add('rolling');
+            
+            try {
+                const res = await fetch(`${API_URL}/api/games/dice/play`, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                    body: JSON.stringify({ game: 'dice', xcoin_amount: bet, params: { target, condition: diceMode } })
+                });
+                const data = await res.json();
+                setTimeout(() => {
+                    dice3d.classList.remove('rolling');
+                    const roll = data.result.roll;
+                    const face = Math.min(6, Math.max(1, Math.floor(roll / 100 * 6) + 1));
+                    const rotations = {1:'0,0',2:'180,0',3:'0,90',4:'0,-90',5:'-90,0',6:'90,0'};
+                    dice3d.style.transform = `rotateX(${rotations[face].split(',')[0]}deg) rotateY(${rotations[face].split(',')[1]}deg)`;
+                    currentUser.xcoin_balance = data.new_balance;
+                    document.getElementById('balance').textContent = currentUser.xcoin_balance.toFixed(2);
+                    const resultDiv = document.getElementById('dice-result');
+                    resultDiv.className = data.outcome === 'win' ? 'result-message win' : 'result-message lose';
+                    resultDiv.innerHTML = data.outcome === 'win' ? `<i class="fas fa-trophy"></i> WIN +${data.win_amount.toFixed(2)} XCOIN | ROLL: ${roll.toFixed(1)}` : `<i class="fas fa-skull"></i> LOSS -${bet} XCOIN | ROLL: ${roll.toFixed(1)}`;
+                    resultDiv.style.display = 'block';
+                    if (data.outcome === 'win') particles.addExplosion(window.innerWidth / 2, window.innerHeight / 2);
+                    setTimeout(() => resultDiv.style.display = 'none', 3000);
+                }, 500);
+            } catch { toast('Roll failed', 'error'); dice3d.classList.remove('rolling'); }
+        };
     }
     
-    // ==================== ENHANCED CRASH ====================
+    // ==================== CRASH GAME ====================
     function getCrashHTML() {
         return `
-            <div class="crash-game-v2">
-                <div class="crash-visualization">
-                    <canvas id="crash-canvas" width="800" height="400"></canvas>
-                    <div class="crash-multiplier-display" id="crash-mult">1.00x</div>
-                </div>
+            <div class="crash-container">
+                <canvas id="crash-canvas" width="800" height="400" style="width:100%; height:400px; background:#0A0A0F; border-radius:16px;"></canvas>
+                <div class="crash-multiplier" id="crash-mult">1.00x</div>
                 <div class="bet-input-group">
                     <button class="bet-adjust" data-change="-10">-10</button>
-                    <input type="number" class="bet-input" id="crash-bet" value="10" placeholder="BET AMOUNT">
+                    <input type="number" class="bet-input" id="crash-bet" value="10">
                     <button class="bet-adjust" data-change="10">+10</button>
                 </div>
                 <div class="quick-bets">${[10, 25, 50, 100, 250].map(amt => `<span class="quick-bet-btn" data-amount="${amt}">${amt}</span>`).join('')}</div>
@@ -1321,21 +1393,88 @@
     }
     
     function initCrash() {
-        crashMult = 1;
-        crashActive = true;
-        updateCrashMultiplier(1);
-        drawCrashGraph();
+        let crashMult = 1;
+        let crashActive = true;
+        let crashBetActive = false;
+        let crashBetAmount = 0;
+        let crashInterval = null;
+        
+        const canvas = document.getElementById('crash-canvas');
+        
+        function drawCrashGraph() {
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const w = canvas.width = canvas.clientWidth;
+            const h = canvas.height = 400;
+            ctx.clearRect(0, 0, w, h);
+            ctx.strokeStyle = '#2ECC71';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            for (let x = 0; x <= w; x++) {
+                const t = x / w;
+                const m = Math.pow(1.03, t * 50);
+                const y = h - Math.min(h - 20, (m / 20) * h);
+                if (x === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            }
+            ctx.stroke();
+            const currentX = w * (Math.log(crashMult) / Math.log(1.03)) / 50;
+            const currentY = h - Math.min(h - 20, (crashMult / 20) * h);
+            ctx.fillStyle = '#FFD966';
+            ctx.beginPath();
+            ctx.arc(currentX, currentY, 10, 0, Math.PI * 2);
+            ctx.fill();
+        }
+        
+        function crash() {
+            crashActive = false;
+            if (crashBetActive) {
+                document.getElementById('crash-result').className = 'result-message lose';
+                document.getElementById('crash-result').innerHTML = `<i class="fas fa-bomb"></i> CRASHED AT ${crashMult.toFixed(2)}x | LOSS ${crashBetAmount} XCOIN`;
+                crashBetActive = false;
+                document.getElementById('crash-bet-btn').disabled = false;
+                document.getElementById('crash-cash-btn').disabled = true;
+            }
+            setTimeout(() => { crashMult = 1; crashActive = true; document.getElementById('crash-mult').textContent = '1.00x'; drawCrashGraph(); }, 3000);
+        }
+        
         if (crashInterval) clearInterval(crashInterval);
         crashInterval = setInterval(() => {
             if (crashActive) {
                 crashMult *= 1.03;
-                updateCrashMultiplier(crashMult);
+                document.getElementById('crash-mult').textContent = crashMult.toFixed(2) + 'x';
                 drawCrashGraph();
                 if (crashMult > 2 + Math.random() * 8) crash();
             }
         }, 100);
-        document.getElementById('crash-bet-btn').onclick = placeCrashBet;
-        document.getElementById('crash-cash-btn').onclick = cashoutCrash;
+        
+        document.getElementById('crash-bet-btn').onclick = () => {
+            const bet = parseFloat(document.getElementById('crash-bet').value);
+            if (!currentUser || bet > currentUser.xcoin_balance) return toast('Insufficient balance', 'error');
+            if (!crashActive) return toast('Wait for next round', 'info');
+            crashBetActive = true;
+            crashBetAmount = bet;
+            currentUser.xcoin_balance -= bet;
+            document.getElementById('balance').textContent = currentUser.xcoin_balance.toFixed(2);
+            document.getElementById('crash-bet-btn').disabled = true;
+            document.getElementById('crash-cash-btn').disabled = false;
+            toast(`Bet placed: ${bet} XCOIN`, 'info');
+        };
+        
+        document.getElementById('crash-cash-btn').onclick = () => {
+            if (!crashBetActive || !crashActive) return;
+            const win = crashBetAmount * crashMult;
+            currentUser.xcoin_balance += win;
+            document.getElementById('balance').textContent = currentUser.xcoin_balance.toFixed(2);
+            document.getElementById('crash-result').className = 'result-message win';
+            document.getElementById('crash-result').innerHTML = `<i class="fas fa-trophy"></i> CASHED OUT ${win.toFixed(2)} XCOIN AT ${crashMult.toFixed(2)}x`;
+            crashBetActive = false;
+            document.getElementById('crash-bet-btn').disabled = false;
+            document.getElementById('crash-cash-btn').disabled = true;
+            particles.addExplosion(window.innerWidth / 2, window.innerHeight / 2);
+            toast(`+${win.toFixed(2)} XCOIN`, 'success');
+        };
+        
         document.querySelectorAll('.quick-bet-btn').forEach(btn => {
             btn.onclick = () => { document.getElementById('crash-bet').value = btn.dataset.amount; };
         });
@@ -1349,263 +1488,205 @@
         });
     }
     
-    function updateCrashMultiplier(mult) { document.getElementById('crash-mult').textContent = mult.toFixed(2) + 'x'; }
-    
-    function drawCrashGraph() {
-        const canvas = document.getElementById('crash-canvas');
-        if (!canvas) return;
-        const ctx = canvas.getContext('2d');
-        const w = canvas.width = canvas.clientWidth;
-        const h = canvas.height = 400;
-        ctx.clearRect(0, 0, w, h);
-        ctx.strokeStyle = '#2ECC71';
-        ctx.lineWidth = 3;
-        ctx.beginPath();
-        for (let x = 0; x <= w; x++) {
-            const t = x / w;
-            const m = Math.pow(1.03, t * 50);
-            const y = h - Math.min(h - 20, (m / 20) * h);
-            if (x === 0) ctx.moveTo(x, y);
-            else ctx.lineTo(x, y);
-        }
-        ctx.stroke();
-        const currentX = w * (Math.log(crashMult) / Math.log(1.03)) / 50;
-        const currentY = h - Math.min(h - 20, (crashMult / 20) * h);
-        ctx.fillStyle = '#FFD966';
-        ctx.beginPath();
-        ctx.arc(currentX, currentY, 10, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.fillStyle = '#FFFFFF';
-        ctx.beginPath();
-        ctx.arc(currentX, currentY, 5, 0, Math.PI * 2);
-        ctx.fill();
-    }
-    
-    function crash() {
-        crashActive = false;
-        if (crashBetActive) {
-            const resultDiv = document.getElementById('crash-result');
-            resultDiv.className = 'result-message lose';
-            resultDiv.innerHTML = `<i class="fas fa-bomb"></i> CRASHED AT ${crashMult.toFixed(2)}x | LOSS ${crashBetAmount} XCOIN`;
-            crashBetActive = false;
-            document.getElementById('crash-bet-btn').disabled = false;
-            document.getElementById('crash-cash-btn').disabled = true;
-        }
-        setTimeout(() => { crashMult = 1; crashActive = true; updateCrashMultiplier(1); drawCrashGraph(); }, 3000);
-    }
-    
-    function placeCrashBet() {
-        const bet = parseFloat(document.getElementById('crash-bet').value);
-        if (!currentUser || bet > currentUser.xcoin_balance) return toast('Insufficient balance', 'error');
-        if (!crashActive) return toast('Wait for next round', 'info');
-        crashBetActive = true;
-        crashBetAmount = bet;
-        currentUser.xcoin_balance -= bet;
-        document.getElementById('balance').textContent = currentUser.xcoin_balance.toFixed(2);
-        document.getElementById('crash-bet-btn').disabled = true;
-        document.getElementById('crash-cash-btn').disabled = false;
-        toast(`Bet placed: ${bet} XCOIN`, 'info');
-    }
-    
-    function cashoutCrash() {
-        if (!crashBetActive || !crashActive) return;
-        const win = crashBetAmount * crashMult;
-        currentUser.xcoin_balance += win;
-        document.getElementById('balance').textContent = currentUser.xcoin_balance.toFixed(2);
-        const resultDiv = document.getElementById('crash-result');
-        resultDiv.className = 'result-message win';
-        resultDiv.innerHTML = `<i class="fas fa-trophy"></i> CASHED OUT ${win.toFixed(2)} XCOIN AT ${crashMult.toFixed(2)}x`;
-        crashBetActive = false;
-        document.getElementById('crash-bet-btn').disabled = false;
-        document.getElementById('crash-cash-btn').disabled = true;
-        toast(`+${win.toFixed(2)} XCOIN`, 'success');
-    }
-    
-    // ==================== ENHANCED MINES ====================
+    // ==================== MINES GAME ====================
     function getMinesHTML() {
         return `
-            <div><div class="mines-grid" id="mines-grid"></div>
-            <div class="bet-input-group">
-                <button class="bet-adjust" data-change="-5">-5</button>
-                <input type="number" class="bet-input" id="mines-bet" value="10">
-                <button class="bet-adjust" data-change="5">+5</button>
+            <div>
+                <div class="mines-grid" id="mines-grid"></div>
+                <div class="bet-input-group">
+                    <button class="bet-adjust" data-change="-5">-5</button>
+                    <input type="number" class="bet-input" id="mines-bet" value="10">
+                    <button class="bet-adjust" data-change="5">+5</button>
+                </div>
+                <div class="quick-bets">${[10, 25, 50, 100, 250].map(amt => `<span class="quick-bet-btn" data-amount="${amt}">${amt}</span>`).join('')}</div>
+                <div style="display:flex; gap:10px;"><button class="btn btn-primary" style="flex:1" id="mines-start-btn"><i class="fas fa-play"></i> START GAME</button><button class="btn btn-cashout" style="flex:1" id="mines-cashout-btn" disabled><i class="fas fa-hand-holding-usd"></i> CASH OUT</button></div>
+                <div id="mines-multiplier" style="text-align:center; font-size:1.8rem; margin:1rem 0; font-family:'Orbitron';">MULTIPLIER: 1.00x</div>
+                <div class="result-message" id="mines-result"></div>
             </div>
-            <div class="quick-bets">${[10, 25, 50, 100, 250].map(amt => `<span class="quick-bet-btn" data-amount="${amt}">${amt}</span>`).join('')}</div>
-            <div style="display:flex; gap:10px;"><button class="btn btn-primary" style="flex:1" onclick="startMines()"><i class="fas fa-play"></i> START GAME</button><button class="btn btn-cashout" style="flex:1" id="mines-cashout" disabled onclick="cashoutMines()"><i class="fas fa-hand-holding-usd"></i> CASH OUT</button></div>
-            <div id="mines-multiplier" style="text-align:center; font-size:1.8rem; margin:1rem 0; font-family:'Orbitron';">MULTIPLIER: 1.00x</div>
-            <div class="result-message" id="mines-result"></div></div>
         `;
     }
     
-    function createMinesGrid() {
-        const grid = document.getElementById('mines-grid');
-        grid.innerHTML = '';
-        for (let i = 0; i < 25; i++) {
-            const tile = document.createElement('div');
-            tile.className = 'mine-tile';
-            tile.innerHTML = '<i class="fas fa-gem"></i>';
-            tile.onclick = () => revealMine(i);
-            grid.appendChild(tile);
-        }
-    }
-    
-    async function startMines() {
-        const bet = parseFloat(document.getElementById('mines-bet').value);
-        if (!currentUser || bet > currentUser.xcoin_balance) return toast('Insufficient balance', 'error');
-        minesActive = true;
-        minesMultiplier = 1;
-        minesBetAmount = bet;
-        currentUser.xcoin_balance -= bet;
-        document.getElementById('balance').textContent = currentUser.xcoin_balance.toFixed(2);
-        document.getElementById('mines-cashout').disabled = false;
-        document.getElementById('mines-multiplier').textContent = 'MULTIPLIER: 1.00x';
-        createMinesGrid();
-        minesGrid = Array(25).fill(false);
-        const bombPositions = new Set();
-        while (bombPositions.size < 5) bombPositions.add(Math.floor(Math.random() * 25));
-        bombPositions.forEach(pos => minesGrid[pos] = true);
-    }
-    
-    async function revealMine(index) {
-        if (!minesActive) return;
-        if (minesGrid[index]) {
-            const tiles = document.querySelectorAll('.mine-tile');
-            tiles[index].classList.add('mine');
-            tiles[index].innerHTML = '<i class="fas fa-bomb"></i>';
-            document.getElementById('mines-result').className = 'result-message lose';
-            document.getElementById('mines-result').innerHTML = '<i class="fas fa-bomb"></i> HIT A MINE | GAME OVER';
+    function initMines() {
+        let minesActive = false, minesMultiplier = 1, minesBetAmount = 0, minesRevealed = 0;
+        let minesGrid = [];
+        
+        document.getElementById('mines-start-btn').onclick = () => {
+            const bet = parseFloat(document.getElementById('mines-bet').value);
+            if (!currentUser || bet > currentUser.xcoin_balance) return toast('Insufficient balance', 'error');
+            minesActive = true;
+            minesMultiplier = 1;
+            minesRevealed = 0;
+            minesBetAmount = bet;
+            currentUser.xcoin_balance -= bet;
+            document.getElementById('balance').textContent = currentUser.xcoin_balance.toFixed(2);
+            document.getElementById('mines-cashout-btn').disabled = false;
+            document.getElementById('mines-multiplier').textContent = 'MULTIPLIER: 1.00x';
+            document.getElementById('mines-result').style.display = 'none';
+            
+            const grid = document.getElementById('mines-grid');
+            grid.innerHTML = '';
+            minesGrid = Array(25).fill(false);
+            const bombPositions = new Set();
+            while (bombPositions.size < 5) bombPositions.add(Math.floor(Math.random() * 25));
+            bombPositions.forEach(pos => minesGrid[pos] = true);
+            
+            for (let i = 0; i < 25; i++) {
+                const tile = document.createElement('div');
+                tile.className = 'mine-tile';
+                tile.innerHTML = '<i class="fas fa-gem"></i>';
+                tile.onclick = () => revealMine(i);
+                grid.appendChild(tile);
+            }
+        };
+        
+        document.getElementById('mines-cashout-btn').onclick = () => {
+            if (!minesActive) return;
+            const winAmount = minesBetAmount * minesMultiplier;
+            currentUser.xcoin_balance += winAmount;
+            document.getElementById('balance').textContent = currentUser.xcoin_balance.toFixed(2);
+            document.getElementById('mines-result').className = 'result-message win';
+            document.getElementById('mines-result').innerHTML = `<i class="fas fa-trophy"></i> CASHED OUT ${winAmount.toFixed(2)} XCOIN`;
+            document.getElementById('mines-result').style.display = 'block';
             minesActive = false;
-            document.getElementById('mines-cashout').disabled = true;
-        } else {
-            const tiles = document.querySelectorAll('.mine-tile');
-            tiles[index].classList.add('revealed');
-            tiles[index].innerHTML = '<i class="fas fa-check"></i>';
-            minesMultiplier += 0.5;
-            document.getElementById('mines-multiplier').textContent = `MULTIPLIER: ${minesMultiplier.toFixed(2)}x`;
-            const revealedCount = document.querySelectorAll('.mine-tile.revealed').length;
-            if (revealedCount === 20) {
-                const winAmount = minesBetAmount * minesMultiplier;
-                currentUser.xcoin_balance += winAmount;
-                document.getElementById('balance').textContent = currentUser.xcoin_balance.toFixed(2);
-                document.getElementById('mines-result').className = 'result-message win';
-                document.getElementById('mines-result').innerHTML = `<i class="fas fa-trophy"></i> WIN +${winAmount.toFixed(2)} XCOIN`;
+            document.getElementById('mines-cashout-btn').disabled = true;
+            particles.addExplosion(window.innerWidth / 2, window.innerHeight / 2);
+            toast(`+${winAmount.toFixed(2)} XCOIN`, 'success');
+        };
+        
+        async function revealMine(index) {
+            if (!minesActive) return;
+            if (minesGrid[index]) {
+                const tiles = document.querySelectorAll('.mine-tile');
+                tiles[index].classList.add('mine');
+                tiles[index].innerHTML = '<i class="fas fa-bomb"></i>';
+                document.getElementById('mines-result').className = 'result-message lose';
+                document.getElementById('mines-result').innerHTML = '<i class="fas fa-bomb"></i> HIT A MINE | GAME OVER';
+                document.getElementById('mines-result').style.display = 'block';
                 minesActive = false;
-                document.getElementById('mines-cashout').disabled = true;
-                toast(`+${winAmount.toFixed(2)} XCOIN`, 'success');
+                document.getElementById('mines-cashout-btn').disabled = true;
+            } else {
+                const tiles = document.querySelectorAll('.mine-tile');
+                tiles[index].classList.add('revealed');
+                tiles[index].innerHTML = '<i class="fas fa-check"></i>';
+                minesRevealed++;
+                minesMultiplier = 1 + (minesRevealed * 0.15);
+                document.getElementById('mines-multiplier').textContent = `MULTIPLIER: ${minesMultiplier.toFixed(2)}x`;
+                if (minesRevealed === 20) {
+                    const winAmount = minesBetAmount * minesMultiplier;
+                    currentUser.xcoin_balance += winAmount;
+                    document.getElementById('balance').textContent = currentUser.xcoin_balance.toFixed(2);
+                    document.getElementById('mines-result').className = 'result-message win';
+                    document.getElementById('mines-result').innerHTML = `<i class="fas fa-trophy"></i> WIN +${winAmount.toFixed(2)} XCOIN`;
+                    document.getElementById('mines-result').style.display = 'block';
+                    minesActive = false;
+                    document.getElementById('mines-cashout-btn').disabled = true;
+                    particles.addExplosion(window.innerWidth / 2, window.innerHeight / 2);
+                    toast(`+${winAmount.toFixed(2)} XCOIN`, 'success');
+                }
             }
         }
+        
+        document.querySelectorAll('.quick-bet-btn').forEach(btn => {
+            btn.onclick = () => { document.getElementById('mines-bet').value = btn.dataset.amount; };
+        });
+        document.querySelectorAll('.bet-adjust').forEach(btn => {
+            btn.onclick = () => {
+                let val = parseInt(document.getElementById('mines-bet').value);
+                val += parseInt(btn.dataset.change);
+                if (val < 1) val = 1;
+                document.getElementById('mines-bet').value = val;
+            };
+        });
     }
     
-    function cashoutMines() {
-        if (!minesActive) return;
-        const winAmount = minesBetAmount * minesMultiplier;
-        currentUser.xcoin_balance += winAmount;
-        document.getElementById('balance').textContent = currentUser.xcoin_balance.toFixed(2);
-        document.getElementById('mines-result').className = 'result-message win';
-        document.getElementById('mines-result').innerHTML = `<i class="fas fa-trophy"></i> CASHED OUT ${winAmount.toFixed(2)} XCOIN`;
-        minesActive = false;
-        document.getElementById('mines-cashout').disabled = true;
-        toast(`+${winAmount.toFixed(2)} XCOIN`, 'success');
-    }
-    
-    // ==================== ENHANCED PLINKO ====================
+    // ==================== PLINKO GAME ====================
     function getPlinkoHTML() {
         return `
-            <div><canvas id="plinko-canvas" width="600" height="400" style="width:100%; height:400px; background:#0A0A0F; border-radius:12px;"></canvas>
-            <div class="bet-input-group">
-                <button class="bet-adjust" data-change="-5">-5</button>
-                <input type="number" class="bet-input" id="plinko-bet" value="10">
-                <button class="bet-adjust" data-change="5">+5</button>
+            <div>
+                <canvas id="plinko-canvas" width="600" height="400" style="width:100%; height:400px; background:#0A0A0F; border-radius:16px;"></canvas>
+                <div class="bet-input-group">
+                    <button class="bet-adjust" data-change="-5">-5</button>
+                    <input type="number" class="bet-input" id="plinko-bet" value="10">
+                    <button class="bet-adjust" data-change="5">+5</button>
+                </div>
+                <div class="quick-bets">${[10, 25, 50, 100, 250].map(amt => `<span class="quick-bet-btn" data-amount="${amt}">${amt}</span>`).join('')}</div>
+                <div style="display:flex; gap:10px;"><button class="btn btn-secondary" id="plinko-low">LOW RISK</button><button class="btn btn-primary" id="plinko-medium">MEDIUM RISK</button><button class="btn btn-danger" id="plinko-high">HIGH RISK</button></div>
+                <button class="btn btn-primary" style="width:100%; margin-top:1rem;" id="drop-plinko-btn"><i class="fas fa-circle-dot"></i> DROP BALL</button>
+                <div class="result-message" id="plinko-result"></div>
             </div>
-            <div class="quick-bets">${[10, 25, 50, 100, 250].map(amt => `<span class="quick-bet-btn" data-amount="${amt}">${amt}</span>`).join('')}</div>
-            <div style="display:flex; gap:10px;"><button class="btn btn-secondary" onclick="setPlinkoRisk('low')"><i class="fas fa-leaf"></i> LOW RISK</button><button class="btn btn-primary" onclick="setPlinkoRisk('medium')"><i class="fas fa-chart-line"></i> MEDIUM RISK</button><button class="btn btn-danger" onclick="setPlinkoRisk('high')"><i class="fas fa-fire"></i> HIGH RISK</button></div>
-            <button class="btn-roll" style="width:100%; margin-top:1rem;" onclick="dropPlinko()"><i class="fas fa-circle-dot"></i> DROP BALL</button>
-            <div class="result-message" id="plinko-result"></div></div>
         `;
     }
     
     function initPlinko() {
         const canvas = document.getElementById('plinko-canvas');
-        if (!canvas) return;
         canvas.width = canvas.clientWidth;
         canvas.height = 400;
-        plinkoCtx = canvas.getContext('2d');
-        drawPlinkoBoard();
-    }
-    
-    function drawPlinkoBoard() {
-        if (!plinkoCtx) return;
-        const canvas = document.getElementById('plinko-canvas');
-        const w = canvas.width, h = canvas.height;
-        plinkoCtx.fillStyle = '#1A1A2E';
-        plinkoCtx.fillRect(0, 0, w, h);
-        const rows = 16;
-        const spacingX = w / 18;
-        for (let row = 0; row < rows; row++) {
-            const y = 30 + row * (h - 60) / rows;
-            const offsetX = (row % 2) * spacingX / 2;
-            for (let col = 0; col <= row + 1; col++) {
-                const x = offsetX + col * spacingX;
-                if (x > 0 && x < w) {
-                    plinkoCtx.beginPath();
-                    plinkoCtx.arc(x, y, 4, 0, Math.PI * 2);
-                    plinkoCtx.fillStyle = '#FFD966';
-                    plinkoCtx.fill();
+        const ctx = canvas.getContext('2d');
+        
+        function drawPlinkoBoard() {
+            const w = canvas.width, h = canvas.height;
+            ctx.fillStyle = '#1A1A2E';
+            ctx.fillRect(0, 0, w, h);
+            const rows = 16;
+            const spacingX = w / 18;
+            for (let row = 0; row < rows; row++) {
+                const y = 30 + row * (h - 60) / rows;
+                const offsetX = (row % 2) * spacingX / 2;
+                for (let col = 0; col <= row + 1; col++) {
+                    const x = offsetX + col * spacingX;
+                    if (x > 0 && x < w) {
+                        ctx.beginPath();
+                        ctx.arc(x, y, 4, 0, Math.PI * 2);
+                        ctx.fillStyle = '#FFD966';
+                        ctx.fill();
+                    }
                 }
             }
         }
+        
+        drawPlinkoBoard();
+        
+        document.getElementById('plinko-low').onclick = () => { plinkoRisk = 'low'; toast('Risk set to LOW', 'info'); };
+        document.getElementById('plinko-medium').onclick = () => { plinkoRisk = 'medium'; toast('Risk set to MEDIUM', 'info'); };
+        document.getElementById('plinko-high').onclick = () => { plinkoRisk = 'high'; toast('Risk set to HIGH', 'info'); };
+        
+        document.getElementById('drop-plinko-btn').onclick = async () => {
+            const bet = parseFloat(document.getElementById('plinko-bet').value);
+            if (!currentUser || bet > currentUser.xcoin_balance) return toast('Insufficient balance', 'error');
+            
+            try {
+                const res = await fetch(`${API_URL}/api/games/plinko/play`, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                    body: JSON.stringify({ game: 'plinko', xcoin_amount: bet, params: { risk: plinkoRisk } })
+                });
+                const data = await res.json();
+                
+                currentUser.xcoin_balance = data.new_balance;
+                document.getElementById('balance').textContent = currentUser.xcoin_balance.toFixed(2);
+                const resultDiv = document.getElementById('plinko-result');
+                resultDiv.className = data.outcome === 'win' ? 'result-message win' : 'result-message lose';
+                resultDiv.innerHTML = data.outcome === 'win' ? `<i class="fas fa-trophy"></i> WIN +${data.win_amount.toFixed(2)} XCOIN | MULTIPLIER: ${data.multiplier}x` : `<i class="fas fa-skull"></i> LOSS -${bet} XCOIN`;
+                resultDiv.style.display = 'block';
+                if (data.outcome === 'win') particles.addExplosion(window.innerWidth / 2, window.innerHeight / 2);
+                setTimeout(() => resultDiv.style.display = 'none', 3000);
+                drawPlinkoBoard();
+            } catch { toast('Game error', 'error'); }
+        };
+        
+        document.querySelectorAll('.quick-bet-btn').forEach(btn => {
+            btn.onclick = () => { document.getElementById('plinko-bet').value = btn.dataset.amount; };
+        });
+        document.querySelectorAll('.bet-adjust').forEach(btn => {
+            btn.onclick = () => {
+                let val = parseInt(document.getElementById('plinko-bet').value);
+                val += parseInt(btn.dataset.change);
+                if (val < 1) val = 1;
+                document.getElementById('plinko-bet').value = val;
+            };
+        });
     }
     
-    function setPlinkoRisk(risk) { plinkoRisk = risk; toast(`Risk set to ${risk}`, 'info'); }
-    
-    function drawPlinkoBallPath(path) {
-        if (!plinkoCtx) return;
-        const canvas = document.getElementById('plinko-canvas');
-        const w = canvas.width, h = canvas.height;
-        const spacingX = w / 18;
-        let x = path[0] * spacingX, y = 20;
-        for (let i = 1; i < path.length; i++) {
-            const nextX = path[i] * spacingX;
-            const nextY = 30 + i * (h - 60) / path.length;
-            plinkoCtx.beginPath();
-            plinkoCtx.moveTo(x, y);
-            plinkoCtx.lineTo(nextX, nextY);
-            plinkoCtx.strokeStyle = '#FFD966';
-            plinkoCtx.lineWidth = 3;
-            plinkoCtx.stroke();
-            plinkoCtx.beginPath();
-            plinkoCtx.arc(nextX, nextY, 6, 0, Math.PI * 2);
-            plinkoCtx.fillStyle = '#FFD966';
-            plinkoCtx.fill();
-            x = nextX; y = nextY;
-        }
-    }
-    
-    async function dropPlinko() {
-        const bet = parseFloat(document.getElementById('plinko-bet').value);
-        if (!currentUser || bet > currentUser.xcoin_balance) return toast('Insufficient balance', 'error');
-        const multipliers = { low: [0.5, 1, 1.5, 2, 1.5, 1, 0.5], medium: [0.2, 0.5, 1, 2, 5, 2, 1, 0.5, 0.2], high: [0.1, 0.2, 0.5, 1, 2, 5, 10, 5, 2, 1, 0.5, 0.2, 0.1] };
-        const riskMultipliers = multipliers[plinkoRisk];
-        const multiplier = riskMultipliers[Math.floor(Math.random() * riskMultipliers.length)];
-        const winAmount = bet * multiplier;
-        const path = Array(16).fill(0).map(() => Math.floor(Math.random() * 18));
-        drawPlinkoBallPath(path);
-        currentUser.xcoin_balance = currentUser.xcoin_balance - bet + winAmount;
-        document.getElementById('balance').textContent = currentUser.xcoin_balance.toFixed(2);
-        const resultDiv = document.getElementById('plinko-result');
-        if (winAmount > bet) {
-            resultDiv.className = 'result-message win';
-            resultDiv.innerHTML = `<i class="fas fa-trophy"></i> WIN +${(winAmount - bet).toFixed(2)} XCOIN | MULTIPLIER: ${multiplier}x`;
-            toast(`+${(winAmount - bet).toFixed(2)} XCOIN`, 'success');
-        } else {
-            resultDiv.className = 'result-message lose';
-            resultDiv.innerHTML = `<i class="fas fa-skull"></i> LOSS -${bet} XCOIN`;
-        }
-        resultDiv.style.display = 'block';
-        setTimeout(() => resultDiv.style.display = 'none', 3000);
-    }
-    
-    // ==================== BLACKJACK ====================
+    // ==================== BLACKJACK GAME ====================
     function getBlackjackHTML() {
         return `
             <div class="blackjack-table">
@@ -1617,98 +1698,125 @@
                     <button class="bet-adjust" data-change="5">+5</button>
                 </div>
                 <div class="quick-bets">${[10, 25, 50, 100, 250].map(amt => `<span class="quick-bet-btn" data-amount="${amt}">${amt}</span>`).join('')}</div>
-                <div style="display:flex; gap:10px;"><button class="btn btn-primary" style="flex:1" onclick="blackjackStart()"><i class="fas fa-hand"></i> DEAL</button><button class="btn btn-secondary" style="flex:1" id="bj-hit" disabled onclick="blackjackHit()"><i class="fas fa-plus"></i> HIT</button><button class="btn btn-secondary" style="flex:1" id="bj-stand" disabled onclick="blackjackStand()"><i class="fas fa-check"></i> STAND</button></div>
+                <div style="display:flex; gap:10px;"><button class="btn btn-primary" style="flex:1" id="bj-deal"><i class="fas fa-hand"></i> DEAL</button><button class="btn btn-secondary" style="flex:1" id="bj-hit" disabled><i class="fas fa-plus"></i> HIT</button><button class="btn btn-secondary" style="flex:1" id="bj-stand" disabled><i class="fas fa-check"></i> STAND</button></div>
                 <div class="result-message" id="bj-result"></div>
             </div>
         `;
     }
     
-    function calculateBJScore(hand) {
-        let score = 0, aces = 0;
-        for (let card of hand) {
-            if (card.value === 'A') { aces++; score += 11; }
-            else if (['K','Q','J'].includes(card.value)) score += 10;
-            else score += parseInt(card.value);
+    function initBlackjack() {
+        let playerCards = [], dealerCards = [], bjBet = 0, gameActive = false;
+        
+        function calculateScore(hand) {
+            let score = 0, aces = 0;
+            for (let card of hand) {
+                if (card.value === 'A') { aces++; score += 11; }
+                else if (['K','Q','J'].includes(card.value)) score += 10;
+                else score += parseInt(card.value);
+            }
+            while (score > 21 && aces > 0) { score -= 10; aces--; }
+            return score;
         }
-        while (score > 21 && aces > 0) { score -= 10; aces--; }
-        return score;
-    }
-    
-    function updateBlackjackUI() {
-        document.getElementById('player-cards').innerHTML = playerCards.map(c => `<div class="card ${c.suit === '♥' || c.suit === '♦' ? 'heart' : 'spade'}">${c.value}${c.suit}</div>`).join('');
-        document.getElementById('dealer-cards').innerHTML = dealerCards.map((c, i) => i === 1 && !blackjackGame?.game_over ? `<div class="card card-back">?</div>` : `<div class="card ${c.suit === '♥' || c.suit === '♦' ? 'heart' : 'spade'}">${c.value}${c.suit}</div>`).join('');
-        document.getElementById('player-score').textContent = `SCORE: ${calculateBJScore(playerCards)}`;
-        if (blackjackGame?.dealer_score) document.getElementById('dealer-score').textContent = `SCORE: ${blackjackGame.dealer_score}`;
-    }
-    
-    function blackjackStart() {
-        const bet = parseFloat(document.getElementById('bj-bet').value);
-        if (!currentUser || bet > currentUser.xcoin_balance) return toast('Insufficient balance', 'error');
-        bjBet = bet;
-        const suits = ['♥', '♦', '♣', '♠'];
-        const values = ['2','3','4','5','6','7','8','9','10','J','Q','K','A'];
-        let deck = [];
-        for (let suit of suits) for (let value of values) deck.push({suit, value});
-        deck = deck.sort(() => Math.random() - 0.5);
-        playerCards = [deck.pop(), deck.pop()];
-        dealerCards = [deck.pop(), deck.pop()];
-        blackjackGame = { deck, game_over: false, dealer_score: null };
-        updateBlackjackUI();
-        document.getElementById('bj-hit').disabled = false;
-        document.getElementById('bj-stand').disabled = false;
-        currentUser.xcoin_balance -= bet;
-        document.getElementById('balance').textContent = currentUser.xcoin_balance.toFixed(2);
-    }
-    
-    function blackjackHit() {
-        const deck = blackjackGame.deck;
-        playerCards.push(deck.pop());
-        updateBlackjackUI();
-        const playerScore = calculateBJScore(playerCards);
-        if (playerScore > 21) {
-            document.getElementById('bj-result').className = 'result-message lose';
-            document.getElementById('bj-result').innerHTML = '<i class="fas fa-skull"></i> BUST | YOU LOSE';
+        
+        function updateUI() {
+            document.getElementById('player-cards').innerHTML = playerCards.map(c => `<div class="card ${c.suit === '♥' || c.suit === '♦' ? 'heart' : 'spade'}">${c.value}${c.suit}</div>`).join('');
+            document.getElementById('dealer-cards').innerHTML = dealerCards.map((c, i) => i === 1 && gameActive ? `<div class="card card-back">?</div>` : `<div class="card ${c.suit === '♥' || c.suit === '♦' ? 'heart' : 'spade'}">${c.value}${c.suit}</div>`).join('');
+            document.getElementById('player-score').textContent = `SCORE: ${calculateScore(playerCards)}`;
+        }
+        
+        function createDeck() {
+            const suits = ['♥', '♦', '♣', '♠'];
+            const values = ['2','3','4','5','6','7','8','9','10','J','Q','K','A'];
+            let deck = [];
+            for (let suit of suits) for (let value of values) deck.push({suit, value});
+            return deck.sort(() => Math.random() - 0.5);
+        }
+        
+        document.getElementById('bj-deal').onclick = () => {
+            const bet = parseFloat(document.getElementById('bj-bet').value);
+            if (!currentUser || bet > currentUser.xcoin_balance) return toast('Insufficient balance', 'error');
+            bjBet = bet;
+            const deck = createDeck();
+            playerCards = [deck.pop(), deck.pop()];
+            dealerCards = [deck.pop(), deck.pop()];
+            gameActive = true;
+            currentUser.xcoin_balance -= bet;
+            document.getElementById('balance').textContent = currentUser.xcoin_balance.toFixed(2);
+            updateUI();
+            document.getElementById('bj-hit').disabled = false;
+            document.getElementById('bj-stand').disabled = false;
+            document.getElementById('bj-result').style.display = 'none';
+        };
+        
+        document.getElementById('bj-hit').onclick = () => {
+            if (!gameActive) return;
+            const deck = createDeck();
+            playerCards.push(deck.pop());
+            updateUI();
+            const playerScore = calculateScore(playerCards);
+            if (playerScore > 21) {
+                document.getElementById('bj-result').className = 'result-message lose';
+                document.getElementById('bj-result').innerHTML = '<i class="fas fa-skull"></i> BUST | YOU LOSE';
+                document.getElementById('bj-result').style.display = 'block';
+                document.getElementById('bj-hit').disabled = true;
+                document.getElementById('bj-stand').disabled = true;
+                gameActive = false;
+            }
+        };
+        
+        document.getElementById('bj-stand').onclick = () => {
+            if (!gameActive) return;
+            let dealerScore = calculateScore(dealerCards);
+            const deck = createDeck();
+            while (dealerScore < 17) {
+                dealerCards.push(deck.pop());
+                dealerScore = calculateScore(dealerCards);
+            }
+            const playerScore = calculateScore(playerCards);
+            let result = '', winAmount = 0;
+            if (dealerScore > 21 || playerScore > dealerScore) { result = 'win'; winAmount = bjBet * 2; }
+            else if (playerScore === dealerScore) { result = 'push'; winAmount = bjBet; }
+            else { result = 'lose'; winAmount = 0; }
+            if (winAmount > 0) currentUser.xcoin_balance += winAmount;
+            document.getElementById('balance').textContent = currentUser.xcoin_balance.toFixed(2);
+            document.getElementById('bj-result').className = result === 'win' ? 'result-message win' : 'result-message lose';
+            document.getElementById('bj-result').innerHTML = result === 'win' ? `<i class="fas fa-trophy"></i> WIN +${winAmount} XCOIN` : result === 'push' ? `<i class="fas fa-handshake"></i> PUSH | BET RETURNED` : `<i class="fas fa-skull"></i> LOSS -${bjBet} XCOIN`;
+            document.getElementById('bj-result').style.display = 'block';
+            document.getElementById('dealer-cards').innerHTML = dealerCards.map(c => `<div class="card ${c.suit === '♥' || c.suit === '♦' ? 'heart' : 'spade'}">${c.value}${c.suit}</div>`).join('');
+            document.getElementById('dealer-score').textContent = `SCORE: ${dealerScore}`;
             document.getElementById('bj-hit').disabled = true;
             document.getElementById('bj-stand').disabled = true;
-            blackjackGame.game_over = true;
-        }
-    }
-    
-    function blackjackStand() {
-        let dealerScore = calculateBJScore(dealerCards);
-        const deck = blackjackGame.deck;
-        while (dealerScore < 17 && deck.length) {
-            dealerCards.push(deck.pop());
-            dealerScore = calculateBJScore(dealerCards);
-        }
-        const playerScore = calculateBJScore(playerCards);
-        let result = '', winAmount = 0;
-        if (dealerScore > 21 || playerScore > dealerScore) { result = 'win'; winAmount = bjBet * 2; }
-        else if (playerScore === dealerScore) { result = 'push'; winAmount = bjBet; }
-        else { result = 'lose'; winAmount = 0; }
-        if (winAmount > 0) currentUser.xcoin_balance += winAmount;
-        document.getElementById('balance').textContent = currentUser.xcoin_balance.toFixed(2);
-        document.getElementById('bj-result').className = result === 'win' ? 'result-message win' : result === 'push' ? 'result-message win' : 'result-message lose';
-        document.getElementById('bj-result').innerHTML = result === 'win' ? `<i class="fas fa-trophy"></i> WIN +${winAmount} XCOIN` : result === 'push' ? `<i class="fas fa-handshake"></i> PUSH | BET RETURNED` : `<i class="fas fa-skull"></i> LOSS -${bjBet} XCOIN`;
-        document.getElementById('dealer-cards').innerHTML = dealerCards.map(c => `<div class="card ${c.suit === '♥' || c.suit === '♦' ? 'heart' : 'spade'}">${c.value}${c.suit}</div>`).join('');
-        document.getElementById('dealer-score').textContent = `SCORE: ${dealerScore}`;
-        document.getElementById('bj-hit').disabled = true;
-        document.getElementById('bj-stand').disabled = true;
-        blackjackGame.game_over = true;
+            gameActive = false;
+            if (result === 'win') particles.addExplosion(window.innerWidth / 2, window.innerHeight / 2);
+        };
+        
+        document.querySelectorAll('.quick-bet-btn').forEach(btn => {
+            btn.onclick = () => { document.getElementById('bj-bet').value = btn.dataset.amount; };
+        });
+        document.querySelectorAll('.bet-adjust').forEach(btn => {
+            btn.onclick = () => {
+                let val = parseInt(document.getElementById('bj-bet').value);
+                val += parseInt(btn.dataset.change);
+                if (val < 1) val = 1;
+                document.getElementById('bj-bet').value = val;
+            };
+        });
     }
     
     // ==================== GAME LOADER ====================
     function openGame(game) {
         if (!currentUser) { showAuthModal('login'); return; }
         const content = document.getElementById('game-content');
-        const titles = { slots: 'DIAMOND SLOTS', dice: 'LUCKY DICE', crash: 'ROCKET CRASH', mines: 'MINES', plinko: 'PLINKO', blackjack: 'BLACKJACK' };
+        const titles = { slots: '🎰 DIAMOND SLOTS', dice: '🎲 LUCKY DICE', crash: '🚀 ROCKET CRASH', mines: '💣 MINES', plinko: '⚡ PLINKO', blackjack: '🃏 BLACKJACK' };
         document.getElementById('game-title').innerHTML = `<i class="fas ${game === 'slots' ? 'fa-layer-group' : game === 'dice' ? 'fa-dice-d6' : game === 'crash' ? 'fa-chart-line' : game === 'mines' ? 'fa-bomb' : game === 'plinko' ? 'fa-circle-dot' : 'fa-club'}"></i> ${titles[game] || game}`;
+        
         if (game === 'slots') { content.innerHTML = getSlotsHTML(); setTimeout(initSlots, 100); }
-        else if (game === 'dice') { content.innerHTML = getDiceHTML(); document.getElementById('dice-target').addEventListener('input', (e) => document.getElementById('target-value').textContent = e.target.value); document.querySelectorAll('.quick-bet-btn').forEach(btn => { btn.onclick = () => { document.getElementById('dice-bet').value = btn.dataset.amount; }; }); document.querySelectorAll('.bet-adjust').forEach(btn => { btn.onclick = () => { let val = parseInt(document.getElementById('dice-bet').value); val += parseInt(btn.dataset.change); if (val < 1) val = 1; document.getElementById('dice-bet').value = val; }; }); }
+        else if (game === 'dice') { content.innerHTML = getDiceHTML(); setTimeout(initDice, 100); }
         else if (game === 'crash') { content.innerHTML = getCrashHTML(); setTimeout(initCrash, 100); }
-        else if (game === 'mines') { content.innerHTML = getMinesHTML(); document.querySelectorAll('.quick-bet-btn').forEach(btn => { btn.onclick = () => { document.getElementById('mines-bet').value = btn.dataset.amount; }; }); document.querySelectorAll('.bet-adjust').forEach(btn => { btn.onclick = () => { let val = parseInt(document.getElementById('mines-bet').value); val += parseInt(btn.dataset.change); if (val < 1) val = 1; document.getElementById('mines-bet').value = val; }; }); }
-        else if (game === 'plinko') { content.innerHTML = getPlinkoHTML(); setTimeout(initPlinko, 100); document.querySelectorAll('.quick-bet-btn').forEach(btn => { btn.onclick = () => { document.getElementById('plinko-bet').value = btn.dataset.amount; }; }); document.querySelectorAll('.bet-adjust').forEach(btn => { btn.onclick = () => { let val = parseInt(document.getElementById('plinko-bet').value); val += parseInt(btn.dataset.change); if (val < 1) val = 1; document.getElementById('plinko-bet').value = val; }; }); }
-        else if (game === 'blackjack') { content.innerHTML = getBlackjackHTML(); document.querySelectorAll('.quick-bet-btn').forEach(btn => { btn.onclick = () => { document.getElementById('bj-bet').value = btn.dataset.amount; }; }); document.querySelectorAll('.bet-adjust').forEach(btn => { btn.onclick = () => { let val = parseInt(document.getElementById('bj-bet').value); val += parseInt(btn.dataset.change); if (val < 1) val = 1; document.getElementById('bj-bet').value = val; }; }); }
+        else if (game === 'mines') { content.innerHTML = getMinesHTML(); setTimeout(initMines, 100); }
+        else if (game === 'plinko') { content.innerHTML = getPlinkoHTML(); setTimeout(initPlinko, 100); }
+        else if (game === 'blackjack') { content.innerHTML = getBlackjackHTML(); setTimeout(initBlackjack, 100); }
+        
         openModal('game-modal');
     }
     
@@ -1719,12 +1827,54 @@
         try {
             const res = await fetch(`${API_URL}/api/admin/users`, { headers: { 'Authorization': `Bearer ${token}` } });
             const data = await res.json();
-            document.getElementById('admin-content').innerHTML = `<h3><i class="fas fa-users"></i> USER MANAGEMENT</h3><table style="width:100%; border-collapse:collapse;"><thead><tr style="border-bottom:1px solid var(--border);"><th style="padding:8px;">USER</th><th>EMAIL</th><th>BALANCE</th><th>ROLE</th><th>ACTIONS</th></tr></thead><tbody>${data.users.map(u => `<tr style="border-bottom:1px solid var(--border);"><td style="padding:8px;"><i class="fas fa-user"></i> ${u.username}</td><td>${u.email || '-'}</td><td>${u.xcoin_balance.toFixed(0)}</td><td>${u.role}</td><td><button class="btn btn-secondary" onclick="banUser('${u.id}', ${!u.banned})">${u.banned ? '<i class="fas fa-check"></i> UNBAN' : '<i class="fas fa-ban"></i> BAN'}</button></td></tr>`).join('')}</tbody></table>`;
+            document.getElementById('admin-content').innerHTML = `
+                <h3><i class="fas fa-users"></i> USER MANAGEMENT</h3>
+                <div style="overflow-x:auto;">
+                    <table style="width:100%; border-collapse:collapse;">
+                        <thead><tr style="border-bottom:1px solid var(--border);">
+                            <th style="padding:8px; text-align:left;">USER</th>
+                            <th style="padding:8px; text-align:left;">EMAIL</th>
+                            <th style="padding:8px; text-align:left;">BALANCE</th>
+                            <th style="padding:8px; text-align:left;">ROLE</th>
+                            <th style="padding:8px; text-align:left;">ACTIONS</th>
+                        </tr></thead>
+                        <tbody>${data.users.map(u => `
+                            <tr style="border-bottom:1px solid var(--border);">
+                                <td style="padding:8px;"><i class="fas fa-user"></i> ${u.username}</td>
+                                <td style="padding:8px;">${u.email || '-'}</td>
+                                <td style="padding:8px;">${u.xcoin_balance.toFixed(0)}</td>
+                                <td style="padding:8px;">${u.role}</td>
+                                <td style="padding:8px;">
+                                    <button class="btn btn-secondary" style="padding:4px 12px; margin-right:5px;" onclick="banUser('${u.id}', ${!u.banned})">${u.banned ? '<i class="fas fa-check"></i> UNBAN' : '<i class="fas fa-ban"></i> BAN'}</button>
+                                </td>
+                            </tr>
+                        `).join('')}</tbody>
+                    </table>
+                </div>
+            `;
         } catch { document.getElementById('admin-content').innerHTML = '<div>Failed to load users</div>'; }
     }
-    async function banUser(userId, ban) { try { await fetch(`${API_URL}/api/admin/users/${userId}/ban`, { method: 'PUT', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }, body: JSON.stringify({ banned: ban }) }); toast(ban ? 'User banned' : 'User unbanned', 'success'); showAdminPanel(); } catch { toast('Action failed', 'error'); } }
     
-    document.querySelectorAll('.nav-link').forEach(link => link.addEventListener('click', () => { const page = link.dataset.page; document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active')); link.classList.add('active'); document.querySelectorAll('.page').forEach(p => p.classList.remove('active')); document.getElementById(`${page}-page`).classList.add('active'); }));
+    async function banUser(userId, ban) { 
+        try { 
+            await fetch(`${API_URL}/api/admin/users/${userId}/ban`, { 
+                method: 'PUT', 
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }, 
+                body: JSON.stringify({ banned: ban }) 
+            }); 
+            toast(ban ? 'User banned' : 'User unbanned', 'success'); 
+            showAdminPanel(); 
+        } catch { toast('Action failed', 'error'); } 
+    }
+    
+    document.querySelectorAll('.nav-link').forEach(link => link.addEventListener('click', () => { 
+        const page = link.dataset.page; 
+        document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active')); 
+        link.classList.add('active'); 
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active')); 
+        document.getElementById(`${page}-page`).classList.add('active'); 
+        if (page === 'shop') loadShopProducts();
+    }));
     
     verifyToken();
     setInterval(loadLeaderboard, 30000);
