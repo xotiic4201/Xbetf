@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>XBET - Premium Online Casino</title>
+    <title>XBET - Premium Crypto Casino</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <!-- Font Awesome 6 Pro (Better Icons) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -971,7 +971,7 @@
 <div class="modal" id="admin-modal"><div class="modal-content" style="max-width: 1200px;"><div class="modal-header"><div class="modal-title"><i class="fas fa-shield-alt"></i> ADMIN DASHBOARD</div><div class="modal-close" onclick="closeModal('admin-modal')">×</div></div><div class="modal-body" id="admin-content"></div></div></div>
 
 <script>
-    const API_URL = ('https://xbetb.onrender.com' : window.location.origin;
+    const API_URL = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'https://xbetb.onrender.com' : window.location.origin;
     let token = localStorage.getItem('token');
     let currentUser = null;
     let ws = null;
